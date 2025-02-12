@@ -1,0 +1,40 @@
+{
+  "name": "docnet",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@pdftron/webviewer": "^10.12.0",
+    "@tato30/vue-pdf": "^1.11.1",
+    "@types/pdfjs-dist": "^2.10.377",
+    "@vue-pdf-viewer/viewer": "^1.4.3",
+    "axios": "^1.7.7",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.5",
+    "jszip": "^3.10.1",
+    "pdf-vue3": "^1.0.12",
+    "pdfjs-dist": "^4.7.76",
+    "pdfviewer": "^1.1.1",
+    "pinia": "^2.2.2",
+    "pinia-plugin-persistedstate": "^4.1.1",
+    "socket.io-client": "^4.8.0",
+    "vue": "^3.5.10",
+    "vue-pdf": "^4.3.0",
+    "vue-router": "^4.4.5",
+    "vue-toastification": "^2.0.0-rc.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.4",
+    "sass": "^1.79.4",
+    "sass-loader": "^10.5.2",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.9",
+    "vue-style-loader": "^4.1.3",
+    "vue-tsc": "^2.0.29"
+  }
+}
