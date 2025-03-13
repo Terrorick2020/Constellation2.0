@@ -3,6 +3,7 @@ import * as argon from 'argon2'
 import { PrismaService } from 'prisma/prisma.service'
 import { RegisterDto } from 'src/auth/dto/register.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
+
 @Injectable()
 export class UserService {
 	constructor(private prisma: PrismaService) {}

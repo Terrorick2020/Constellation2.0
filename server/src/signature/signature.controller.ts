@@ -1,41 +1,41 @@
-import {
-	Body,
-	Controller,
-	Get,
-	Param,
-	Post,
-	Request,
-	UploadedFile,
-	UseGuards,
-	UseInterceptors
-} from '@nestjs/common'
-import { FileInterceptor } from '@nestjs/platform-express'
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { Controller, Get, Param, Query, Post, Body, Put, Delete, UploadedFile, UseInterceptors, UseGuards, Request } from '@nestjs/common'
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger'
 import { SignatureService } from './signature.service'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { AuthGuard } from '@nestjs/passport'
 
-@Controller()
+@ApiTags('Signature') // Группируем эндпоинты в Swagger
+@Controller('signature')
 export class SignatureController {
 	constructor(private readonly signatureService: SignatureService) {}
 
+	@Post('create')
+	@UseGuards(AuthGuard('jwt'))
 	@UseInterceptors(FileInterceptor('file'))
-	@UseGuards(JwtAuthGuard)
-	@Post('sign/:postId')
-	create(
-		@Param('postId') postId: string,
-		@UploadedFile() file: Express.Multer.File,
-		@Request() req
-	) {
-		console.log(postId)
-		return this.signatureService.create(+postId, file, req)
+	@ApiOperation({ summary: 'Создать подпись для поста' })
+	@ApiBearerAuth()
+	@ApiConsumes('multipart/form-data')
+	@ApiResponse({ status: 201, description: 'Подпись успешно добавлена' })
+	@ApiResponse({ status: 400, description: 'Ошибка при добавлении подписи' })
+	@ApiBody({
+		schema: {
+			type: 'object',
+			properties: {
+				postId: { type: 'number', example: 1 },
+				file: { type: 'string', format: 'binary' }
+			}
+		}
+	})
+	async create(@Request() req, @Body() dto: any, @UploadedFile() file: Express.Multer.File) {
+		return this.signatureService.create(dto.postId, file, req)
 	}
 
-	@Get('post/:id')
-	findAll(@Param('id') id: string) {
-		return this.signatureService.findAll(+id)
-	}
-
-	@Post('check')
-	check(@Body('username') username: string, @Body('hash') hash: string) {
-		return this.signatureService.checkSignature(username, hash)
+	@Get('all/:postId')
+	@ApiOperation({ summary: 'Получить все подписи для поста' })
+	@ApiResponse({ status: 200, description: 'Список подписей' })
+	@ApiResponse({ status: 404, description: 'Пост не найден' })
+	@ApiParam({ name: 'postId', example: '1', description: 'ID поста' })
+	async findAll(@Param('postId') postId: number) {
+		return this.signatureService.findAll(postId)
 	}
 }

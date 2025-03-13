@@ -51,7 +51,7 @@ export class AuthService {
 
 	async login(loginDto: LoginDto) {
 		const user = await this.usersService.findByUsername(loginDto.username)
-		if (!user) throw new UnauthorizedException('Неверный номер телефона')
+		if (!user) throw new UnauthorizedException('Неверное имя пользователя')
 		const isValid = await argon.verify(user.password, loginDto.password)
 
 		if (!isValid) {
@@ -73,7 +73,7 @@ export class AuthService {
 	}
 	async profile(req) {
 		const user = await this.usersService.findOne(req.user.userId)
-		if (!user) throw new UnauthorizedException('Неверный номер телефона')
+		if (!user) throw new UnauthorizedException('Неверное имя пользователя')
 		const { ...data } = user
 		return data
 	}
