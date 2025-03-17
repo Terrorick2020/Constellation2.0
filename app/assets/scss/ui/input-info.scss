@@ -1,0 +1,18 @@
+#__nuxt {
+    .input-info {
+        width: 100%;
+        margin-top: 0.5rem;
+
+        .el-icon {
+            width: 1.3rem;
+            height: 1.3rem;
+            margin-right: 0.3rem;
+            margin-top: 0.2rem;
+      
+            svg {
+                width: 1.3rem;
+                height: 1.3rem;
+            }
+        }
+    }
+}

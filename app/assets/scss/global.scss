@@ -1,0 +1,43 @@
+@use "./components/mixins";
+@use "./components/vars";
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+::selection {
+    background: var(--primary-selection-bg-color);
+    color: var(--primary-selection-font-color);
+}
+
+h1 { @include mixins.fluid-text(40, 28) }
+h2 { @include mixins.fluid-text(36, 26) }
+h3 { @include mixins.fluid-text(32, 24) }
+h4 { @include mixins.fluid-text(28, 22) }
+h5 { @include mixins.fluid-text(24, 20) }
+h6 { @include mixins.fluid-text(20, 18) }
+p  { @include mixins.fluid-text(16, 14) }
+
+img, svg {
+    user-select: none;
+}
+
+#__nuxt {
+    width: 100%;
+    background: var(--primary-bg-color);
+    color: var(--primary-color);
+}
+
+
+.headline {
+    letter-spacing: -0.5px;
+    font-weight: 700;
+}
+
+.sub-headline {
+    letter-spacing: -0.5px;
+    font-weight: 600;
+}

@@ -1,0 +1,33 @@
+:root {
+  #light {
+    --checkbox-color: black;
+    --checkbox-label-checked: black;
+  }
+
+  #dark {}
+}
+
+#__nuxt {
+  .el-checkbox {
+    &__inner {
+      border: 1px solid var(--checkbox-color);
+      border-color: var(--checkbox-color);
+  
+      --el-checkbox-checked-bg-color: var(--checkbox-color);
+  
+      &:checked {
+        background-color: var(--checkbox-color);
+      }
+    }
+
+    &.is-checked {
+      .el-checkbox__label {
+        color: var(--checkbox-label-checked);
+      }
+    }
+
+    &.large .el-checkbox__inner {
+      scale: 1.3;
+    }
+  }
+}

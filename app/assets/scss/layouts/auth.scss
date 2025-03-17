@@ -1,0 +1,79 @@
+@use "../components/mixins";
+@use "../components/vars";
+
+
+:root {
+    #light {
+        --color-block-bg: #FFFFFF;
+        --color-block-border-color: #0000000f;
+        --horizontal-color: #00000036;
+    }
+
+    #dark {}
+}
+
+@keyframes fadeUpAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeDownAnimation{
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-layout {
+    width: 100%;
+    height: 100%;
+    min-height: 100lvh;
+    padding-block: 2rem;
+    background: var(--primary-bg);
+    @include mixins.Flex();
+
+    .box {
+        .color-block {
+            background: var(--color-block-bg);
+            border: 2px solid var(--color-block-border-color);
+            border-radius: 20px;
+            padding: 5%;
+        }
+          
+        .fadeDown {
+            opacity: 0;
+            transform: translateY(-50px);
+            animation: fadeDownAnimation 0.7s ease forwards;
+        }
+    
+        .fadeUp {
+            overflow: hidden;
+            margin-top: 0.6rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeUpAnimation 0.7s ease forwards;
+
+            .el-main {
+                width: 100%;
+                overflow: hidden;
+
+                .horizontal {
+                    width: 100%;
+                    height: 2px;
+                    color: var(--horizontal-color);
+                    margin-block: 0.2rem;
+                }
+            }
+        }
+    }
+}

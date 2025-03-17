@@ -1,18 +1,31 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+.vscode/
+api/.vscode/
+bot/.vscode/
+app/.vscode/
+**/.vscode/
 
-# Other files and folders
-.settings/
+api/node_modules/
+bot/node_modules/
+app/node_modules/
+**/node_modules/
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+api/dist/
+bot/dist/
+app/dist/
+**/dist/
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+api/ssl/
+bot/ssl/
+app/ssl/
+nginx/ssl/
+**/ssl/
+
+bot/.env
+api/.env
+app/.env
+.env
+**/.env
+
+**/*.crt
+**/*.key
+**/*.pem
