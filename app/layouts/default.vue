@@ -1,7 +1,7 @@
 <template>
-    <div class="wrapper" :id="settingsStore.theme">
+    <main class="wrapper" :id="settingsStore.theme">
         <slot/>
-    </div>
+    </main>
 </template>
 
 <script setup lang="ts">

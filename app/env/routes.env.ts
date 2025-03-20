@@ -2,6 +2,8 @@ export const clientRoutes = {
     account: {
         main: '/account',
         local: {
+            admin: '/admin',
+            ads: '/ads',
             settings: {
                 main: '/settings',
                 local: {
@@ -12,15 +14,15 @@ export const clientRoutes = {
             catalog: {
                 main: '/catalog',
                 local: {
-                    doc: '/doc',
                     list: '/list',
+                    doc: '/doc',
                 },
             },
             chats: {
                 main: '/chats',
                 local: {
+                    all: '/all',
                     certain: '/certain',
-                    all: '/all'
                 }
             },
         },

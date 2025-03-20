@@ -10,9 +10,9 @@ definePageMeta({
 })
 
 useSeoMeta({
-    title: 'Уведомления',
-    ogTitle: 'Уведомления',
-    description: 'Страница уведомлений',
-    ogDescription: 'Страница уведомлений'
+    title: 'Объявления',
+    ogTitle: 'Объявления',
+    description: 'Страница объявлений',
+    ogDescription: 'Страница объявлений'
 })
 </script>
