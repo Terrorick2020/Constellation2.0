@@ -6,7 +6,6 @@
                 <slot />
             </div>
         </div>
-        <NavBarMobile />
         <Footer />
     </NuxtLayout>
 </template>

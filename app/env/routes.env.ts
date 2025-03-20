@@ -3,7 +3,7 @@ export const clientRoutes = {
         main: '/account',
         local: {
             admin: '/admin',
-            ads: '/ads',
+            notification: '/notification',
             settings: {
                 main: '/settings',
                 local: {
