@@ -4,11 +4,11 @@ export const REVERB_APP_ID     = import.meta.env.VITE_REVERB_APP_ID
 export const REVERB_APP_KEY    = import.meta.env.VITE_REVERB_APP_KEY
 export const REVERB_APP_SECRET = import.meta.env.VITE_REVERB_APP_SECRET
 
-// if (
-//     !REVERB_HOST       ||
-//     !REVERB_APP_ID     ||
-//     !REVERB_APP_KEY    ||
-//     !REVERB_APP_SECRET
-// ) {
-//     throw new Error( 'Reverb environment variable values are missing!' )
-// }
+if (
+    !REVERB_HOST       ||
+    !REVERB_APP_ID     ||
+    !REVERB_APP_KEY    ||
+    !REVERB_APP_SECRET
+) {
+    throw new Error( 'Reverb environment variable values are missing!' )
+}

@@ -1,7 +1,22 @@
-@use "./layouts/default.scss";
-@use "./layouts/auth.scss";
+@use 'UI/tag';
+@use 'UI/btn';
+@use 'UI/checkbox';
+@use 'profile';
+@use 'settings';
+@use 'UI/input';
+@use 'UI/switch';
+@use 'UI/dialog';
+@use 'UI/tour-c';
+@use 'UI/radio';
+@use 'UI/select';
+@use 'UI/collapse';
+@use 'UI/slider';
+@use 'UI/custom-modal';
+@use 'UI/steps';
+@use 'UI/skeleton.scss';
+@use 'UI/empty.scss';
 
-@use "./ui/checkbox.scss";
-@use "./ui/btn.scss";
-@use "./ui/input.scss";
-@use "./ui/input-info.scss";
+body {
+  overflow-y: scroll;
+  font-family: Manrope, sans-serif;
+}

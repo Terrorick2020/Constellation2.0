@@ -1,0 +1,54 @@
+.offer-header{
+    max-width: 424px;
+}
+.offer-content{
+    max-width: 424px;
+}
+#balance-offer-mobile{
+    visibility:hidden;
+}
+.offer-info{
+    width: 548px;
+}
+.full-offer-nav{
+    max-width: 350px;
+}
+.full-offer-content{
+    max-width: 540px;
+}
+@media (max-width: 1279px) {
+    .full-offer-block{
+        margin: 16px;
+    }
+    .full-offer{
+        max-width: 100%;
+    }
+    #balance-offer{
+        visibility:hidden;
+        display: none;
+    }
+    .my-offers-container{
+        padding: 20px;
+    }
+    #my-offer-header{
+        width: 100%;
+        height: 100%;
+    }
+    .offer-balance{
+        max-width: 100%;
+    }
+    .offer-info{
+        width: 100%;
+    }
+    #balance-offer-mobile{
+        width: 100%;
+        visibility:visible;
+        overflow: visible;
+    }
+    .offer-header{
+        max-width: 100%;
+    }
+    .offer-content{
+        max-width: 100%;
+    }
+}

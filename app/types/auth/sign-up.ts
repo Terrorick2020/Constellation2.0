@@ -1,6 +1,11 @@
 export enum SUContentStep {
-    RegStep = 0,
-    FinalStep = 1,
+    ProfTypeStep = 0,
+    LegFormStep = 1,
+    CompanyTypeStep = 2,
+    WorkFieldsStep = 3,
+    ProfInpStep = 4,
+    RegStep = 5,
+    FinalStep = 6,
 }
   
 export enum SULastContentStep {

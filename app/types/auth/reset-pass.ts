@@ -1,7 +1,8 @@
 export enum RPContentStep {
-    CodeStep = 0,
-    RewritePassStep = 1,
-    FinalStep = 2,
+    EmailStep = 0,
+    CodeStep = 1,
+    RewritePassStep = 2,
+    FinalStep = 3,
 }
   
 export enum RPLastContentStep {

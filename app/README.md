@@ -1,3 +1,23 @@
+# Run project local.
+
+Before run another commands copy file `.env.example` to `.env`.
+
+Default port `3003`, you can change in `.env` file
+
+After copy env file run command:
+
+```bash
+  docker compose -f local.docker-compose.yml up -d --force-recreate 
+```
+
+or with make command
+
+```bash
+  make up
+```
+
+Another commands with make you can see in `Makefile`.
+
 # Nuxt Minimal Starter
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.

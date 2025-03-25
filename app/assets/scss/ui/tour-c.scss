@@ -1,0 +1,42 @@
+body {
+  .el-tour {
+    &__content {
+      border-radius: 16px;
+    }
+
+    &__arrow {
+      display: none;
+    }
+
+    &__title {
+      font-weight: 700;
+    }
+
+    &__header.show-close {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-right: 0;
+    }
+
+    &__headerbtn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+    }
+
+    &__closebtn .el-tour__close {
+      top: 5px;
+      right: 5px;
+      width: 24px;
+      height: 24px;
+      color: black;
+
+      &:hover {
+        color: black;
+      }
+    }
+  }
+}

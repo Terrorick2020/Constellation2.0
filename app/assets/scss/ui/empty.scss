@@ -1,0 +1,11 @@
+#__nuxt {
+    .el-empty {
+        &.notFound {
+            .el-empty__description {
+                p {
+                    --el-font-size-base: 70px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,30 @@
+@use 'typo/layout';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .custom-container {
+    @apply w-full lg:max-w-[1000px] xl:max-w-[1110px] 2xl:max-w-[1110px];
+  }
+
+  .main {
+    @apply relative flex min-h-screen flex-col items-center justify-between bg-main;
+  }
+
+  .main-block-wrapper {
+    @apply px-5 lg:px-0;
+  }
+
+  .block-wrapper, .border-wrapper {
+    @apply rounded-[20px] border;
+  }
+
+  .submenu-block, .block-wrapper {
+    @apply p-[20px] lg:p-[30px];
+  }
+
+  .block-wrapper {
+    @apply bg-white;
+  }
+}

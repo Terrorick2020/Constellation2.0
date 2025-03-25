@@ -1,36 +1,38 @@
 <template>
 
-<UIInputBlock
-    provider="password"
-    :type="AUTH_INP_TYPE.password"
-    :showPassword="true"
-    :error="authStore.sInpErr.value"
-    title="Придумайте пароль"
-    :info="undefined"
-    :postTitle="undefined"
-    placeHolder="Введите пароль..."
-    :svgType="'svgo-lock'"
+  <UIAuthInput provider="pass"
+              :type="AUTH_INP_TYPE.password"
+              :showPassword="true"
+              :error="isFInpErr"
+              :title="$t( `${ props.basePath }.search[0].title` )"
+              :postTitle="undefined"
+              :placeHolder="$t( `${ props.basePath }.search[0].placeholder` )" 
+              :svgType="'svgo-lock'" 
   />
+  <AuthInfo v-if="isFInpErr" :text="$t( `${ props.basePath }.appErr.first[ ${ fInpErrInd } ]` )" />
 
-  <UIInputBlock
-    provider="password"
-    :type="AUTH_INP_TYPE.password"
-    :showPassword="true"
-    :error="authStore.sInpErr.value"
-    title="Повторите пароль"
-    :info="undefined"
-    :postTitle="undefined"
-    placeHolder="Введите пароль..."
-    :svgType="'svgo-lock'"
+  <UIAuthInput provider="repass"
+              :type="AUTH_INP_TYPE.password"
+              :showPassword="true"
+              :error="isSInpErr"
+              :title="$t( `${ props.basePath }.search[1].title` )"
+              :postTitle="undefined"
+              :placeHolder="$t( `${ props.basePath }.search[1].placeholder` )" 
+              :svgType="'svgo-lock'" 
   />
+  <AuthInfo v-if="sInpErrInd" :text="$t( `${ props.basePath }.appErr.second[ ${ sInpErrInd } ]` )" />
 
 </template>
 
 <script setup lang="ts">
 import { ref, provide } from 'vue'
 import { AUTH_INP_TYPE } from '~/constants/auth';
-import { useAuthStore, isValidPassword } from '~/store/auth'
+import { useAuthStore, isValidPassword } from '~/stores/auth'
 
+
+const props = defineProps<{
+  basePath: string
+}>()
 
 const authStore = useAuthStore()
 
@@ -60,4 +62,9 @@ watch(() => repass.value, (newValue) => {
   authStore.password = authStore.sInpErr.value ? ''  : pass.value 
 })
 
+const isFInpErr = computed( () => authStore.fInpErr.value )
+const fInpErrInd = computed( () => authStore.fInpErr.index )
+
+const isSInpErr = computed( () => authStore.sInpErr.value )
+const sInpErrInd = computed( () => authStore.sInpErr.index )
 </script>

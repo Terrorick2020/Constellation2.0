@@ -1,3 +1,0 @@
-<template>
-    Chats-certain
-</template>

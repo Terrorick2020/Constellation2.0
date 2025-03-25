@@ -1,0 +1,32 @@
+html,
+body,
+#app {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-size: 1em;
+}
+
+button,
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+#__nuxt {
+  min-height: 100vh;
+
+  .el-main {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.common-layout {
+  min-height: 100lvh;
+}
+
+img,
+svg,
+i {
+  user-select: none;
+}

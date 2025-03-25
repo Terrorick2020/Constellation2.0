@@ -1,0 +1,25 @@
+{
+  "extends": [
+    "stylelint-scss",
+    "stylelint-config-tailwindcss",
+    "stylelint-config-recess-order",
+    "stylelint-config-standard-scss"
+  ],
+  "rules": {
+    "selector-id-pattern": null,
+    "at-rule-no-unknown": null,
+    "selector-class-pattern": null,
+    "scss/at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": ["tailwind", "apply", "layer", "screen"]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["*.vue", "**/*.vue"],
+      "customSyntax": "postcss-html"
+    }
+  ]
+}

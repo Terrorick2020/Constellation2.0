@@ -1,0 +1,23 @@
+{
+    "docTitle": "Вход",
+    "docDesc": "Страница формы входа",
+    "header": "Вход в аккаунт",
+    "body": {
+        "email": {
+            "title": "E-mail*",
+            "placeholder": "Введите e-mail..."
+        },
+        "password": {
+            "title": "Пароль*",
+            "placeholder": "Введите пароль..."
+        },
+        "checkbox": {
+            "label": "Сохранить вход ",
+            "link": "Забыли пароль?"
+        }
+    },
+    "btns": {
+        "first": "Войти в аккаунт",
+        "secondary": "Нет аккаунта? Регистрация"
+    }
+}

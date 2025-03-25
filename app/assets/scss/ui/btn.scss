@@ -1,48 +1,102 @@
-:root {
-  #light {
-    --colored-btn-color: #ffffff;
-    --font-btn-color: black;
-
-    --btn-hover-shadow: #8f7f7f;
-    --btn-active-border-color: #2f2f2f;
-  }
-
-  #dark {}
-}
-
 #__nuxt {
-  .el-button {
-    height: 3.8rem;
-    border-radius: 5.5rem;
-
-    span, p {
-      font-size: 1rem;
-      font-weight: 700;
-    }
+  .ui-button-color {
+    background: linear-gradient(270deg, #FF6C46, #E44820, #E44820, #FF6C46);
+    background-size: 200% 200%;
+    background-position: left center;
+    transition: background-position 0.3s ease;
 
     &:hover {
-      box-shadow: 0 0 5px var(--btn-hover-shadow);
+      background-position: right center;
     }
 
     &:active {
-      scale: 0.99;
-      border: 1px solid var(--btn-active-border-color);
+      background-color: #E44820;
     }
+  }
 
-    &.color {
-      background: linear-gradient(90deg, #FF6C46, #E44820);
+  .el-icon {
+    width: auto;
+  }
 
-      span, p {
-        color: var(--colored-btn-color);
+  .el-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .el-button {
+    --el-border-radius-round: 100px;
+
+    height: 50px;
+    font-size: 14px;
+    font-weight: 500;
+
+    &.btn-main {
+      @apply bg-main-gradient;
+
+      font-size: 14px;
+      color: white;
+
+      &:active {
+        border: 1px solid #ff6c46;
+      }
+
+      &:hover {
+        color: white;
       }
     }
 
-    &.font {
-      background: transparent;
-      color: var(--font-btn-color);
+    &.is-circle {
+      min-width: 50px;
+    }
 
-      span, p {
-        color: var(--font-btn-color);
+    &.long {
+      width: 100%;
+    }
+
+    &.btn-empty {
+      color: black;
+
+      &:active {
+        border: 1px solid #2f2f2f;
+      }
+
+      &:hover {
+        background-color: white;
+      }
+    }
+
+    &.left {
+      justify-content: flex-start;
+
+      span {
+        width: 100%;
+      }
+    }
+
+    &.btn-classic {
+      color: white;
+      background: linear-gradient(180deg, rgba(255, 108, 70, 1) 0%, rgba(228, 72, 32, 1) 100%);
+      border-radius: 16px;
+      min-height: 60px;
+      margin: 0;
+      width: 100%;
+    }
+
+    &.btn-grey {
+      min-height: 60px;
+      margin: 0;
+
+      @apply bg-main;
+
+      color: black;
+      border-radius: 16px;
+
+      &:hover {
+        border: 1px solid #a8a8a8;
+      }
+
+      &:active {
+        border: 1px solid #2f2f2f;
       }
     }
   }

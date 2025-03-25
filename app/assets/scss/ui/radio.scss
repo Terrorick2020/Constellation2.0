@@ -1,0 +1,32 @@
+#__nuxt {
+  .el-radio {
+    transition: border-color .3s ease-in-out;
+
+    &--large {
+      height: 24px;
+    }
+
+    &__label {
+      font-size: 14px;
+      color: black;
+    }
+
+    &__inner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid black;
+
+      &::after {
+        width: 16px;
+        height: 16px;
+        background: black;
+      }
+    }
+
+    &.is-checked {
+      .el-radio__inner {
+        background: white;
+      }
+    }
+  }
+}

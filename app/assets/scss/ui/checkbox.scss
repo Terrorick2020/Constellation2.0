@@ -1,33 +1,33 @@
-:root {
-  #light {
-    --checkbox-color: black;
-    --checkbox-label-checked: black;
+#__nuxt {
+  .el-checkbox.el-checkbox--large .el-checkbox__inner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid black;
+    border-color: black;
+
+    --el-checkbox-checked-bg-color: black;
+
+    &:checked {
+      background-color: black;
+    }
+
+    &::after {
+      top: 2px;
+      left: 8px;
+      width: 4px;
+      height: 12px;
+    }
   }
 
-  #dark {}
-}
+  .el-checkbox .el-checkbox__inner {
+    scale: 1.3;
+    border: 1px solid black;
+    border-color: black;
 
-#__nuxt {
-  .el-checkbox {
-    &__inner {
-      border: 1px solid var(--checkbox-color);
-      border-color: var(--checkbox-color);
-  
-      --el-checkbox-checked-bg-color: var(--checkbox-color);
-  
-      &:checked {
-        background-color: var(--checkbox-color);
-      }
-    }
+    --el-checkbox-checked-bg-color: black;
 
-    &.is-checked {
-      .el-checkbox__label {
-        color: var(--checkbox-label-checked);
-      }
-    }
-
-    &.large .el-checkbox__inner {
-      scale: 1.3;
+    &:checked {
+      background-color: black;
     }
   }
 }

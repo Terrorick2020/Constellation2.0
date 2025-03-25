@@ -5,20 +5,15 @@
     >
       <div class="flex flex-col justify-between h-full lg:w-1/3">
         <div class="flex flex-col gap-2">
-          <SvgoLogo filled class="text-[113px] max-h-10" />
-          <div class="opacity-40">Collaba - территория для кросс-маркетинга и коллабораций</div>
+          <UILogo  />
+          <div class="opacity-40">Созвездие - платформа безопасного доведения приказов и распоряжений до личного состава</div>
         </div>
-        <div>ООО "Коллаба" 2024</div>
+        <div class="mt-2">61каф. "Созвездие" 2025</div>
       </div>
       <div class="flex flex-col gap-[10px] w-full lg:w-1/3">
-        <div>
-          <nuxt-link to="">Блогеру</nuxt-link>
-        </div>
-        <div>
-          <nuxt-link to="">Продюсеру</nuxt-link>
-        </div>
-        <div>
-          <nuxt-link to="">О нас</nuxt-link>
+        <div class="flex gap-2 items-center text-[#3D5AD2]">
+          <nuxt-link to="/">О нас</nuxt-link>
+          <SvgoLink />
         </div>
         <div class="flex gap-2 items-center text-[#3D5AD2]">
           <nuxt-link to="/privacy">Политика конфиденциальности</nuxt-link>
@@ -34,7 +29,7 @@
           <nuxt-link href="https://dev.collaba.pro/auth/sign-in"><el-button round class="btn-main">Вход/Регистрация</el-button></nuxt-link>
         </div>
         <div>
-          <el-button round class="btn-empty" :icon="SVGEmail">invoice@collaba.pro</el-button>
+          <el-button round class="btn-empty" icon="svgo-email">invoice@collaba.pro</el-button>
         </div>
       </div>
     </div>
@@ -42,5 +37,5 @@
 </template>
 
 <script setup>
-import SVGEmail from '@/assets/icons/email.svg'
+
 </script>

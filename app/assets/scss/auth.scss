@@ -1,0 +1,198 @@
+:root {
+    --primary-selection-bg-color: #1e9e89;
+    --primary-selection-font-color: #ffffff;
+
+    --primary-main-bg-color: #F4F4F4;
+    --primary-main-line-color: #0000000f;
+    --primary-main-font-color: #000000;
+    --primary-link-font-color: #3D5AD2;
+
+    --primary-block-bg-color: #fff;
+    --primary-block-desc-color: #00000080;
+    --primary-block-line-color: #00000026;
+
+    // Переопределённые переменные
+    --el-color-primary: #000000 !important;
+}
+
+::selection {
+    background: var(--primary-selection-bg-color);
+    color : var(--primary-selection-font-color);
+}
+
+@keyframes fadeUpAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeDownAnimation{
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-layout {
+
+    .el-header {
+        margin-bottom: 0 !important;
+        height: auto;
+    }
+    .el-container {
+        margin: 0 !important;
+    }
+    .el-footer {
+        height: auto;
+    }
+
+    .input-svg {
+        path {
+            fill: #e44820;
+        }
+    }
+
+    .fadeUp {
+        opacity: 0;
+        transform: translateY(50px);
+        animation: fadeUpAnimation 0.7s ease forwards;
+    }
+      
+    .fadeDown {
+        opacity: 0;
+        transform: translateY(-50px);
+        animation: fadeDownAnimation 0.7s ease forwards;
+    }
+
+    .title {
+        font-size: 1.5em;
+        letter-spacing: -1px;
+        font-weight: 600;
+        color: var(--primary-main-font-color);
+    }
+
+    .title-min {
+        font-size: 1em;
+        letter-spacing: -0.5px;
+        font-weight: 700;
+        color: var(--primary-main-font-color);
+    }
+    
+    .description {
+        font-size: 1em;
+        letter-spacing: -0.5px;
+        font-weight: 500;
+        color: var(--primary-block-desc-color);
+    }
+
+    .color-block {
+        background: var(--primary-block-bg-color);
+        border: 1px solid var(--primary-main-line-color);
+        border-radius: 20px;
+        padding: 5%;
+    }
+
+    .btn-content {
+        button {
+            font-weight: 800 !important;
+            min-height: 60px;
+
+            &:active {
+                border-color: #e44820;
+                scale: 0.99;
+            }
+    
+            &:first-of-type {
+                background: linear-gradient(#ff6c46, #e44820);
+                color: var(--primary-main-bg-color);
+            }
+
+            &:last-of-type {
+                --el-button-hover-bg-color: #ff6b4616;
+                --el-button-hover-border-color: #ff6b464d;
+
+                color: var(--primary-main-font-color);
+            }
+
+            p {
+                font-weight: 800 !important;
+            }
+        }
+    }
+    
+    
+    .inner-form-widget {
+        width: 480px !important;
+        min-height: 60px !important;
+        border: 1px solid var(--primary-block-line-color);
+        border-radius: 16px;
+        padding: 5px 15px;
+    
+        &:not(:first-of-type) {
+            margin-top: 5px;
+        }
+    
+        @media ( max-width: 597.5px ) {
+            width: 100% !important; 
+        }
+    }
+
+    .sing-in__body {
+        .body-search a {
+            color: #00000080;
+            transition: all .2s ease-in-out;
+
+            &:hover {
+                color: #000000;
+                letter-spacing: 0.1px;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .el-input__wrapper {
+
+        .el-input__password {
+            svg {
+                path {
+                    fill: var(--el-color-primary);
+                }
+            }
+        }
+
+        &.is-focus {
+            border: 2px solid var(--el-color-primary);
+        }
+    }
+
+    .error {
+        --el-border-color: #ff0000 !important;
+    }
+
+    .el-input {
+        --el-border-color: black;
+    }
+
+    .info-block .info-block__text .link{
+        color: var(--primary-link-font-color);
+        text-decoration: underline;
+    }
+
+    .radio-list {
+        min-width: 100%;
+    
+        .radio-item {
+            min-width: 100%;
+            border-radius: 16px !important;
+        }
+    }
+}

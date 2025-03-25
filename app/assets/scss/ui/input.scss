@@ -1,47 +1,55 @@
-:root {
-  #light {
-    --input-color: black;
-    --input-focus-border: black;
-    --input-error-border: #ff0000;
-    --input-focus-shadow: #00000033;
-    --icon-fill: black;
-  }
-
-  #dark {}
-}
-
 #__nuxt {
   .el-input {
-    --el-border-radius-base: 1rem;
-    --el-input-text-color: var(--input-color);
+    border-radius: 80px;
 
-
-    width: 100%;
-    border-radius: 4.5rem;
-    box-sizing: 2px;
+    --el-border-radius-base: 16px;
 
     &__wrapper {
       &.is-focus {
-        border: 2px solid var(--input-focus-border);
-        outline-color: var(--input-focus-border);
-        box-shadow: 0 0 0 1px var(--input-focus-shadow);
+        outline-color: black;
+        box-shadow: 0 0 0 1px rgb(0 0 0 / 20%);
 
-        --el-input-focus-border: var(--input-focus-border);
+        --el-input-focus-border: black;
       }
     }
 
-    &.error {
-      --el-border-color: var(--input-error-border) !important;
+    &__prefix-inner {
+      color: black;
     }
 
-    .el-icon {
-      color: var(--icon-fill);
-      width: 1.6rem;
-      height: 1.6rem;
+    &--large {
+      .el-input__inner {
+        height: 60px;
+      }
+    }
+  }
 
-      svg {
-        width: 100%;
-        height: 100%;
+
+  .el-textarea {
+    border-radius: 80px;
+
+    --el-border-radius-base: 16px;
+
+    &__wrapper {
+      &.is-focus {
+        outline-color: black;
+        box-shadow: 0 0 0 1px rgb(0 0 0 / 20%);
+
+        --el-input-focus-border: black;
+      }
+    }
+    
+    &__inner {
+      padding: 15px;
+    }
+
+    &__prefix-inner {
+      color: black;
+    }
+
+    &--large {
+      .el-input__inner {
+        height: 60px;
       }
     }
   }

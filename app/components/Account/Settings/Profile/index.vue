@@ -1,3 +1,0 @@
-<template>
-    Profile settings
-</template>

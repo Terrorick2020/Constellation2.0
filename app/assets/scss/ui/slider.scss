@@ -1,0 +1,52 @@
+#__nuxt {
+  .el-slider {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 100%;
+      border: none;
+      right: 0;
+      z-index: 35;
+      @apply bg-main-gradient;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 100%;
+      border: none;
+      left: 0;
+      z-index: 35;
+      @apply bg-blue-man;
+    }
+
+    &__bar {
+      @apply bg-blue-man;
+      height: 3px;
+    }
+
+    &__runway {
+      @apply bg-main-gradient;
+      height: 3px;
+      position: relative;
+    }
+
+    &__button {
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgb(226, 110, 33);
+
+      &-wrapper {
+        height: 32px;
+        z-index: 40;
+      }
+      // border-image-source: linear-gradient(90deg, #ff6c46 0%, #e44820 100%);
+    }
+  }
+}

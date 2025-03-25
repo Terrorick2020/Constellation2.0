@@ -1,0 +1,10 @@
+services:
+  app:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: > 
+      sh -c "npm install; npm run build; node .output/server/index.mjs"
+    ports:
+      - "${NODE_PORT}:3000"

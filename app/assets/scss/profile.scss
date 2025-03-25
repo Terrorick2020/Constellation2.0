@@ -1,0 +1,29 @@
+.profile-header-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  > :nth-child(1),
+  > :nth-child(2) {
+    grid-column: span 1;
+  }
+
+  > :nth-child(n + 3) {
+    grid-column: span 2;
+  }
+
+  @media (width <= 1024px) {
+    grid-template-columns: 1fr;
+
+    > :nth-child(1),
+    > :nth-child(n + 3) {
+      display: flex;
+      grid-column: span 1;
+      justify-content: center;
+    }
+
+    > :nth-child(2) {
+      grid-column: span 1;
+      order: 5;
+    }
+  }
+}

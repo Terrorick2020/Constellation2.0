@@ -1,31 +1,16 @@
 export const clientRoutes = {
-    account: {
-        main: '/account',
+    catalog: {
+        main: '/catalog',
+        param: '/[name]',
+    },
+    settings: {
+        main: '/settings',
         local: {
-            admin: '/admin',
-            notification: '/notification',
-            settings: {
-                main: '/settings',
-                local: {
-                    profile: '/profile',
-                    service: '/service'
-                }
-            },
-            catalog: {
-                main: '/catalog',
-                local: {
-                    list: '/list',
-                    doc: '/doc',
-                },
-            },
-            chats: {
-                main: '/chats',
-                local: {
-                    all: '/all',
-                    certain: '/certain',
-                }
-            },
-        },
+            clients: '/clients',
+            common: '/common',
+            inventory: '/inventory',
+            scope: '/scope',
+        }
     },
     auth: {
         main: '/auth',
@@ -33,16 +18,15 @@ export const clientRoutes = {
             resetPass: '/reset-pass',
             signIn: '/sign-in',
             signUp: '/sign-up',
-        },
+            verifyEmail: '/verify-email'
+        }
     },
-    preview: {
-        main: '/preview',
-        local: {
-            index: '/',
-            offers: '/offers',
-            privacy: '/privacy'
-        },
-    },
-    error: '/error',
-    notFound: '/not-found',
+    chats: '/chats',
+    main: '/',
+    signIn: '/login',
+    offers: 'offers',
+    privacy: '/privacy',
+    rules: '/rules',
+    signUp: '/register',
+    resetPass: '/reset-pass',
 }

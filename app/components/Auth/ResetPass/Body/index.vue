@@ -1,20 +1,25 @@
 <template>
     <div class="sing-in__body flex flex-col gap-[20px]">
-        <AuthResetPassBodyStepsInputCode
-            v-if="props.step === RPContentStep.CodeStep"
-        />
-        <AuthResetPassBodyStepsInputPassword
-            v-else-if="props.step === RPContentStep.RewritePassStep"
+        <component
+            :is="bodyStepsList[ props.step ]"
+            :basePath="`${ props.basePath }.body[${ props.step }]`"
         />
     </div>
 </template>
 
 <script setup lang="ts">
-import { RPContentStep } from '~/types/auth/reset-pass'
-
+import InputEmail from './Steps/InputEmail.vue'
+import InputCode from './Steps/InputCode.vue'
+import InputPassword from './Steps/InputPassword.vue'
 
 const props = defineProps<{
   step: number,
   basePath: string
 }>()
+
+const bodyStepsList = [
+    InputEmail,
+    InputCode,
+    InputPassword
+]
 </script>

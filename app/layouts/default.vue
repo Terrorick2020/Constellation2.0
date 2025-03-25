@@ -1,45 +1,8 @@
 <template>
-    <main class="wrapper" :id="settingsStore.theme">
-        <slot/>
-    </main>
+  <main class="custom-container flex gap-[30px] pb-[60px] lg:pt-[30px]">
+    <NavBar />
+    <slot />
+  </main>
+  <LazyNavBarMobile />
+  <Footer />
 </template>
-
-<script setup lang="ts">
-import { useSettingsStore } from '~/store/settings'
-import { type NotificType } from '~/types/settings'
-import { ElNotification } from 'element-plus'
-import { ElMessage } from 'element-plus'
-
-
-const settingsStore = useSettingsStore()
-
-const notificBlock = ( title: string, message: string, type: NotificType ) => {
-    if ( window.innerWidth >= 700 ) {
-        ElNotification({
-            title,
-            message,
-            type,
-            position: 'bottom-right'
-        })
-    } else {
-        ElMessage[ type ]( message )
-    }
-}
-
-watch(
-  () => settingsStore.notific.value,
-  ( newVal ) => {
-    if ( newVal ) {
-        notificBlock(
-            settingsStore.notific.title,
-            settingsStore.notific.message,
-            settingsStore.notific.type,
-        )
-    }
-
-    settingsStore.notific.value   = false
-    settingsStore.notific.title   = ''
-    settingsStore.notific.message = ''
-  }
-)
-</script>

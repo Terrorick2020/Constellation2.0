@@ -1,0 +1,57 @@
+#__nuxt {
+   .el-step.is-horizontal {
+      height: 28px;
+
+      // .el-step__head {
+
+      //    &.is-process {
+      //       @apply text-gray-300 border-gray-300;
+
+      //       .el-step__line {
+      //          @apply bg-gray-300;
+      //       }
+      //    }
+
+      //    &.is-finish {
+      //       @apply text-orange-woman border-orange-woman;
+
+      //       .el-step__line {
+      //          @apply bg-orange-woman
+      //       }
+      //    }
+      // }
+
+      .el-step__icon {
+         &.is-icon {
+            width: 18px;
+         }
+      }
+   }
+
+   .el-step.is-horizontal:not(.current) {
+      .el-step__icon {
+         &.is-icon {
+            padding-top: 4px;
+         }
+      }
+   }
+
+   // lines
+   .el-step.is-horizontal .el-step__line {
+      height: 3px;
+      top: 12px;
+   }
+
+   // 
+   .el-step__line-inner {
+      border-width: 2px !important;
+   }
+
+   .el-step__line {
+      @apply bg-gray-200;
+   }
+
+   .el-step__head.is-finish {
+      @apply text-orange-woman border-orange-woman;
+   }
+}

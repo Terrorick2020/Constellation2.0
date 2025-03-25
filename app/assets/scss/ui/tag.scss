@@ -1,0 +1,64 @@
+#__nuxt {
+  --min-height: 36px;
+
+  .el-tag {
+    &--primary {
+      min-height: var(--min-height);
+      padding: 0 15px;
+      color: black;
+      background-color: #F4F4F4;
+      font-weight: 500;
+
+      @apply border border-black/15;
+
+      &.dark {
+        @apply bg-tag-dark;
+      }
+
+      &.active {
+        border-color: #FF6C46;
+      }
+    }
+
+    &__content {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 140%;
+    }
+
+    &__close {
+      color: black;
+    }
+
+    .el-icon.el-tag__close {
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      :hover {
+        background-color: rgb(208, 208, 208);
+        border-radius: 100%;
+      }
+    }
+  }
+
+  .el-check-tag--primary {
+    display: flex;
+    align-items: center;
+    min-height: var(--min-height);
+    padding: 0 15px;
+    color: black;
+    background-color: white;
+    border-radius: 16px;
+    font-weight: 500;
+    @apply border border-main-border;
+    transition: all 0.2s ease-in-out;
+
+    &.is-checked {
+      @apply bg-main-gradient;
+      color: white;
+      transition: all 0.2s ease-in-out;
+    }
+  }
+}

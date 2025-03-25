@@ -1,0 +1,78 @@
+#__nuxt {
+  .el-select {
+    &__selection {
+      padding: 5px;
+    }
+    &__wrapper {
+      border-radius: 16px;
+      width: 100%;
+      min-height: 60px;
+
+      &.is-focused {
+        box-shadow: 0 0 0 1px rgb(0 0 0 / 90%) inset;
+      }
+
+      &:hover {
+        outline-color: black;
+
+        --el-select-focus-border: black;
+      }
+    }
+
+    &-dropdown {
+      padding: 100px;
+      background-color: black;
+    }
+
+    &__selected-item {
+      .el-tag {
+        padding: 20px 10px;
+        background-color: white;
+        @apply border border-main-border;
+        border-radius: 20px;
+        color: black;
+
+        &__close {
+          width: 16px;
+          height: 16px;
+          color: black;
+          &:hover {
+            background-color: rgb(219, 219, 219);
+          }
+        }
+      }
+    }
+  }
+}
+
+body {
+  .el-popper {
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .el-select-dropdown {
+    overflow: hidden;
+
+    .el-select-dropdown__item {
+      padding: 10px;
+      padding-left: 30px;
+      min-height: 60px;
+      font-weight: 500;
+
+      &.is-selected {
+        color: black;
+        font-weight: bold;
+
+        &-icon {
+          color: black;
+        }
+      }
+    }
+
+    .el-select-dropdown__item.selected {
+      font-weight: bold;
+      color: black;
+    }
+  }
+}
