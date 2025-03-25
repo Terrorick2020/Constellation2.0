@@ -33,7 +33,7 @@
 import { ref, provide } from 'vue'
 import { AUTH_INP_TYPE } from '~/constants/auth'
 import { useAuthStore, isValidUsername } from '~/stores/auth'
-import { lenPassword } from '~/env/auth.env'
+import { lenPassword, lenUsername } from '~/env/auth.env'
 import { clientRoutes } from '~/env/routes.env'
 
 
@@ -52,11 +52,7 @@ provide('password', password)
 watch(
   () => username.value,
   (newValue) => {
-    const res = isValidUsername(newValue)
-
-    authStore.fInpErr.value = res[0]
-    authStore.fInpErr.index = res[1]
-
+    authStore.fInpErr.value = newValue.length < lenUsername.min || newValue.length > lenUsername.max
     authStore.username = res[0] ? newValue : ''
   }
 )
