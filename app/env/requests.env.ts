@@ -24,25 +24,25 @@ export const HELPERS_PRE_VALIDATION_ENDPOINT = import.meta.env.VITE_HELPERS_PRE_
 export const USER_CURRENT = import.meta.env.VITE_USER_CURRENT
 
 
-if (
-    !BASE_URL                        ||
-    !REGISTER_ENDPOINT               ||
-    !LOGIN_ENDPOINT                  ||
-    !LOGOUT_ENDPOINT                 ||
-    !EMAIL_VERIFY                    ||
-    !PASSWORD_RECOVERY               ||
-    !PASSWORD_RESET                  ||
-    !WORK_FIELDS_ENDPOINT            ||
-    !WORK_CONDITIONS_ENDPOINT        ||
-    !PROFILE_TYPE_ENDPOINT           ||
-    !PROFILE_LEGAL_FORM_ENDPOINT     ||
-    !PROFILES_ENDPOINT               ||
-    !MEDIA_ENDPOINT                  ||
-    !HELPERS_PRE_VALIDATION_ENDPOINT ||
-    !USER_CURRENT
-) {
-    throw new Error( 'Some environment variable values are missing!' )
-}
+// if (
+//     !BASE_URL                        ||
+//     !REGISTER_ENDPOINT               ||
+//     !LOGIN_ENDPOINT                  ||
+//     !LOGOUT_ENDPOINT                 ||
+//     !EMAIL_VERIFY                    ||
+//     !PASSWORD_RECOVERY               ||
+//     !PASSWORD_RESET                  ||
+//     !WORK_FIELDS_ENDPOINT            ||
+//     !WORK_CONDITIONS_ENDPOINT        ||
+//     !PROFILE_TYPE_ENDPOINT           ||
+//     !PROFILE_LEGAL_FORM_ENDPOINT     ||
+//     !PROFILES_ENDPOINT               ||
+//     !MEDIA_ENDPOINT                  ||
+//     !HELPERS_PRE_VALIDATION_ENDPOINT ||
+//     !USER_CURRENT
+// ) {
+//     throw new Error( 'Some environment variable values are missing!' )
+// }
 
 export const SignUpRT = {
     profileTypes: 'profile types',

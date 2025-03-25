@@ -4,7 +4,12 @@ import validator from 'validator'
 import axios, { AxiosHeaders, type AxiosResponse } from 'axios'
 
 import { SignUpRT } from '~/env/requests.env'
-import { lenPassword, patternForPass } from '~/env/auth.env'
+import {
+  lenUsername,
+  patternForUsername,
+  lenPassword,
+  patternForPass
+} from '~/env/auth.env'
 import {
   BASE_URL,
   REGISTER_ENDPOINT,
@@ -38,8 +43,16 @@ import {
 } from '~/types/auth/sign-up'
 
 
-export const isValidEmail = (email: string): boolean => {
-  return validator.isEmail(email)
+export const isValidUsername = (username: string): [boolean, number | null] => {
+  if( !patternForUsername.test( username ) ) {
+    return [false, 1]
+  }
+
+  if (username.length < lenUsername.min || username.length > lenUsername.max) {
+    return [false, 2]
+  }
+
+  return [true, null]
 }
 
 export const isValidPassword = (password: string): [boolean, number | null] => {
@@ -76,16 +89,22 @@ export const useAuthStore = defineStore(
   'AuthStore',
   () => {
 
-    const userId = ref(null)
+    const userId = ref<number | null>( null )
+
+    const username = ref<string>( '' )
+    const password = ref<string>( '' )
+
+    const accessToken = ref<string>( '' )
+
+
+
     const email = ref('')
-    const password = ref('')
     const repass = ref('')
     const saveMe = ref(false)
     const code = ref('')
     const phone = ref('')
 
     const resetToken = ref('')
-    const accessToken = ref('')
 
     const emailIsVerify = ref(true)
     const isLoad = ref(false)
@@ -118,14 +137,9 @@ export const useAuthStore = defineStore(
     })
 
     const resetPass: Ref<ResetPassConfig> = ref({
-      contentStep: RPContentStep.EmailStep,
+      contentStep: RPContentStep.CodeStep,
       lastContentStep: RPLastContentStep.Extra,
       contContentStep: RPContContentStep.Extra,
-    })
-    const signUp: Ref<SignUpConfig> = ref({
-      contentStep: SUContentStep.WorkFieldsStep,
-      lastContentStep: SULastContentStep.Extra,
-      contContentStep: SUContContentStep.Extra,
     })
 
     const login = async () => {
@@ -443,20 +457,14 @@ export const useAuthStore = defineStore(
       }
     }
 
-    const restartSignIn = () => {
-      signUp.value.contentStep = 0
-    }
-    const restartSignUp = () => {
-      signUp.value.contentStep = 0
-    }
-    const restartResetPass = () => {
-      resetPass.value.contentStep = 0
-    }
 
     return {
       userId,
-      email,
+      username,
       password,
+      accessToken,
+
+      email,
       repass,
       saveMe,
       code,
@@ -465,7 +473,6 @@ export const useAuthStore = defineStore(
       emailIsVerify,
       isLoad,
 
-      accessToken,
       resetToken,
 
       appWarn,
@@ -477,7 +484,6 @@ export const useAuthStore = defineStore(
       tInpErr,
 
       resetPass,
-      signUp,
 
       login,
       logout,
@@ -491,10 +497,6 @@ export const useAuthStore = defineStore(
       register,
 
       verifyEmail,
-
-      restartSignIn,
-      restartSignUp,
-      restartResetPass
     }
   },
   isBrowser

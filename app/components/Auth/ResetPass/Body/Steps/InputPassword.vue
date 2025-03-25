@@ -4,9 +4,9 @@
               :type="AUTH_INP_TYPE.password"
               :showPassword="true"
               :error="isFInpErr"
-              :title="$t( `${ props.basePath }.search[0].title` )"
+              :title="'Придумайте новый пароль'"
               :postTitle="undefined"
-              :placeHolder="$t( `${ props.basePath }.search[0].placeholder` )" 
+              :placeHolder="'Введите пароль...'" 
               :svgType="'svgo-lock'" 
   />
   <AuthInfo v-if="isFInpErr" :text="$t( `${ props.basePath }.appErr.first[ ${ fInpErrInd } ]` )" />
@@ -15,10 +15,10 @@
               :type="AUTH_INP_TYPE.password"
               :showPassword="true"
               :error="isSInpErr"
-              :title="$t( `${ props.basePath }.search[1].title` )"
+              :title="'Повторите пароль'"
               :postTitle="undefined"
-              :placeHolder="$t( `${ props.basePath }.search[1].placeholder` )" 
-              :svgType="'svgo-lock'" 
+              :placeHolder="'Введите пароль...'"
+              :svgType="'svgo-lock'"
   />
   <AuthInfo v-if="sInpErrInd" :text="$t( `${ props.basePath }.appErr.second[ ${ sInpErrInd } ]` )" />
 

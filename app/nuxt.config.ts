@@ -2,13 +2,14 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-04-03',
+  compatibilityDate: '2025-03-15',
   
   devtools: { enabled: true },
   
   typescript: {
     typeCheck: false
   },
+
   modules: [
     '@element-plus/nuxt',
     'nuxt-svgo',
@@ -33,10 +34,6 @@ export default defineNuxtConfig({
     '~/assets/scss/auth.scss',
     '~/assets/scss/block.scss',
     '~/assets/scss/offer.scss'
-  ],
-
-  plugins: [
-    '~/plugins/laravel-echo.client'
   ],
 
   // devServer: {

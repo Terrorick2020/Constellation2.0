@@ -7,13 +7,11 @@
         </el-icon>
         ]
       </span>
-      {{ $t(`${props.basePath}.btns.first`) }}
+      Войти в аккаунт
     </el-button>
     <hr class="mb-[10px] mt-[10px]" />
     <el-button round @click="toSingUp">
-      <p class="text-base font-[900] text-black">
-        {{ $t(`${props.basePath}.btns.secondary`) }}
-      </p>
+      <p class="text-base font-[900] text-black">Нет аккаунта? Регистрация</p>
     </el-button>
   </div>
 </template>
@@ -25,9 +23,6 @@ import { clientRoutes } from '~/env/routes.env'
 
 import { Right } from '@element-plus/icons-vue'
 
-const props = defineProps<{
-  basePath: string
-}>()
 
 const router = useRouter()
 const authStore = useAuthStore()
