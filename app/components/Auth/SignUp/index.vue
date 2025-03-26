@@ -11,20 +11,13 @@
 				<AuthSignUpBody />
 			</el-main>
 			<el-footer style="padding: 0; margin: 0;">
-				<AuthSignUpBtns :step="step" :basePath="basePath" :maxStep="maxStep" class="mt-7" />
+				<AuthSignUpBtns class="mt-7" />
 			</el-footer>
 		</el-container>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useAuthStore } from '~/stores/auth'
-
-
 const authStore = useAuthStore()
-const basePath = 'authPage.signUp'
-
-const step = computed( () => authStore.signUp.contentStep )
-const maxStep = computed( () => authStore.signUp.lastContentStep )
 </script>

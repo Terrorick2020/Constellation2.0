@@ -45,11 +45,11 @@ import {
 
 export const isValidUsername = (username: string): [boolean, number | null] => {
   if( !patternForUsername.test( username ) ) {
-    return [false, 1]
+    return [false, 0]
   }
 
   if (username.length < lenUsername.min || username.length > lenUsername.max) {
-    return [false, 2]
+    return [false, 1]
   }
 
   return [true, null]
@@ -63,21 +63,21 @@ export const isValidPassword = (password: string): [boolean, number | null] => {
   const isValidChars = patternForPass.isValidChars
 
   if (!isValidChars.test(password)) {
-    return [false, 1]
+    return [false, 0]
   }
 
   if (!hasUpperCase.test(password)) {
-    return [false, 2]
+    return [false, 1]
   }
   if (!hasDigit.test(password)) {
-    return [false, 2]
+    return [false, 1]
   }
   if (!hasSpecialChar.test(password)) {
-    return [false, 2]
+    return [false, 1]
   }
 
   if (password.length < lenPassword.min || password.length > lenPassword.max) {
-    return [false, 3]
+    return [false, 2]
   }
 
   return [true, null]
@@ -137,7 +137,7 @@ export const useAuthStore = defineStore(
     })
 
     const resetPass: Ref<ResetPassConfig> = ref({
-      contentStep: RPContentStep.CodeStep,
+      contentStep: RPContentStep.EmailStep,
       lastContentStep: RPLastContentStep.Extra,
       contContentStep: RPContContentStep.Extra,
     })

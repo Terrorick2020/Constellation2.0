@@ -53,15 +53,14 @@ watch(
   () => username.value,
   (newValue) => {
     authStore.fInpErr.value = newValue.length < lenUsername.min || newValue.length > lenUsername.max
-    authStore.username = res[0] ? newValue : ''
+    authStore.username = !authStore.fInpErr.value ? newValue : ''
   }
 )
 watch(
   () => password.value,
   (newValue) => {
-    authStore.sInpErr.value = password.value.length < lenPassword.min
-
-    authStore.password = newValue
+    authStore.sInpErr.value = password.value.length < lenPassword.min || password.value.length > lenPassword.max
+    authStore.password = !authStore.sInpErr.value ? newValue : ''
   }
 )
 watch(
