@@ -1,80 +1,99 @@
 <template>
-    <div class="flex w-full flex-col gap-[30px]">
-      <div class="flex flex-col gap-1">
-        <div class="flex flex-col gap-2 lg:flex-row">
-          <div class="el-input el-input--large el-input--prefix">
-            <div class="el-input__wrapper" tabindex="-1">
-              <span class="el-input__prefix"
-                ><span class="el-input__prefix-inner"
-                  ><i class="el-icon el-input__icon"
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      class="nuxt-icon nuxt-icon--fill"
-                    >
-                      <g data-name="Layer 2">
-                        <path
-                          d="m20.71 19.29-3.4-3.39A7.92 7.92 0 0 0 19 11a8 8 0 1 0-8 8 7.92 7.92 0 0 0 4.9-1.69l3.39 3.4a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 11a6 6 0 1 1 6 6 6 6 0 0 1-6-6z"
-                          data-name="search"
-                        ></path>
-                      </g></svg></i></span></span
-              ><input
-                class="el-input__inner"
-                type="text"
-                autocomplete="off"
-                tabindex="0"
-                placeholder="Поиск по названию и др...."
-                id="el-id-1024-9"
-              />
-            </div>
-          </div>
-          <Filters />
-          <Sort />
-          <nuxt-link href="/myoffers"
-            ><el-button class="btn-classic !hidden cursor-pointer lg:!block"
-              >Мои обьявления</el-button
-            ></nuxt-link
-          >
-        </div>
-  
-        <!-- Here was Rostov-on-Don item -->
-         
-        <!-- <div class="el-select__selected-item">
-          <span
-            class="el-tag is-closable el-tag--info el-tag--default el-tag--light"
-            style="max-width: 293px; background-color: rgb(144 144 144 / var(--tw-bg-opacity))"><span class="el-tag__content">
-              <span class="el-select__tags-text">Ростов-на-Дону</span></span>
-            <i class="el-icon el-tag__close"
-              ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-                <path
-                  fill="currentColor"
-                  d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"
-                ></path></svg></i
-          ></span>
-        </div> -->
-      </div>
-      <div class="flex flex-wrap justify-between gap-7">
-        <Offer />
-        <Offer />
-        <Offer />
-        <Offer />
-        <Offer />
+  <div class="flex w-full flex-col">
+    <div class="mb-5 flex flex-col gap-[10px] lg:flex-row">
+      <el-input
+        v-model="searchQuery"
+        size="large"
+        placeholder="Поиск по названию и др...."
+        class="h-[60px] max-w-full lg:max-w-[835px]"
+      >
+        <template #prefix>
+          <SvgoSearch filled class="h-6 w-[30px]" :font-controlled="false" />
+        </template>
+      </el-input>
+      <div class="flex items-center gap-x-[10px] grow">
+        <Filters />
+        <Sort />
       </div>
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  const i18n: any = useI18n()
-  const lang = i18n.locale.value
-  
-  const title = i18n.messages.value[lang].offersPage?.docTitle
-  const desc = i18n.messages.value[lang].offersPage?.docDesc
-  
-  useSeoMeta({
-    title: title,
-    ogTitle: title,
-    description: desc,
-    ogDescription: desc
-  })
-  </script>
-  
+
+    <div class="space-y-[100px]">
+      <div class="flex w-full flex-col gap-[10px]" v-for="companyIndex in 5">
+        <!-- Here keep document info -->
+        <Company index-page /> 
+        <div class="border border-black/15 p-4 flex flex-col gap-y-[20px] bg-white rounded-2xl">
+          <div class="flex flex-col gap-[10px]">
+            <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">Количество людей, подписавших документ</h2>
+            <div class="demo-progress">
+              <el-progress
+                :percentage="percentage"
+                :stroke-width="15"
+                status="success"
+                striped
+                striped-flow 
+                :duration="duration"
+                :text-inside="true"
+              />
+              <!-- <el-button-group>
+                <el-button :icon="Minus" @click="decrease" />
+                <el-button :icon="Plus" @click="increase" />
+              </el-button-group> -->
+            </div>
+            <!-- Количество подписавших -->
+            <p class="text-sm text-gray-500">Подписали: {{ 50 }} из {{ 100 }}</p> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { Minus, Plus } from '@element-plus/icons-vue'
+import { useProfileStore } from '~/stores/profile.js'
+import { useFiltersStore } from '~/stores/filters.js'
+
+const percentage = ref<number>(50) // Начальный процент
+const searchQuery = ref(''); // Строка поиска
+
+const duration = computed(() => Math.floor(percentage.value / 5)) // Длительность анимации
+
+const increase = () => {
+  percentage.value += 1
+  if (percentage.value > 100) {
+    percentage.value = 100
+  }
+}
+
+const decrease = () => {
+  percentage.value -= 1
+  if (percentage.value < 0) {
+    percentage.value = 0
+  }
+}
+
+const i18n: any = useI18n()
+const lang = i18n.locale.value
+
+const title = i18n.messages.value[lang].catalogPage?.docTitle
+const desc = i18n.messages.value[lang].catalogPage?.docDesc
+
+useSeoMeta({
+  title: title,
+  ogTitle: title,
+  description: desc,
+  ogDescription: desc
+})
+
+
+</script>
+
+<style scoped>
+.demo-progress .el-progress--line {
+  margin-bottom: 15px;
+  max-width: 600px;
+  border: 2px solid black;
+  border-radius: 15px;
+}
+</style>
