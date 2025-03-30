@@ -19,4 +19,3 @@ useSeoMeta({
     ogDescription: desc
 })
 </script>
-  
