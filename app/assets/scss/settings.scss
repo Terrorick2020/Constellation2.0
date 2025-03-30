@@ -10,11 +10,11 @@ $mobile_min_width: 1024px;
 
     &-title {
         @apply mb-[20px] text-xl;
-        font-weight: 800;
+        font-weight: 600;
         
         line-height: 24px;
     }
-
+    // TODO:Удалить
     &-subtitle {
         @apply mb-[20px];
         font-weight: 500;
@@ -248,3 +248,5 @@ $mobile_min_width: 1024px;
 .block-wrapper.settings-userInfo {
     @apply p-[20px];
 }
+
+

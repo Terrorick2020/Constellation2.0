@@ -2,9 +2,10 @@
   <div class="flex w-full flex-col">
     <div class="mb-5 flex flex-col gap-[10px] lg:flex-row">
       <el-input
+        v-model="searchQuery"
         size="large"
         placeholder="Поиск по названию и др...."
-        class="h-[60px] max-w-full lg:max-w-[635px]"
+        class="h-[60px] max-w-full lg:max-w-[835px]"
       >
         <template #prefix>
           <SvgoSearch filled class="h-6 w-[30px]" :font-controlled="false" />
@@ -16,68 +17,61 @@
       </div>
     </div>
 
-    <div class="space-y-[30px]">
+    <div class="space-y-[100px]">
       <div class="flex w-full flex-col gap-[10px]" v-for="companyIndex in 5">
-        <Company index-page />
+        <!-- Here keep document info -->
+        <Company index-page /> 
         <div class="border border-black/15 p-4 flex flex-col gap-y-[20px] bg-white rounded-2xl">
           <div class="flex flex-col gap-[10px]">
-            <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">КАТЕГОРИИ</h2>
-            <div class="flex w-full flex-wrap gap-[5px]">
-              <template v-if="profileInfo.tags.length">
-                <el-tag v-for="item in profileInfo.tags" :key="item.name" round>
-                  {{ item.name }}
-                </el-tag>
-              </template>
-              <p v-else class="text-sm">Не задано</p>
+            <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">Количество людей, подписавших документ</h2>
+            <div class="demo-progress">
+              <el-progress
+                :percentage="percentage"
+                :stroke-width="15"
+                status="success"
+                striped
+                striped-flow 
+                :duration="duration"
+                :text-inside="true"
+              />
+              <!-- <el-button-group>
+                <el-button :icon="Minus" @click="decrease" />
+                <el-button :icon="Plus" @click="increase" />
+              </el-button-group> -->
             </div>
-          </div>
-          <div class="flex flex-col gap-[10px]">
-            <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">АУДИТОРИЯ</h2>
-            <div class="flex w-full flex-wrap gap-[5px]">
-              <template v-if="audienceTags.length">
-                <el-tag v-for="item in audienceTags" class="dark" :key="item.name" round>
-                  {{ item.name }}
-                </el-tag>
-              </template>
-              <p v-else class="text-sm">Не задано</p>
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-[10px]">
-            <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">УСЛОВИЯ СОТРУДНИЧЕСТВА</h2>
-            <div class="flex w-full flex-wrap gap-[5px]">
-              <template v-if="terms.tags.length">
-                <el-tag v-for="item in terms.tags" class="dark" :key="item.name" round>
-                  {{ item.name }}
-                </el-tag>
-              </template>
-              <p v-else class="text-sm">Не задано</p>
-            </div>
-          </div>
-          <div class="flex flex-col gap-[10px]">
-            <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">РЕКЛАМНЫЙ ИНВЕНТАРЬ</h2>
-            <div class="flex items-center gap-x-[5px] flex-wrap">
-              <button v-for="inventory in INVENTORY_LIST" :key="inventory.key">
-                <component 
-                  :is="`svgo-${inventory.icon}`" 
-                  :font-controlled="false"
-                  class="w-9 h-9"
-                  filled
-                />
-              </button>
-              <button>
-                <el-tag round>Ещё 15</el-tag>
-              </button>
-            </div>
+            <!-- Количество подписавших -->
+            <p class="text-sm text-gray-500">Подписали: {{ 50 }} из {{ 100 }}</p> 
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
+import { computed, ref } from 'vue'
+import { Minus, Plus } from '@element-plus/icons-vue'
 import { useProfileStore } from '~/stores/profile.js'
 import { useFiltersStore } from '~/stores/filters.js'
+
+const percentage = ref<number>(50) // Начальный процент
+const searchQuery = ref(''); // Строка поиска
+
+const duration = computed(() => Math.floor(percentage.value / 5)) // Длительность анимации
+
+const increase = () => {
+  percentage.value += 1
+  if (percentage.value > 100) {
+    percentage.value = 100
+  }
+}
+
+const decrease = () => {
+  percentage.value -= 1
+  if (percentage.value < 0) {
+    percentage.value = 0
+  }
+}
 
 const i18n: any = useI18n()
 const lang = i18n.locale.value
@@ -92,22 +86,14 @@ useSeoMeta({
   ogDescription: desc
 })
 
-const filtersStore = useFiltersStore()
-const { profileInfo, audience, terms } = useProfileStore()
 
-const audienceTags = computed(() => {
-  return [
-    ...audience.age,
-    ...audience.segment_tags,
-    ...audience.geo_tags,
-    ...audience.interes_tags,
-  ]
-})
-
-const INVENTORY_LIST = [
-  { key: 'telegram', icon: 'telegram', label: '' },
-  { key: 'vk', icon: 'vk', label: '' },
-  { key: 'youtube', icon: 'youtube', label: '' },
-  { key: 'yandex-dzen', icon: 'yandex-dzen', label: '' },
-]
 </script>
+
+<style scoped>
+.demo-progress .el-progress--line {
+  margin-bottom: 15px;
+  max-width: 600px;
+  border: 2px solid black;
+  border-radius: 15px;
+}
+</style>

@@ -36,20 +36,22 @@
           ></nuxt-link
         >
       </div>
-      <div class="el-select__selected-item">
+
+      <!-- Here was Rostov-on-Don item -->
+       
+      <!-- <div class="el-select__selected-item">
         <span
           class="el-tag is-closable el-tag--info el-tag--default el-tag--light"
-          style="max-width: 293px; background-color: rgb(244 244 244 / var(--tw-bg-opacity))"
-          ><span class="el-tag__content"
-            ><span class="el-select__tags-text">Ростов-на-Дону</span></span
-          ><i class="el-icon el-tag__close"
+          style="max-width: 293px; background-color: rgb(144 144 144 / var(--tw-bg-opacity))"><span class="el-tag__content">
+            <span class="el-select__tags-text">Ростов-на-Дону</span></span>
+          <i class="el-icon el-tag__close"
             ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
               <path
                 fill="currentColor"
                 d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"
               ></path></svg></i
         ></span>
-      </div>
+      </div> -->
     </div>
     <div class="flex flex-wrap justify-between gap-7">
       <Offer />

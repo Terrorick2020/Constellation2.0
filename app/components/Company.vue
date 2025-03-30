@@ -4,19 +4,14 @@
       <div class="flex items-center gap-x-[10px]">
         <el-avatar :size="48" :src="Avatar" class="border border-black/15" />
         <div class="flex flex-col">
+          <!-- TODO: Username -->
           <span class="font-extrabold text-base">Название профиля </span>
-          <span class="text-sm opacity-40 leading-[140%]">Дескриптор · Подразделение</span>
+          <span class="text-sm opacity-80 leading-[140%]">Название документа2222 </span>
+          <!-- TODO: Подразделение -->
+          <span class="text-sm opacity-40 leading-[140%]">Подразделение</span>
         </div>
       </div>
       <div v-if="indexPage" class="flex items-center transition-all group-hover:translate-x-[2px] gap-x-[10px]">
-        <button @click="isFavorite = !isFavorite">
-          <component 
-            :is="`svgo-${isFavorite ? 'StarFill' : 'StarOutline'}`"
-            :font-controlled="false" 
-            class="w-6 h-6" 
-            filled
-          />
-        </button>
         <UIPopoverMenu :list="LIST_OPTIONS" @select="onSelect">
           <template #reference>
             <button>
@@ -26,25 +21,17 @@
         </UIPopoverMenu>
       </div>
     </div>
-    <div
-      class="group flex cursor-pointer items-center justify-between rounded-2xl border border-black/15 px-5 py-[18px]"
-      :class="{
-        'bg-white': indexPage
-      }"
-    >
-      <div class="flex items-center gap-x-[5px] font-semibold text-sm">
-        <SvgoPinLocationOutline class="w-6 h-6" :font-controlled="false" />
-        <span class="leading-none">Россия; Москва; Ул. Снежная 16</span>
-      </div>
-      <div v-if="indexPage" class="transition-all group-hover:translate-x-[2px]">
-        <SvgoArrow filled class="rotate-90 transform text-xl" />
-      </div>
-    </div>
   </div>
 </template>
+
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { useDocumentStore } from '~/stores/documentStore'
 import Avatar from '@/assets/image/avatar.png'
-import type { TPopoverItemProps } from '~/types/UI/popover';
+import type { TPopoverItemProps } from '~/types/UI/popover'
+
+const router = useRouter()
+const documentStore = useDocumentStore()
 
 const props = withDefaults(
   defineProps<{
@@ -56,15 +43,19 @@ const props = withDefaults(
 )
 
 const LIST_OPTIONS: TPopoverItemProps[] = [
-  { key: 'message', label: 'Написать сообщение' },
-  { key: 'block', label: 'Заблокировать' },
-  { key: 'report', label: 'Пожаловаться' },
-  { key: 'copy', label: 'Скопировать ссылку' },
+  { key: 'subscribe', label: 'Подписать документ', route: '/subscribe' },
+  { key: 'message', label: 'Посмотреть документ', route: '/message' },
+  { key: 'block', label: 'Скачать документ', route: '/block' },
+  { key: 'copy', label: 'Скопировать ссылку', route: '/copy' },
 ]
-
-const isFavorite = ref(false)
 
 const onSelect = (option: (typeof LIST_OPTIONS)[0]) => {
   console.log('option', option)
+  if (option.route) {
+    documentStore.setDocumentName('Название документа2222')
+
+    router.push(option.route)
+  }
 }
 </script>
+

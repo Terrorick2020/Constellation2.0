@@ -1,0 +1,73 @@
+<template>
+  <div class="flex w-full flex-col gap-[1px]">
+    <el-empty description="&nbsp;" />
+    
+    <el-card class="center-card">
+      <template #header>
+        <div class="card-header">
+          <span>Список всех пользователей</span>
+        </div>
+      </template>
+      
+      <el-input
+        v-model="searchQuery"
+        placeholder="Поиск пользователей..."
+        prefix-icon="el-icon-search"
+        class="search-input"
+      />
+
+      <div class="item-container">
+        <p v-for="o in filteredUsers" :key="o" class="text item">{{ '' + o }}</p>
+      </div>
+    </el-card>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+
+const searchQuery = ref(''); // Строка поиска
+
+const users = ['User 1', 'User 2', 'User 3', 'User 4', 'User 5', 'User 7', 'User 8', 'User 9', 'User 10'];
+
+const filteredUsers = computed(() => {
+  return users.filter(user => user.toLowerCase().includes(searchQuery.value.toLowerCase()));
+});
+</script>
+
+<style scoped>
+  .flex {
+    margin-top: -40px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .center-card {
+    max-width: 800px;
+    width: 100%;
+    margin-left: 90px;
+    padding: 20px;
+    margin-top: -70px;
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .item {
+    font-size: 17px;
+    color: #555;
+  }
+
+  .item-container {
+    max-height: 100px; 
+    overflow-y: auto;  
+  }
+
+  .search-input {
+    margin-bottom: 10px; 
+  }
+</style>

@@ -35,10 +35,6 @@ export default defineNuxtConfig({
     '~/assets/scss/offer.scss'
   ],
 
-  plugins: [
-    '~/plugins/laravel-echo.client'
-  ],
-
   // devServer: {
   //   host: '0.0.0.0'
   // },

@@ -6,3 +6,10 @@
   <LazyNavBarMobile />
   <Footer />
 </template>
+
+
+
+<!-- layout для всех pages -->
+
+
+<!-- pages будет route setting/offers -->

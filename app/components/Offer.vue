@@ -1,4 +1,7 @@
-<template>
+<!-- page with past offers -->
+
+
+<!-- <template>
     <div class="flex flex-col">
     <div class="offer-header justify-between flex items-center">
         <div class="flex items-center gap-2 w-full">
@@ -31,30 +34,30 @@
 
             <p class="text-xs font-bold mt-3">Компании</p>
             <div class="flex flex-wrap gap-1 mt-2">
-                <span class="el-tag el-tag--primary el-tag--light is-round dark active"><span class="el-tag__content">Красота и здоровье</span><!--v-if--></span>
-                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Стрижки</span><!--v-if--></span>
-                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Мода</span><!--v-if--></span>
-                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Путешествия</span><!--v-if--></span>
+                <span class="el-tag el-tag--primary el-tag--light is-round dark active"><span class="el-tag__content">Красота и здоровье</span></span>
+                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Стрижки</span></span>
+                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Мода</span></span>
+                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Путешествия</span></span>
             </div>
             
             <p class="text-xs font-bold mt-3">Блогеры</p>
             <div class="flex flex-wrap gap-1 mt-2">
-                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Стрижки</span><!--v-if--></span>
-                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Мода</span><!--v-if--></span>
-                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content ">Красота и здоровье</span><!--v-if--></span>
+                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Стрижки</span></span>
+                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Мода</span></span>
+                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content ">Красота и здоровье</span></span>
 
             </div>
            <p class="text-xs font-bold mt-3">Проекты</p>
             <div class="flex flex-wrap gap-1 mt-2">
-                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Стрижки</span><!--v-if--></span>
-                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Мода</span><!--v-if--></span>
+                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Стрижки</span></span>
+                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">Мода</span></span>
             </div>
             <div class="h-[1px] w-[98%] bg-black/10 mt-4"></div>
             
             <h2 class="text-xs font-bold opacity-60 mt-2">ГОРОДА</h2>
             <div class="flex flex-wrap gap-1 mt-2">
-                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">🇷🇺 Москва</span><!--v-if--></span>
-                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">🇷🇺 Тюмень</span><!--v-if--></span>
+                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">🇷🇺 Москва</span></span>
+                <span class="el-tag el-tag--primary el-tag--light is-round dark"><span class="el-tag__content">🇷🇺 Тюмень</span></span>
             </div>
         </div>
     </div>
@@ -64,4 +67,10 @@
 
 <script setup lang="ts">
 import OfferImg from '~/assets/image/offer-banner.jpg'
-</script>
+</script> -->
+
+
+
+<template>
+    
+</template>

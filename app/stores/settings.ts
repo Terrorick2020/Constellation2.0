@@ -7,29 +7,30 @@ type Scope = {
     id: string;
     name: string;
     scopes?: Scope[]
+    
 }
 
 export const useSettingsStore = defineStore('settings', () => {
     const { $api } = useNuxtApp()
-
+    // TODO:Удалить линки
     const mediaList = ref<UploadUserFile[]>([
-        {
-            name: 'food.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-        },
-        {
-            name: 'food.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-        },
-        {
-            name: 'food.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-        },
+        // {
+        //     name: 'food.jpeg',
+        //     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+        // },
+        // {
+        //     name: 'food.jpeg',
+        //     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+        // },
+        // {
+        //     name: 'food.jpeg',
+        //     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+        // },
     ])
 
     const common = reactive({
-        name: 'Britva',
-        url: 'britva_ru',
+        name: '',
+        url: '',
         geo: [],
         descritor: '',
         description: '',
@@ -37,63 +38,43 @@ export const useSettingsStore = defineStore('settings', () => {
         hideAddress: false,
         logo,
         media: mediaList,
-        site: ''
+        site: '',
+        password: [],
+        rank:[]
     });
 
     const scopes: Scope[] = [
         {
-            id: 'services',
-            name: 'Услуги',
+            id: 'language',
+            name: 'Язык',
             scopes: [
                 {
-                    id: 'health',
-                    name: 'Здоровье и медицина'
+                    id: 'English',
+                    name: 'Английский'
                 },
                 {
-                    id: 'sport',
-                    name: 'Спорт и фитнес'
+                    id: 'Russian',
+                    name: 'Русский'
                 },
                 {
-                    id: 'home',
-                    name: 'Бытовые услуги'
+                    id: 'Chinese',
+                    name: 'Китайский'
                 },
             ]
         },
         {
-            id: 'building',
-            name: 'Строительство',
+            id: 'theme ',
+            name: 'Тема',
             scopes: [
                 {
-                    id: 'repair',
-                    name: 'Ремонт',
-                    scopes: [
-                        {
-                            id: 'tech',
-                            name: 'Бытовая техника'
-                        },
-                        {
-                            id: 'house',
-                            name: 'Оштукатуривание'
-                        },
-                    ]
+                    id: 'light',
+                    name: 'Cветлая',
+
                 },
                 {
-                    id: 'build-sip',
-                    name: 'Строительство домов из SIP панелей'
-                },
-            ]
-        },
-        {
-            id: 'entertainments',
-            name: 'Услуги',
-            scopes: [
-                {
-                    id: 'cinema',
-                    name: 'Кинотеатр'
-                },
-                {
-                    id: 'pc-games',
-                    name: 'Компьютерный клуб'
+                    id: 'Dark',
+                    name: 'Темная',
+
                 },
             ]
         },
@@ -107,6 +88,7 @@ export const useSettingsStore = defineStore('settings', () => {
         price: [],
         scopeActivity: [],
         description: ''
+        
     })
 
     return {
