@@ -5,3 +5,16 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+definePageMeta({
+    layout: 'preview',
+})
+
+useSeoMeta({
+    title: 'Содержание документа',
+    ogTitle: 'Содержание документа',
+    description: 'Страница содержания документа',
+    ogDescription: 'Страница содержания документа',
+})
+</script>

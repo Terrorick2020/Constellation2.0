@@ -49,7 +49,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
 import { Minus, Plus } from '@element-plus/icons-vue'
 import { useProfileStore } from '~/stores/profile.js'
 import { useFiltersStore } from '~/stores/filters.js'
@@ -73,17 +72,11 @@ const decrease = () => {
   }
 }
 
-const i18n: any = useI18n()
-const lang = i18n.locale.value
-
-const title = i18n.messages.value[lang].catalogPage?.docTitle
-const desc = i18n.messages.value[lang].catalogPage?.docDesc
-
 useSeoMeta({
-  title: title,
-  ogTitle: title,
-  description: desc,
-  ogDescription: desc
+  title: 'Приказы и приказания',
+  ogTitle: 'Приказы и приказания',
+  description: 'Страница приказов и приказаний',
+  ogDescription: 'Страница приказов и приказаний',
 })
 
 
