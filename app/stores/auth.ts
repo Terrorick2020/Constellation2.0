@@ -127,7 +127,7 @@ export const useAuthStore = defineStore(
     })
 
     const resetPass: Ref<ResetPassConfig> = ref({
-      contentStep: RPContentStep.EmailStep,
+      contentStep: RPContentStep.RewritePassStep,
       lastContentStep: RPLastContentStep.Extra,
       contContentStep: RPContContentStep.Extra,
     })
@@ -157,10 +157,12 @@ export const useAuthStore = defineStore(
 
         const result = await delay(1000)
 
-        // if ( result ) {
-        //   apiSuccess.value = true
-        //   apiSuccess.block = 'login'
-        // }
+        if ( result ) {
+          apiRes.value = true
+          apiRes.type = ApiResType.success
+          apiRes.title = 'Ура!'
+          apiRes.msg = 'Успешный вход в сиситему!'
+        }
 
         isLoad.value = false
 
@@ -310,11 +312,18 @@ export const useAuthStore = defineStore(
       try {
         isLoad.value = true
 
-        const resEmailValid = await axios.get(
-          `url`
-        )
-          return resEmailValid.status === 201
+        const result = await delay(1000)
 
+        if ( result ) {
+          apiRes.value = true
+          apiRes.type = ApiResType.success
+          apiRes.title = 'Ура!'
+          apiRes.msg = 'Успешнаня регистрация!'
+        }
+        
+        isLoad.value = false
+
+        return result
       } catch (error: any) {
         // apiErr.value = true
         // apiErr.block = block

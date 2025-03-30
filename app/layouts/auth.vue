@@ -38,7 +38,6 @@ watch(
   () => authStore.apiRes.value,
   ( newVal ) => {
     if ( newVal ) {
-
       const title = authStore.apiRes.title
       const message = authStore.apiRes.msg
       const type = authStore.apiRes.type
