@@ -2,7 +2,7 @@
     <div class="sing-in__conteiner w-full">
         <el-container v-loading="authStore.isLoad">
             <el-header style="padding: 0; margin: 0;">
-                <ResetPassHeader :step="step" :email="email" :basePath="basePath" />
+                <ResetPassHeader :step="step" />
             </el-header>
             <el-main style="padding: 0; margin: 0;">
                 <ResetPassBody :step="step" :maxStep="maxStep" :basePath="basePath" class="mt-5" />
@@ -28,6 +28,5 @@ const authStore = useAuthStore()
 const basePath = 'authPage.resetPass'
 
 const step = computed( () => authStore.resetPass.contentStep )
-const email = computed( () => authStore.email )
 const maxStep = computed( () => authStore.resetPass.lastContentStep )
 </script>

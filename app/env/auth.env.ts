@@ -9,6 +9,13 @@ export const lenProfileUrl = {
     max: 15,
 }
 
+export const lenUsername = {
+    min: 4,
+    max: 50,
+}
+
+export const patternForUsername = /^[a-zA-Z0-9\-_]+$/
+
 export const lenPassword = {
     min: 8,
     max: 50,

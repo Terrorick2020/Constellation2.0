@@ -1,20 +1,21 @@
 <template>
-    
-    <UIAuthInput provider="code"
-                class="body-email"
-                :type="AUTH_INP_TYPE.text"
-                :showPassword="false"
-                :error="isFInpErr"
-                :title="$t( `${ props.basePath }.search[0].title` )"
-                :postTitle="undefined" 
-                :placeHolder="$t( `${ props.basePath }.search[0].placeholder` )" 
-                :svgType="'svgo-info'" 
-    />
+
+  <el-upload
+    ref="upload"
+    class="upload-cert"
+    action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+    :limit="1"
+    :on-exceed="handleExceed"
+    :auto-upload="false"
+  >
+    <template #trigger>
+      <el-button type="primary">Загрузить цифровую подпись...</el-button>
+    </template>
+  </el-upload>
 
 </template>
 
 <script setup lang="ts">
-import { ref, provide } from 'vue'
 import { useAuthStore } from '~/stores/auth'
 import { AUTH_INP_TYPE } from '~/constants/auth'
 import { lenCode } from '~/env/auth.env'
@@ -37,4 +38,16 @@ watch(() => code.value, (newValue) => {
 })
 
 const isFInpErr = computed( () => authStore.fInpErr.value )
+
+import { genFileId } from 'element-plus'
+import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+
+const upload = ref<UploadInstance>()
+
+const handleExceed: UploadProps['onExceed'] = (files) => {
+  upload.value!.clearFiles()
+  const file = files[0] as UploadRawFile
+  file.uid = genFileId()
+  upload.value!.handleStart(file)
+}
 </script>

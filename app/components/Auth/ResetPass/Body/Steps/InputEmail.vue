@@ -4,10 +4,10 @@
               :type="AUTH_INP_TYPE.text"
               :showPassword="false"
               :error="isFInpErr"
-              :title="$t( `${ props.basePath }.search[0].title` )"
+              :title="'Имя пользователя'"
               :postTitle="undefined"
-              :placeHolder="$t( `${ props.basePath }.search[0].placeholder` )" 
-              :svgType="'svgo-email'" 
+              :placeHolder="'Введите username...'" 
+              :svgType="'svgo-user'" 
   />
   <AuthInfo v-if="isFInpErr" :text="$t( `${ props.basePath }.appErr.first[ ${ fInpErrInd } ]` )" />
 

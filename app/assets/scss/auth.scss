@@ -128,6 +128,35 @@
             }
         }
     }
+
+    .upload-cert {
+        width: 100%;
+        overflow: hidden;
+
+        .el-upload {
+            width: 100%;
+
+            .el-button {
+                width: 100%;
+                background: transparent;
+                border: 2px solid #240b05;
+                border-radius: 10px;
+
+                &:hover {
+                    background: #ff6b461e;
+                }
+                
+                &:active {
+                    scale: 0.99;
+                }
+
+                span {
+                    font-weight: 600;
+                    color: black;
+                }
+            }
+        }
+    }
     
     
     .inner-form-widget {
