@@ -36,9 +36,9 @@
         <div class="info-block w-full">
             <p class="info-block__text description w-full">
             Нажимая далее, вы соглашаетесь с
-            <nuxtLink class="link" :to="privacyRoute">Политикой конфиденциальности</nuxtLink>
+            <nuxtLink class="link" to="/preview/privacy">Политикой конфиденциальности</nuxtLink>
             и
-            <nuxtLink class="link" :to="rulesRoute">Публичной офертой</nuxtLink>
+            <nuxtLink class="link" to="/preview/rules">Публичной офертой</nuxtLink>
             </p>
         </div>
     </div>
@@ -86,12 +86,10 @@ provide( 'repass', repass )
 watch(() => username.value, (newValue) => {
     const [ res, ind ] = isValidUsername( newValue )
 
-    console.log( appErr.first[ ind ] )
-
     authStore.fInpErr.value = !res
     authStore.fInpErr.index = ind
 
-    authStore.email = res ? newValue : ''
+    authStore.username = res ? newValue : ''
 })
 watch(() => pass.value, (newValue) => {
     const [ res, ind ] = isValidPassword( newValue )

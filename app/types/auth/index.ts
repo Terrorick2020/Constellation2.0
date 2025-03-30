@@ -1,15 +1,12 @@
-export interface AuthAppWarn {
-    value: boolean
-    block: string
+export enum ApiResType {
+    success = 'success',
+    warning = 'warning',
+    error = 'error',
 }
 
-export interface AuthApiErr {
+export interface ApiRes {
     value: boolean
-    block: string
-    statusCode: number | null
-}
-
-export interface InpAuthErr {
-    value: boolean
-    index: number | null
+    type: ApiResType
+    title: string
+    msg: string
 }

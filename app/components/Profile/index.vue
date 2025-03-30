@@ -1,5 +1,5 @@
 <template>
-  <!-- <ProfileLoading v-if="isLoad" />
+  <ProfileLoading v-if="isLoad" />
   <UIError v-else-if="isNotFound" />
   <div v-else class="w-full flex flex-col gap-[30px]" >
     <ProfileHeader />
@@ -11,7 +11,7 @@
     <ProfileUniversalAdvertising title="Оффлайн инвентарь" />
     <ProfileFooter />
     <ProfileSimilarСompanies />
-  </div> -->
+  </div>
   <div class="flex flex-col w-full">
       <div class="card-header">
         <span>Список всех пользователей</span>
