@@ -28,7 +28,7 @@ import {
 } from '~/env/requests.env'
 
 import type { ApiSuccess } from '~/types/auth/sing-in'
-import { ApiResType, type ApiRes } from '~/types/auth'
+import { ApiResType, type ApiRes, type InpAuthErr } from '~/types/auth'
 import {
   RPContentStep,
   RPLastContentStep,
@@ -105,16 +105,25 @@ export const useAuthStore = defineStore(
 
     const isLoad = ref(false)
 
+    const fInpErr: InpAuthErr = reactive({
+      value: false,
+      index: null
+    })
+    const sInpErr: InpAuthErr = reactive({
+      value: false,
+      index: null
+    })
+    const tInpErr: InpAuthErr = reactive({
+      value: false,
+      index: null
+    })
+
+
     const apiRes: ApiRes = reactive({
       value: false,
       type: ApiResType.success,
       title: '',
       msg: ''
-    })
-
-    const apiSuccess: ApiSuccess = reactive({
-      value: false,
-      block: ''
     })
 
     const resetPass: Ref<ResetPassConfig> = ref({
@@ -148,10 +157,10 @@ export const useAuthStore = defineStore(
 
         const result = await delay(1000)
 
-        if ( result ) {
-          apiSuccess.value = true
-          apiSuccess.block = 'login'
-        }
+        // if ( result ) {
+        //   apiSuccess.value = true
+        //   apiSuccess.block = 'login'
+        // }
 
         isLoad.value = false
 
@@ -170,16 +179,16 @@ export const useAuthStore = defineStore(
         //   email: email.value
         // }
 
-        const response = await axios.post(`${BASE_URL}${PASSWORD_RECOVERY}`, data)
+        // const response = await axios.post(`${BASE_URL}${PASSWORD_RECOVERY}`, data)
 
         isLoad.value = false
 
-        return response.status === 200
+        // return response.status === 200
       } catch (error: any) {
-        apiErr.value = true
-        apiErr.block = 'sendEmail'
-        apiErr.statusCode = error.status ? error.status : 500
-        isLoad.value = false
+        // apiErr.value = true
+        // apiErr.block = 'sendEmail'
+        // apiErr.statusCode = error.status ? error.status : 500
+        // isLoad.value = false
       }
     }
     const checkingCode = async () => {
@@ -194,10 +203,10 @@ export const useAuthStore = defineStore(
 
         return response.status === 200
       } catch (error: any) {
-        apiErr.value = true
-        apiErr.block = 'checkingCode'
-        apiErr.statusCode = error.status ? error.status : 500
-        isLoad.value = false
+        // apiErr.value = true
+        // apiErr.block = 'checkingCode'
+        // apiErr.statusCode = error.status ? error.status : 500
+        // isLoad.value = false
       }
     }
     const rewritePass = async () => {
@@ -216,10 +225,10 @@ export const useAuthStore = defineStore(
 
         return response.status === 200
       } catch (error: any) {
-        apiErr.value = true
-        apiErr.block = 'rewritePass'
-        apiErr.statusCode = error.status ? error.status : 500
-        isLoad.value = false
+        // apiErr.value = true
+        // apiErr.block = 'rewritePass'
+        // apiErr.statusCode = error.status ? error.status : 500
+        // isLoad.value = false
       }
     }
 
@@ -250,10 +259,10 @@ export const useAuthStore = defineStore(
 
         return response.data
       } catch (error: any) {
-        apiErr.value = true
-        apiErr.block = 'getSingUpData'
-        apiErr.statusCode = error.status ? error.status : 500
-        isLoad.value = false
+        // apiErr.value = true
+        // apiErr.block = 'getSingUpData'
+        // apiErr.statusCode = error.status ? error.status : 500
+        // isLoad.value = false
       }
     }
 
@@ -269,32 +278,32 @@ export const useAuthStore = defineStore(
       try {
         await axios.get(baseUri + nameParams)
       } catch (error: any) {
-        if (error.status === 422) {
-          fInpErr.value = true
-          fInpErr.index = 3
-        } else {
-          apiErr.value = true
-          apiErr.block = 'predictValid'
-          apiErr.statusCode = error.status ? error.status : null
-        }
+        // if (error.status === 422) {
+        //   fInpErr.value = true
+        //   fInpErr.index = 3
+        // } else {
+        //   apiErr.value = true
+        //   apiErr.block = 'predictValid'
+        //   apiErr.statusCode = error.status ? error.status : null
+        // }
       }
 
       try {
         await axios.get(baseUri + slugParams)
       } catch (error: any) {
-        if (error.status === 422) {
-          sInpErr.value = true
-          sInpErr.index = 3
-        } else {
-          apiErr.value = true
-          apiErr.block = 'predictValid'
-          apiErr.statusCode = error.status ? error.status : null
-        }
+        // if (error.status === 422) {
+        //   sInpErr.value = true
+        //   sInpErr.index = 3
+        // } else {
+        //   apiErr.value = true
+        //   apiErr.block = 'predictValid'
+        //   apiErr.statusCode = error.status ? error.status : null
+        // }
       }
 
       isLoad.value = false
 
-      return !fInpErr.value && !sInpErr.value && !apiErr.value
+      // return !fInpErr.value && !sInpErr.value && !apiErr.value
     }
 
     const register = async () => {
@@ -307,7 +316,7 @@ export const useAuthStore = defineStore(
           return resEmailValid.status === 201
 
       } catch (error: any) {
-        apiErr.value = true
+        // apiErr.value = true
         // apiErr.block = block
         // apiErr.statusCode = status
         isLoad.value = false
@@ -357,9 +366,11 @@ export const useAuthStore = defineStore(
 
       isLoad,
 
-      resetToken,
+      fInpErr,
+      sInpErr,
+      tInpErr,
 
-      apiSuccess,
+      resetToken,
       apiRes,
 
       resetPass,

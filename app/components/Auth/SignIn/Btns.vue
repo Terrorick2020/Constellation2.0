@@ -24,6 +24,7 @@ import { Right } from '@element-plus/icons-vue'
 
 
 const router = useRouter()
+const authStore = useAuthStore(); 
 
 const setRoute = clientRoutes.settings.main
 const mainAuthRoute = clientRoutes.auth.main

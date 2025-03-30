@@ -10,3 +10,8 @@ export interface ApiRes {
     title: string
     msg: string
 }
+
+export interface InpAuthErr {
+    value: boolean
+    index: number | null
+}
