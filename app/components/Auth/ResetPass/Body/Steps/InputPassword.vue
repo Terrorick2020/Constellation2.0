@@ -4,12 +4,12 @@
               :type="AUTH_INP_TYPE.password"
               :showPassword="true"
               :error="isFInpErr"
-              :title="'Придумайте новый пароль'"
+              :title="'Придумайте пароль'"
               :postTitle="undefined"
               :placeHolder="'Введите пароль...'" 
-              :svgType="'svgo-lock'" 
+              :svgType="'svgo-lock'"
   />
-  <AuthInfo v-if="isFInpErr" :text="$t( `${ props.basePath }.appErr.first[ ${ fInpErrInd } ]` )" />
+  <AuthInfo v-if="isFInpErr" :text="fInpErrMsg" />
 
   <UIAuthInput provider="repass"
               :type="AUTH_INP_TYPE.password"
@@ -20,7 +20,7 @@
               :placeHolder="'Введите пароль...'"
               :svgType="'svgo-lock'"
   />
-  <AuthInfo v-if="sInpErrInd" :text="$t( `${ props.basePath }.appErr.second[ ${ sInpErrInd } ]` )" />
+  <AuthInfo v-if="isSInpErr" :text="sInpErrMsg" />
 
 </template>
 
@@ -30,9 +30,16 @@ import { AUTH_INP_TYPE } from '~/constants/auth';
 import { useAuthStore, isValidPassword } from '~/stores/auth'
 
 
-const props = defineProps<{
-  basePath: string
-}>()
+const appErr = {
+    first: [
+        'Пароль должен состоять только из латинских букв, цифр и специальных символов!',
+        'Требования: 1 цифра, 1 заглавная буква, 1 специальный символ!',
+        'Пароль должен быть длиной от 8 до 50 символов!',
+    ],
+    second: [
+        'Пароли не совпадают!',
+    ]
+}
 
 const authStore = useAuthStore()
 
@@ -43,28 +50,28 @@ provide( 'pass', pass )
 provide( 'repass', repass )
 
 watch(() => pass.value, (newValue) => {
-  const [ res, ind ] = isValidPassword( newValue )
+    const [ res, ind ] = isValidPassword( newValue )
 
-  authStore.fInpErr.value = !res
-  authStore.fInpErr.index = ind
+    authStore.fInpErr.value = !res
+    authStore.fInpErr.index = ind
 
-  if ( repass.value && repass.value !== newValue ) {
-    authStore.password = ''
+    if ( repass.value ) {
+        authStore.sInpErr.value = repass.value !== newValue
+        authStore.sInpErr.index = authStore.sInpErr.value ? 0 : null
 
-    authStore.sInpErr.value = true
-    authStore.sInpErr.index = 1
-  }
+        authStore.password = !res && !authStore.sInpErr.value ? newValue : ''
+    }
 })
 watch(() => repass.value, (newValue) => {
-  authStore.sInpErr.value = newValue !== pass.value
-  authStore.sInpErr.index = authStore.sInpErr.value ? 1 : null
+    authStore.sInpErr.value = newValue !== pass.value
+    authStore.sInpErr.index = authStore.sInpErr.value ? 0 : null
 
-  authStore.password = authStore.sInpErr.value ? ''  : pass.value 
+    authStore.password = !authStore.sInpErr.value ? newValue : ''
 })
 
 const isFInpErr = computed( () => authStore.fInpErr.value )
-const fInpErrInd = computed( () => authStore.fInpErr.index )
+const fInpErrMsg = computed( () => appErr.first[ authStore.fInpErr.index ] )
 
 const isSInpErr = computed( () => authStore.sInpErr.value )
-const sInpErrInd = computed( () => authStore.sInpErr.index )
+const sInpErrMsg = computed( () => appErr.second[ authStore.sInpErr.index ] )
 </script>

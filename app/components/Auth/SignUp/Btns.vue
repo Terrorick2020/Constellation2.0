@@ -18,22 +18,24 @@ const authStore = useAuthStore()
 const profileStore = useProfileStore()
 
 const mainRoute = clientRoutes.auth.main
+const setRoute = clientRoutes.settings.main
 const logRoute = mainRoute + clientRoutes.auth.local.signIn
 
 const nextStep = async () => {
     const [ resUN, indUN ] = isValidUsername( authStore.username )
     const [ resP, indP ] = isValidPassword( authStore.password )
 
-    authStore.fInpErr.value = resUN
+    authStore.fInpErr.value = !resUN
     authStore.fInpErr.index = indUN
 
-    authStore.sInpErr.value = resP
+    authStore.sInpErr.value = !resP
     authStore.sInpErr.index = indP
 
-    if ( !resUN && !resP ) {
+    if ( resUN && resP ) {
+        console.log( 'sdvsdvsd' )
         const response = await authStore.register()
 
-        response && router.push( '' )
+        response && router.push( setRoute )
     }
 }
 const prevStep = () => {
