@@ -1,5 +1,6 @@
 <template>
   <div class="flex w-full flex-col gap-[1px]">
+    <Profiles />
 
     <div class="flex flex-col w-full">
       <div class="card-header">
