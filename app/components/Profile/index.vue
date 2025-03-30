@@ -1,6 +1,10 @@
 <template>
-  <div class="search">
-    <el-input
+  <div class="flex flex-col w-full">
+      <div class="card-header">
+        <span>Список всех пользователей</span>
+      </div>
+
+      <el-input
         v-model="searchQuery"
         size="large"
         placeholder="Поиск по названию и др...."

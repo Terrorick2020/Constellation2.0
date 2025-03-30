@@ -1,7 +1,7 @@
 <template>
   <aside class="hidden min-w-40 transform flex-col lg:flex">
     <div class="sticky top-5 w-full">
-      <NuxtLink to="/">
+      <NuxtLink to="/preview">
         <UILogo />
       </NuxtLink>
       <div class="pt-10">

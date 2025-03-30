@@ -78,3 +78,16 @@
         </p>
     </div>
 </template>
+
+<script setup lang="ts">
+definePageMeta({
+    layout: 'preview',
+})
+
+useSeoMeta({
+    title: 'Публичная офферта',
+    ogTitle: 'Публичная офферта',
+    description: 'Страница публичной офферты',
+    ogDescription: 'Страница публичной офферты',
+})
+</script>
