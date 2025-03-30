@@ -8,10 +8,11 @@
         alt="fon-img"
       />
       <div v-else class="h-[199px] w-full bg-gray-300 flex justify-center items-center rounded-xl">
-        <el-icon class="max-lg:mb-[75px]">
-          <icon-picture />
-          <span class="ml-2">Ваша фоновая картинка</span>
-        </el-icon>
+        <img 
+          :src="Image" 
+          alt="your image" 
+          class="image_logo" 
+        />
       </div>
     </div>
 
@@ -22,7 +23,7 @@
         <div class="w-[130px] bg-white p-[2px]">
           <el-avatar
             :size="130"
-            :src="profileInfo.logo ?? DEFAULT_LOGO"
+            :src="Avatar"
             class="absolute bottom-14 lg:bottom-0"
           />
         </div>
@@ -33,28 +34,36 @@
       </div>
 
       <div class="item2 flex">
-        <el-button round size="large" class="btn-main long fill-none !px-[54px] !text-[10xp]">
-          <template #icon>
-            <SvgoMessage filled />
+        <NuxtLink :to="`/chats/`">
+          <el-button round size="large" class="btn-main long fill-none !px-[134px] !text-[10xp]">
+            <template #icon>
+              <SvgoMessage filled />
+            </template>
+            Сообщение
+          </el-button>
+        </NuxtLink>
+        <h1> {{ name }}</h1>
+        <UIPopoverMenu :list="LIST_OPTIONS" @select="onSelect">
+          <template #reference>
+            <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button>
           </template>
-          Сообщение
-        </el-button>
-        <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button>
+        </UIPopoverMenu>
+        <!-- <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button> -->
       </div>
 
-      <p class="text-center text-sm opacity-40 lg:text-left">
+      <!-- <p class="text-center text-sm opacity-40 lg:text-left">
         {{ profileInfo.description }}
-      </p>
+      </p> -->
 
-      <div class="flex flex-wrap gap-2">
+      <!-- <div class="flex flex-wrap gap-2">
         <el-tag v-for="item in profileInfo.tags" :key="item.id" round>
           {{ item.name }}
         </el-tag>
-      </div>
-      <div class="flex items-center gap-2 text-sm"><SvgoPin /> {{ profileInfo.location }}</div>
+      </div> -->
+      <!-- <div class="flex items-center gap-2 text-sm"><SvgoPin /> {{ profileInfo.location }}</div>
       <div v-if="profileInfo.site" class="flex items-center gap-2 text-sm underline">
         <SvgoGlobe /> {{ profileInfo.site }}
-      </div>
+      </div> -->
     </div>
   </section>
 </template>
@@ -63,8 +72,25 @@
 import { DEFAULT_LOGO } from '~/constants/profile'
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 import { useProfileStore } from '~/stores/profile'
+import Image from '~/assets/image/image.png'
+import Avatar from '~/assets/image/avatar.png'
+import type { TPopoverItemProps } from '~/types/UI/popover'
+
 
 const { profileInfo } = useProfileStore()
+
+
+const LIST_OPTIONS: TPopoverItemProps[] = [
+  { key: 'complain', label: 'Пожаловаться', route: '/subscribe' },
+  { key: 'block', label: 'Заблокировать', route: '/message' },
+]
+
+defineProps({
+  name: {
+    type: String,
+    required: true
+  }
+});
 </script>
 
 
@@ -73,3 +99,11 @@ const { profileInfo } = useProfileStore()
      Заблокировать (ТОЛЛЬКО ДЛОЯ АДМИНА)
      Заблокать
       -->
+
+
+<style scoped>
+.image_logo {
+  width: 920px;
+  height: 195px;
+}
+</style>
