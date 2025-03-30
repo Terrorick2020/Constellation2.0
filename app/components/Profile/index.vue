@@ -48,7 +48,7 @@ watch(searchQuery, (newQuery) => {
 <style scoped lang="scss">
 // rename to prevent conflicts
 .search {
-  margin-top: 10px;
+  margin-top: 7px;
   color: #555;
 }
 
