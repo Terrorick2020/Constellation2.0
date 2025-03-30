@@ -157,10 +157,12 @@ export const useAuthStore = defineStore(
 
         const result = await delay(1000)
 
-        // if ( result ) {
-        //   apiSuccess.value = true
-        //   apiSuccess.block = 'login'
-        // }
+        if ( result ) {
+          apiRes.value = true
+          apiRes.type = ApiResType.success
+          apiRes.title = 'Ура!'
+          apiRes.msg = 'Успешный вход в сиситему!'
+        }
 
         isLoad.value = false
 

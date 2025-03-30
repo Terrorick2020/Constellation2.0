@@ -31,16 +31,16 @@ const mainAuthRoute = clientRoutes.auth.main
 const regRoute = mainAuthRoute + clientRoutes.auth.local.signUp
 
 const toProfile = async () => {
-  const { usernaem, password } = useAuthStore()
+  const { username, password } = useAuthStore()
 
-  authStore.fInpErr.value = usernaem.length < lenUsername.min || usernaem.length > lenUsername.max
+  authStore.fInpErr.value = username.length < lenUsername.min || username.length > lenUsername.max
   authStore.sInpErr.value = password.length < lenPassword.min || password.length > lenPassword.max
 
   if (!authStore.fInpErr.value && !authStore.sInpErr.value) {
     const response = await authStore.login()
 
     if (response) {
-      router.push(setRoute)
+      // router.push(setRoute)
     }
   }
 }
