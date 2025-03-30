@@ -66,3 +66,10 @@ import { useProfileStore } from '~/stores/profile'
 
 const { profileInfo } = useProfileStore()
 </script>
+
+
+<!-- три точки:
+     Пожаловаться
+     Заблокировать (ТОЛЛЬКО ДЛОЯ АДМИНА)
+     Заблокать
+      -->

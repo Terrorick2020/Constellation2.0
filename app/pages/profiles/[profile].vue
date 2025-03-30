@@ -1,6 +1,7 @@
 <template>
     <div class="w-full flex flex-col gap-[30px]">
-        <Profile />
+        <ProfileHeader />
+
     </div>
 </template>
   

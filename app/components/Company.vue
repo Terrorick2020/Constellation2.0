@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useDocumentStore } from '~/stores/documentStore'
-import Avatar from '@/assets/image/avatar.png'
+import Avatar from '~/assets/image/avatar.png'
 import type { TPopoverItemProps } from '~/types/UI/popover'
 
 const router = useRouter()
