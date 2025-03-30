@@ -1,61 +1,55 @@
 <template>
-  <!-- <ProfileLoading v-if="isLoad" />
-  <UIError v-else-if="isNotFound" />
-  <div v-else class="w-full flex flex-col gap-[30px]" >
-    <ProfileHeader />
-    <ProfileMedia />
-    <ProfileTerms />
-    <ProfileAudience />
-    <ProfileOnlineInventory />
-    <ProfileUniversalAdvertising title="Коллоборации" />
-    <ProfileUniversalAdvertising title="Оффлайн инвентарь" />
-    <ProfileFooter />
-    <ProfileSimilarСompanies />
-  </div> -->
-  <div class="flex flex-col w-full">
-      <div class="card-header">
-        <span>Список всех пользователей</span>
-      </div>
-
-      <el-input
+  <div class="search">
+    <el-input
         v-model="searchQuery"
-        placeholder="Поиск пользователей..."
-        prefix-icon="el-icon-search"
-        class="search-input"
-      />
+        size="large"
+        placeholder="Поиск по названию и др...."
+        class="h-[60px] max-w-full lg:max-w-[935px]"
+      >
+      <template #prefix>
+        <SvgoSearch filled class="h-6 w-[30px]" :font-controlled="false" />
+      </template>
+    </el-input>
+      
 
-      <div class="item-container">
-        <p v-for="o in filteredUsers" :key="o" class="text item">{{ '' + o }}</p>
-      </div>
+    <div class="item-container">
+      <p v-for="o in filteredUsers" :key="o" class="text item">{{ '' + o }}</p>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-const searchQuery = ref(''); // Строка поиска
-  
-const users = ['User 1', 'User 2', 'User 3', 'User 4', 'User 5', 'User 7', 'User 8', 'User 9', 'User 10',
-              'User 11', 'User 12', 'User 13', 'User 14', 'User 15', 'User 17', 'User 18', 'User 19', 'User 20',
+import { ref, computed, watch } from 'vue';
 
-];
-  
-const filteredUsers = computed(() => {
-  return users.filter(user => user.toLowerCase().includes(searchQuery.value.toLowerCase()));
+const searchQuery = ref('');
+
+const users = ['User 1', 'User 2', 'User 3', 'User 4', 'User 5', 'User 7', 'User 8', 'User 9', 'User 10',
+              'User 11', 'User 12', 'User 13', 'User 14', 'User 15', 'User 17', 'User 18', 'User 19', 'User 20'];
+
+const filteredUsers = ref<string[]>(users);
+
+const filterUsers = () => {
+  filteredUsers.value = users.filter(user =>
+    user.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+};
+
+let timeout: ReturnType<typeof setTimeout>;
+
+// Watcher для searchQuery 
+watch(searchQuery, (newQuery) => {
+  clearTimeout(timeout); 
+  timeout = setTimeout(() => {
+    filterUsers();
+  }, 500); 
 });
 </script>
 
 <style scoped lang="scss">
-.flex {
-  margin-top: 35px;  
-  display: flex;
-  justify-content: center;
-  height: 100%;
-}
-
-.card-header {
-  display: flex;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 20px;
+// rename to prevent conflicts
+.search {
+  margin-top: 10px;
+  color: #555;
 }
 
 .item {
@@ -73,6 +67,6 @@ const filteredUsers = computed(() => {
 .search-input {
   margin-bottom: 10px; 
   width: 100%; 
-  max-width: 1000px;  
+  max-width: 1000px; 
 }
 </style>
