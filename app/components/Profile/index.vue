@@ -26,7 +26,7 @@
             <h4 class="user-name">{{ o.name }}</h4>
             <h5 class="user-fio">{{ o.fio }}</h5>
           </div>
-          <NuxtLink :to="`/profiles/${o.name}?current_name=${o.fio}`">
+          <NuxtLink :to="`/profiles/${o.name}`">
             <el-button class="profile-description">
               <span class="mr-2 text-[#ffffff]">Перейти к профилю</span>
               <el-icon>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import Avatar from '~/assets/image/avatar.png'
 import { Right } from '@element-plus/icons-vue'
 
@@ -78,6 +78,14 @@ watch(searchQuery, (newQuery) => {
     filterUsers();
   }, 500);
 });
+
+const getUsers = async () => {
+
+}
+
+onMounted(() => {
+  getUsers()
+})
 </script>
 
 <style scoped lang="scss">

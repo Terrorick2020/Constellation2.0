@@ -12,7 +12,7 @@
         </div>
       </div>
       <div v-if="indexPage" class="flex items-center transition-all group-hover:translate-x-[2px] gap-x-[10px]">
-        <UIPopoverMenu :list="LIST_OPTIONS" @select="onSelect">
+        <UIPopoverMenu :list="LIST_OPTIONS" :slug="props.item.slug" @select="onSelect">
           <template #reference>
             <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button>
           </template>
@@ -35,6 +35,7 @@ const documentStore = useDocumentStore()
 const props = withDefaults(
   defineProps<{
     indexPage?: boolean
+    item: any
   }>(),
   {
     indexPage: false
@@ -42,11 +43,11 @@ const props = withDefaults(
 )
 
 const LIST_OPTIONS: TPopoverItemProps[] = [
-  { key: 'viewdoc', label: 'К документу', route: '/document' },
+  { key: 'viewdoc', label: 'К документу', },
   { key: 'download', label: 'Скачать документ' },
   { key: 'copy', label: 'Скопировать ссылку'},
   { key: 'statistics', label: 'Посмотреть статистику' },
-  { key: 'Удалить документ', label: 'Удалить документ' }
+  { key: 'delete', label: 'Удалить документ' }
 ]
 
 

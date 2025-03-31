@@ -17,9 +17,9 @@
       </div>
     </div>
     <div class="space-y-[100px]">
-      <div class="flex w-full flex-col gap-[10px]" v-for="companyIndex in 5">
+      <div class="flex w-full flex-col gap-[10px]" v-for="companyIndex in listDocs">
         <!-- Here keep document info -->
-        <Company index-page /> 
+        <Company :item="companyIndex" index-page /> 
         <div class="border border-black/15 p-4 flex flex-col gap-y-[20px] bg-white rounded-2xl">
           <div class="flex flex-col gap-[10px]">
             <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">Количество людей, подписавших документ</h2>
@@ -59,6 +59,13 @@ const increase = () => {
     percentage.value = 100
   }
 }
+
+const listDocs = [
+  {id: 0, name: 'Документ 1', slug: 'doc-1'},
+  {id: 1, name: 'Документ 2', slug: 'doc-2'},
+  {id: 2, name: 'Документ 3', slug: 'doc-3'},
+  {id: 3, name: 'Документ 4', slug: 'doc-4'},
+]
 
 const decrease = () => {
   percentage.value -= 1

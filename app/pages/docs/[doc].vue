@@ -1,12 +1,15 @@
 <template>
   <div class="flex w-full flex-col gap-[30px]">
     <div class="flex w-full flex-col gap-[30px]">
-      <Subscribe />
+      <Subscribe :docname="docName" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+const route = useRoute(); 
+const docName = route.params.doc as string;
+
 definePageMeta({
     layout: 'preview',
 })
