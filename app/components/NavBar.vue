@@ -21,7 +21,6 @@ const navigationLinks = [
   { id: 2, title: 'Документы', path: '/docs', iconName: 'search' },
   { id: 3, title: 'Чаты', path: '/chats', iconName: 'message' },
   { id: 4, title: 'Обьявления', path: '/offers', iconName: 'fire' },
-  { id: 5, title: 'Настройки профиля', path: '/settings', iconName: 'settings' },
-  { id: 6, title: 'Администратору', path: '/admin', iconName: 'lock' },
+  { id: 5, title: 'Настройки', path: '/settings', iconName: 'settings' },
 ]
 </script>

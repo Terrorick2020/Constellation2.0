@@ -66,6 +66,11 @@ watch(() => repass.value, (newValue) => {
     authStore.sInpErr.value = newValue !== pass.value
     authStore.sInpErr.index = authStore.sInpErr.value ? 0 : null
 
+    const [ res, ind ] = isValidPassword( pass.value )
+
+    authStore.fInpErr.value = !res
+    authStore.fInpErr.index = ind
+
     authStore.password = !authStore.sInpErr.value ? newValue : ''
 })
 

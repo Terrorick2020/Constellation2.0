@@ -32,6 +32,7 @@
                 striped-flow 
                 :duration="duration"
                 :text-inside="true"
+                color="#409EFF"
               />
             </div>
             <p class="text-sm text-gray-500">Подписали: {{ 50 }} из {{ 100 }}</p> 

@@ -229,17 +229,18 @@ export const useAuthStore = defineStore(
       try {
         isLoad.value = true
 
-        const data = {
-          password: password.value,
-          password_confirmation: password.value,
-          code: key.value
-        }
+        const result = await delay(1000)
 
-        const response = await axios.post(`${BASE_URL}${PASSWORD_RESET}`, data)
+        if ( result ) {
+          apiRes.value = true
+          apiRes.type = ApiResType.success
+          apiRes.title = 'Ура!'
+          apiRes.msg = 'Пароль успешно изменён!'
+        }
 
         isLoad.value = false
 
-        return response.status === 200
+        return result
       } catch (error: any) {
         // apiErr.value = true
         // apiErr.block = 'rewritePass'
