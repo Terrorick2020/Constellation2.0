@@ -1,6 +1,6 @@
 <template>
   <div class="btn-content flex flex-col gap-[5px]">
-    <el-button round type="danger" class="bordered" @click="toProfile">
+    <el-button round type="danger" class="bordered first" @click="toProfile">
       <span class="align-center mr-[10px] flex flex-row">
         <el-icon>
           <Right />
@@ -10,7 +10,7 @@
       Войти в аккаунт
     </el-button>
     <hr class="mb-[10px] mt-[10px]" />
-    <el-button round @click="toSingUp">
+    <el-button class="second" round @click="toSingUp">
       <p class="text-base font-[900] text-black">Нет аккаунта? Регистрация</p>
     </el-button>
   </div>

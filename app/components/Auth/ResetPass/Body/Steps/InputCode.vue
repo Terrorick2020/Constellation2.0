@@ -8,6 +8,7 @@
     :on-exceed="handleExceed"
     :auto-upload="false"
     :on-change="handleFileChange"
+    :on-remove="handleFileRemove"
     accept=".pem, .key, .crt"
   >
     <template #trigger>
@@ -37,8 +38,6 @@ const authStore = useAuthStore()
 const upload = ref<UploadInstance>()
 
 const handleExceed: UploadProps['onExceed'] = (files) => {
-  authStore.fInpErr.value = false
-  authStore.fInpErr.index = null
   upload.value!.clearFiles()
   const file = files[0] as UploadRawFile
   file.uid = genFileId()
@@ -52,6 +51,9 @@ const handleFileChange = (file: UploadRawFile, fileList: UploadRawFile[]) => {
     return
   }
 
+  authStore.fInpErr.value = false
+  authStore.fInpErr.index = null
+
   const reader = new FileReader()
   reader.readAsDataURL(file.raw)
 
@@ -64,6 +66,12 @@ const handleFileChange = (file: UploadRawFile, fileList: UploadRawFile[]) => {
     authStore.fInpErr.value = true
     authStore.fInpErr.index = 1
   }
+}
+
+const handleFileRemove: UploadProps['onRemove'] = (file, fileList) => {  
+  authStore.fInpErr.value = true
+  authStore.fInpErr.index = 0
+  authStore.key = ''
 }
 
 const isFInpErr = computed( () => authStore.fInpErr.value )

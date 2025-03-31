@@ -1,13 +1,21 @@
 <template>
   <div class="btn-content flex flex-col gap-[5px]">
-    <el-button type="danger" round @click="nextStep">Далее</el-button>
+    <el-button type="danger" class="first" round @click="nextStep">
+      {{ 
+        props.step !== RPContentStep.FinalStep
+          ?
+          'Далее'
+          :
+          'Вернуться ко входу'
+      }}
+    </el-button>
     <p></p>
-    <el-button round v-if="step !== RPContentStep.FinalStep" @click="prevStep">Назад</el-button>
+    <el-button class="second" round v-if="props.step !== RPContentStep.FinalStep" @click="prevStep">Назад</el-button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useAuthStore, isValidUsername } from '~/stores/auth'
+import { useAuthStore, isValidUsername, isValidPassword } from '~/stores/auth'
 import { RPContentStep } from '~/types/auth/reset-pass'
 import { clientRoutes } from '~/env/routes.env'
 import { lenCode, lenPassword } from '~/env/auth.env'
@@ -25,12 +33,12 @@ const logRoute = mainRoute + clientRoutes.auth.local.signIn
 const nextStep = async () => {
   switch (props.step) {
     case RPContentStep.EmailStep:
-      const [ res, ind ] = isValidUsername( authStore.username )
+      const [ resUN, indUN ] = isValidUsername( authStore.username )
 
-      authStore.fInpErr.value = !res
-      authStore.fInpErr.index = ind
+      authStore.fInpErr.value = !resUN
+      authStore.fInpErr.index = indUN
 
-      if ( res ) {
+      if ( resUN ) {
         const response = await authStore.sendUsername()
 
         if (response) {
@@ -51,12 +59,15 @@ const nextStep = async () => {
       }
       break
     case RPContentStep.RewritePassStep:
-      if (!authStore.fInpErr.value) {
-        authStore.fInpErr.value = authStore.password.length < lenPassword.min
-        authStore.fInpErr.index = authStore.fInpErr.value ? 3 : null
-      }
+      const [ resP, indP ] = isValidPassword( authStore.password )
 
-      if (authStore.password) {
+      authStore.fInpErr.value = !resP
+      authStore.fInpErr.index = indP
+
+      authStore.sInpErr.value = !resP
+      authStore.sInpErr.index = 0
+
+      if (resP) {
         const response = await authStore.rewritePass()
 
         if (response) {

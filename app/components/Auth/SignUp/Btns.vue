@@ -1,8 +1,8 @@
 <template>
     <div class="btn-content  flex flex-col gap-[5px] mt-[30px]">
-        <el-button round @click="nextStep">Зарегистрироваться</el-button>
+        <el-button class="first" round @click="nextStep">Зарегистрироваться</el-button>
         <p></p>
-        <el-button class="btn-sign-up-down" round @click="prevStep">Назад</el-button>
+        <el-button class="btn-sign-up-down second" round @click="prevStep">Назад</el-button>
     </div>
 </template>
 
