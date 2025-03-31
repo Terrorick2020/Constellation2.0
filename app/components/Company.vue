@@ -14,15 +14,14 @@
       <div v-if="indexPage" class="flex items-center transition-all group-hover:translate-x-[2px] gap-x-[10px]">
         <UIPopoverMenu :list="LIST_OPTIONS" @select="onSelect">
           <template #reference>
-            <button>
-              <SvgoMoreVertical class="w-6 h-6" filled :font-controlled="false" />
-            </button>
+            <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button>
           </template>
         </UIPopoverMenu>
       </div>
     </div>
   </div>
 </template>
+
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
@@ -43,19 +42,13 @@ const props = withDefaults(
 )
 
 const LIST_OPTIONS: TPopoverItemProps[] = [
-  { key: 'subscribe', label: 'Подписать документ', route: '/subscribe' },
-  { key: 'message', label: 'Посмотреть документ', route: '/message' },
-  { key: 'block', label: 'Скачать документ', route: '/block' },
-  { key: 'copy', label: 'Скопировать ссылку', route: '/copy' },
+  { key: 'viewdoc', label: 'К документу', route: '/document' },
+  { key: 'download', label: 'Скачать документ' },
+  { key: 'copy', label: 'Скопировать ссылку'},
+  { key: 'statistics', label: 'Посмотреть статистику' },
+  { key: 'Удалить документ', label: 'Удалить документ' }
 ]
 
-const onSelect = (option: (typeof LIST_OPTIONS)[0]) => {
-  console.log('option', option)
-  if (option.route) {
-    documentStore.setDocumentName('Название документа2222')
 
-    router.push(option.route)
-  }
-}
 </script>
 

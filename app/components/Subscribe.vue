@@ -1,5 +1,5 @@
 <template>
-    <h1>Subscribe</h1>
+    <h1>THIS DOCUMENT</h1>
 </template>
 
 <script setup lang="ts">
