@@ -4,13 +4,15 @@
     class="flex items-center gap-[10px] text-[14px] transition-all"
     :class="[mobile ? 'flex-col items-center justify-center' : 'flex-row']"
   >
-    <component
-      :is="`svgo-${link.iconName}`"
-      :class="['h-6 w-6', opacityClasses]"
-      :fontControlled="false"
-      v-bind:color="link.color"
-      filled
-    />
+    <el-badge is-dot :hidden="!link.isBadge" class="item mr-[10px]">
+      <component
+        :is="`svgo-${link.iconName}`"
+        :class="['h-6 w-6', opacityClasses]"
+        :fontControlled="false"
+        v-bind:color="link.color"
+        filled
+      />
+    </el-badge>
     <span v-if="!mobile || isActive" :class="['font-extrabold', opacityClasses]">
       {{ link.title }}
     </span>

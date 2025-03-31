@@ -47,6 +47,7 @@ const router = useRouter()  // Используем useRouter для досту�
 interface Props {
   list: TPopoverItemProps[]
   slug: string
+  setTable?: (value: boolean) => void
 }
 
 const props = defineProps<Props>()
@@ -63,6 +64,10 @@ const handleClickOption = (listItem: TPopoverItemProps) => {
   if (listItem.key === 'viewdoc') {
     // Переход с использованием Vue Router
     router.push(`/docs/${props.slug}`)
+  }
+
+  if (listItem.key === 'statistics') {
+    props.setTable( true )
   }
 }
 </script>

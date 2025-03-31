@@ -5,17 +5,11 @@
 </template>
 
 <script setup lang="ts">
-const i18n: any = useI18n()
-const lang = i18n.locale.value
-
-const title = i18n.messages.value[lang].chatsPage?.docTitle
-const desc = i18n.messages.value[lang].chatsPage?.docDesc
-
 useSeoMeta({
-  title: title,
-  ogTitle: title,
-  description: desc,
-  ogDescription: desc
+  title: 'Чаты',
+  ogTitle: 'Чаты',
+  description: 'Страница чатов',
+  ogDescription: 'Страница чатов'
 })
 
 definePageMeta({

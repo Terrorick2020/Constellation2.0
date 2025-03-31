@@ -12,15 +12,19 @@
         </template>
       </el-input>
       <div class="flex items-center gap-x-[10px] grow">
-        <Filters />
         <Sort />
+        <UIButton
+          ref="add"
+          icon-name="plus"
+          :class="{ '!bg-white': false }"
+          @click="setDrawer(true)"
+        />
       </div>
-      <el-button @click="setDrawer(true)">Загрузить новые приказы</el-button>
     </div>
     <div class="space-y-[100px]">
       <div class="flex w-full flex-col gap-[10px]" v-for="companyIndex in listDocs">
         <!-- Here keep document info -->
-        <Company :item="companyIndex" index-page /> 
+        <Company :item="companyIndex" :setTable="setTable" index-page /> 
         <div class="border border-black/15 p-4 flex flex-col gap-y-[20px] bg-white rounded-2xl">
           <div class="flex flex-col gap-[10px]">
             <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">Количество людей, подписавших документ</h2>
@@ -43,12 +47,15 @@
     </div>
   </div>
   <DrawersLoadDoc :drawer="drawer" :setDrawer="setDrawer" />
+  <DrawersStatistic :table="table" :setTable="setTable" />
 </template>
 
 <script setup lang="ts">
 import { Minus, Plus } from '@element-plus/icons-vue'
 import { useProfileStore } from '~/stores/profile.js'
 import { useFiltersStore } from '~/stores/filters.js'
+import type { ButtonInstance } from 'element-plus'
+
 
 const percentage = ref<number>(50) // Начальный процент
 const searchQuery = ref(''); // Строка поиска
@@ -76,11 +83,12 @@ const decrease = () => {
   }
 }
 
+const add = ref<ButtonInstance>()
 const drawer = ref(false)
+const setDrawer = (value: boolean) => drawer.value = value;
 
-const setDrawer = (value: boolean) => {
-  drawer.value = value
-}
+const table = ref(false)
+const setTable = (value: boolean) => table.value = value;
 
 useSeoMeta({
   title: 'Приказы и приказания',
@@ -88,8 +96,6 @@ useSeoMeta({
   description: 'Страница приказов и приказаний',
   ogDescription: 'Страница приказов и приказаний',
 })
-
-
 </script>
 
 <style scoped>
@@ -98,5 +104,9 @@ useSeoMeta({
   max-width: 600px;
   border: 2px solid black;
   border-radius: 15px;
+}
+
+.btn-add {
+  height: 100%;
 }
 </style>

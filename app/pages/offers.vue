@@ -30,12 +30,12 @@
         </div>
         <Filters />
         <Sort />
-        <nuxt-link href="/myoffers"
-          ><el-button class="btn-classic !hidden cursor-pointer lg:!block"
-            >Мои обьявления</el-button
-          ></nuxt-link
-        >
-        
+        <UIButton
+          ref="add"
+          icon-name="plus"
+          :class="{ '!bg-white': false }"
+          @click="setDialog(true)"
+        />
       </div>
 
       <!-- Here was Rostov-on-Don item -->
@@ -62,19 +62,18 @@
       <Offer />
     </div>
   </div>
+  <DrawersAddNotify :dialog="dialog" :setDialog="setDialog" />
 </template>
 
 <script setup lang="ts">
-const i18n: any = useI18n()
-const lang = i18n.locale.value
-
-const title = i18n.messages.value[lang].offersPage?.docTitle
-const desc = i18n.messages.value[lang].offersPage?.docDesc
-
 useSeoMeta({
-  title: title,
-  ogTitle: title,
-  description: desc,
-  ogDescription: desc
+  title: 'Уведомления',
+  ogTitle: 'Уведомления',
+  description: 'Страница уведомлений',
+  ogDescription: 'Страница уведомлений',
 })
+
+const add = ref<ButtonInstance>( )
+const dialog = ref<boolean>( false )
+const setDialog = ( value: boolean ) => dialog.value = value;
 </script>

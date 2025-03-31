@@ -12,7 +12,7 @@
         </div>
       </div>
       <div v-if="indexPage" class="flex items-center transition-all group-hover:translate-x-[2px] gap-x-[10px]">
-        <UIPopoverMenu :list="LIST_OPTIONS" :slug="props.item.slug" @select="onSelect">
+        <UIPopoverMenu :list="LIST_OPTIONS" :setTable="setTable" :slug="props.item.slug" @select="onSelect">
           <template #reference>
             <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button>
           </template>
@@ -36,6 +36,7 @@ const props = withDefaults(
   defineProps<{
     indexPage?: boolean
     item: any
+    setTable: (value: boolean) => void
   }>(),
   {
     indexPage: false
@@ -50,6 +51,8 @@ const LIST_OPTIONS: TPopoverItemProps[] = [
   { key: 'delete', label: 'Удалить документ' }
 ]
 
-
+const onSelect = (option: (typeof LIST_OPTIONS)[0]) => {
+  console.log('option', option)
+}
 </script>
 

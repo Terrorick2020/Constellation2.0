@@ -1,16 +1,8 @@
+<template>
+  <Settings />
+</template>
+
 <script setup lang="ts">
-const i18n: any = useI18n()
-const lang = i18n.locale.value
-
-const title = i18n.messages.value[ lang ].settingsPage?.common.docTitle
-const desc = i18n.messages.value[ lang ].settingsPage?.common.docDesc
-
-
-definePageMeta({
-  path: '/settings',
-})
-
-
 const viewport = useViewport();
 const isDesktop = !viewport.isLessThan('desktop');
 
@@ -18,15 +10,16 @@ if (isDesktop) {
   navigateTo('/settings/common');
 }
 
+definePageMeta({
+  path: '/settings',
+})
+
+
 useSeoMeta({
-  title: title,
-  ogTitle: title,
-  description: desc,
-  ogDescription: desc
+  title: 'Настройки',
+  ogTitle: 'Настройки',
+  description: 'Страница настроек',
+  ogDescription: 'Страница настроек',
 })
 
 </script>
-
-<template>
-  <Settings />
-</template>
