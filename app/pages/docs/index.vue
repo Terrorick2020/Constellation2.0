@@ -33,6 +33,7 @@
                 striped-flow 
                 :duration="duration"
                 :text-inside="true"
+                color="#409EFF"
               />
               <!-- <el-button-group>
                 <el-button :icon="Minus" @click="decrease" />

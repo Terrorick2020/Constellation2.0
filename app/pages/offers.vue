@@ -35,6 +35,7 @@
             >Мои обьявления</el-button
           ></nuxt-link
         >
+        
       </div>
 
       <!-- Here was Rostov-on-Don item -->
