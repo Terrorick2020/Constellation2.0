@@ -25,10 +25,6 @@ const usernameErr = [
   'Такое имя уже занято!',
 ]
 
-const props = defineProps<{
-  basePath: string
-}>()
-
 const authStore = useAuthStore()
 
 const username = ref<string>('')
@@ -41,7 +37,7 @@ watch(() => username.value, (newValue) => {
   authStore.fInpErr.value = !res
   authStore.fInpErr.index = ind
 
-  authStore.username = res ? newValue : ''
+  authStore.username = newValue
 })
 
 const isFInpErr = computed( () => authStore.fInpErr.value )

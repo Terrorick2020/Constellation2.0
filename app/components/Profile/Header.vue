@@ -42,7 +42,7 @@
             Сообщение
           </el-button>
         </NuxtLink>
-        <h1> {{ name }}</h1>
+        <h1> {{ props.username }}</h1>
         <UIPopoverMenu :list="LIST_OPTIONS" @select="onSelect">
           <template #reference>
             <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button>
@@ -85,12 +85,9 @@ const LIST_OPTIONS: TPopoverItemProps[] = [
   { key: 'block', label: 'Заблокировать', route: '/message' },
 ]
 
-defineProps({
-  name: {
-    type: String,
-    required: true
-  }
-});
+const props = defineProps<{
+  username: string
+}>()
 </script>
 
 

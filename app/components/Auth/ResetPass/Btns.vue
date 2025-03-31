@@ -2,7 +2,7 @@
   <div class="btn-content flex flex-col gap-[5px]">
     <el-button type="danger" round @click="nextStep">Далее</el-button>
     <p></p>
-    <el-button round v-if="step !== maxStep" @click="prevStep">Назад</el-button>
+    <el-button round v-if="step !== RPContentStep.FinalStep" @click="prevStep">Назад</el-button>
   </div>
 </template>
 
@@ -25,11 +25,13 @@ const logRoute = mainRoute + clientRoutes.auth.local.signIn
 const nextStep = async () => {
   switch (props.step) {
     case RPContentStep.EmailStep:
-      authStore.fInpErr.value = !isValidUsername(authStore.email)
-      authStore.fInpErr.index = authStore.fInpErr.value ? 1 : null
+      const [ res, ind ] = isValidUsername( authStore.username )
 
-      if (!authStore.fInpErr.value) {
-        const response = await authStore.sendEmail()
+      authStore.fInpErr.value = !res
+      authStore.fInpErr.index = ind
+
+      if ( res ) {
+        const response = await authStore.sendUsername()
 
         if (response) {
           authStore.resetPass.contentStep = RPContentStep.CodeStep
@@ -37,8 +39,8 @@ const nextStep = async () => {
       }
       break
     case RPContentStep.CodeStep:
-      authStore.fInpErr.value = authStore.code.length < lenCode
-      authStore.fInpErr.index = authStore.fInpErr.value ? 1 : null
+      authStore.fInpErr.value = !authStore.key
+      authStore.fInpErr.index = authStore.fInpErr.value ? 0 : null
 
       if (!authStore.fInpErr.value) {
         const response = await authStore.checkingCode()

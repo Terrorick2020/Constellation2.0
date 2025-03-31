@@ -14,7 +14,7 @@
       <el-button type="primary">Загрузить цифровую подпись...</el-button>
     </template>
   </el-upload>
-  <AuthInfo v-if="isFInpErr" text="Файл не выбран" />
+  <AuthInfo v-if="isFInpErr" :text="fInpErrMsg" />
 
 </template>
 
@@ -26,32 +26,46 @@ import { lenCode } from '~/env/auth.env'
 
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
+
+const loadErr = [
+  'Ключ не загружен',
+  'Ошибка загрузки ключа',
+]
+
 const authStore = useAuthStore()
 
 const upload = ref<UploadInstance>()
 
 const handleExceed: UploadProps['onExceed'] = (files) => {
+  authStore.fInpErr.value = false
+  authStore.fInpErr.index = null
   upload.value!.clearFiles()
   const file = files[0] as UploadRawFile
   file.uid = genFileId()
   upload.value!.handleStart(file)
 }
 
-const beforeUpload = (file: UploadRawFile) => {
-  // Проверяем размер файла, тип и т.д.
-  console.log('Получен файл:', file);
-
-  // Возвращаем true или false, чтобы разрешить или отменить загрузку
-  return true;
-}
-
 const handleFileChange = (file: UploadRawFile, fileList: UploadRawFile[]) => {
-  // Выводим информацию о выбранном файле в консоль
-  console.log('Выбран файл:', file)
-  console.log('Список файлов:', fileList)
+  if (!file || !file.raw) {
+    authStore.fInpErr.value = true
+    authStore.fInpErr.index = 1
+    return
+  }
 
-  // Здесь можно добавить дополнительную обработку файла
+  const reader = new FileReader()
+  reader.readAsDataURL(file.raw)
+
+  reader.onload = () => {
+    const base64Data = reader.result as string
+    authStore.key = base64Data
+  }
+
+  reader.onerror = (error) => {
+    authStore.fInpErr.value = true
+    authStore.fInpErr.index = 1
+  }
 }
 
 const isFInpErr = computed( () => authStore.fInpErr.value )
+const fInpErrMsg = computed( () => loadErr[ authStore.fInpErr.index ] )
 </script>

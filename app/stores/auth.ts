@@ -98,12 +98,12 @@ export const useAuthStore = defineStore(
     const username = ref<string>( '' )
     const password = ref<string>( '' )
     const saveMe = ref<boolean>( false )
-    const code = ref<string>( '' )
+    const key = ref<string>()
 
     const accessToken = ref<string>( '' )
     const resetToken = ref<string>( '' )
 
-    const isLoad = ref(false)
+    const isLoad = ref<boolean>( false )
 
     const fInpErr: InpAuthErr = reactive({
       value: false,
@@ -127,7 +127,7 @@ export const useAuthStore = defineStore(
     })
 
     const resetPass: Ref<ResetPassConfig> = ref({
-      contentStep: RPContentStep.RewritePassStep,
+      contentStep: RPContentStep.EmailStep,
       lastContentStep: RPLastContentStep.Extra,
       contContentStep: RPContContentStep.Extra,
     })
@@ -173,7 +173,7 @@ export const useAuthStore = defineStore(
       }
     }
 
-    const sendEmail = async () => {
+    const sendUsername = async () => {
       try {
         isLoad.value = true
 
@@ -183,9 +183,18 @@ export const useAuthStore = defineStore(
 
         // const response = await axios.post(`${BASE_URL}${PASSWORD_RECOVERY}`, data)
 
+        const result = await delay(1000)
+
+        if ( result ) {
+          apiRes.value = true
+          apiRes.type = ApiResType.success
+          apiRes.title = 'Ура!'
+          apiRes.msg = 'Имя пользователя прошло проверку!'
+        }
+
         isLoad.value = false
 
-        // return response.status === 200
+        return result
       } catch (error: any) {
         // apiErr.value = true
         // apiErr.block = 'sendEmail'
@@ -197,13 +206,18 @@ export const useAuthStore = defineStore(
       try {
         isLoad.value = true
 
-        const response = await axios.get(
-          `${BASE_URL}${HELPERS_PRE_VALIDATION_ENDPOINT}?field_name=code&value=${code.value}`
-        )
+        const result = await delay(1000)
+
+        if ( result ) {
+          apiRes.value = true
+          apiRes.type = ApiResType.success
+          apiRes.title = 'Ура!'
+          apiRes.msg = 'Успешная проверка ключа!'
+        }
 
         isLoad.value = false
 
-        return response.status === 200
+        return result
       } catch (error: any) {
         // apiErr.value = true
         // apiErr.block = 'checkingCode'
@@ -218,7 +232,7 @@ export const useAuthStore = defineStore(
         const data = {
           password: password.value,
           password_confirmation: password.value,
-          code: code.value
+          code: key.value
         }
 
         const response = await axios.post(`${BASE_URL}${PASSWORD_RESET}`, data)
@@ -371,7 +385,7 @@ export const useAuthStore = defineStore(
       accessToken,
 
       saveMe,
-      code,
+      key,
 
       isLoad,
 
@@ -386,7 +400,7 @@ export const useAuthStore = defineStore(
 
       login,
 
-      sendEmail,
+      sendUsername,
       checkingCode,
       rewritePass,
 
