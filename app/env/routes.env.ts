@@ -1,3 +1,4 @@
+
 export const clientRoutes = {
     catalog: {
         main: '/catalog',
@@ -29,4 +30,6 @@ export const clientRoutes = {
     rules: '/rules',
     signUp: '/register',
     resetPass: '/reset-pass',
+    // new path to view document
+    viewdocument: '/viewdocument',
 }

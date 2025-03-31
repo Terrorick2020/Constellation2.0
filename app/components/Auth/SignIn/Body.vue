@@ -59,7 +59,7 @@ watch(
 watch(
   () => password.value,
   (newValue) => {
-    authStore.sInpErr.value = password.value.length < lenPassword.min || password.value.length > lenPassword.max
+    authStore.sInpErr.value = newValue.length < lenPassword.min || newValue.length > lenPassword.max
     authStore.password = !authStore.sInpErr.value ? newValue : ''
   }
 )

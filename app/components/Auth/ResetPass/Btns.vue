@@ -1,25 +1,19 @@
 <template>
   <div class="btn-content flex flex-col gap-[5px]">
-    <el-button type="danger" round @click="nextStep">
-      {{ $t(`${basePath}.btns[ ${step} ].main`) }}
-    </el-button>
+    <el-button type="danger" round @click="nextStep">Далее</el-button>
     <p></p>
-    <el-button round v-if="step !== maxStep" @click="prevStep">
-      {{ $t(`${basePath}.btns[ ${step} ].secondary`) }}
-    </el-button>
+    <el-button round v-if="step !== maxStep" @click="prevStep">Назад</el-button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useAuthStore, isValidEmail } from '~/stores/auth'
+import { useAuthStore, isValidUsername } from '~/stores/auth'
 import { RPContentStep } from '~/types/auth/reset-pass'
 import { clientRoutes } from '~/env/routes.env'
 import { lenCode, lenPassword } from '~/env/auth.env'
 
 const props = defineProps<{
   step: number
-  maxStep: number
-  basePath: string
 }>()
 
 const authStore = useAuthStore()
@@ -31,7 +25,7 @@ const logRoute = mainRoute + clientRoutes.auth.local.signIn
 const nextStep = async () => {
   switch (props.step) {
     case RPContentStep.EmailStep:
-      authStore.fInpErr.value = !isValidEmail(authStore.email)
+      authStore.fInpErr.value = !isValidUsername(authStore.email)
       authStore.fInpErr.index = authStore.fInpErr.value ? 1 : null
 
       if (!authStore.fInpErr.value) {

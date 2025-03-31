@@ -15,7 +15,7 @@ definePageMeta({
     layout: 'auth',
 })
 
-    useSeoMeta({
+useSeoMeta({
     title: title,
     ogTitle: title,
     description: desc,

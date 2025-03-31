@@ -5,10 +5,10 @@
                 <ResetPassHeader :step="step" />
             </el-header>
             <el-main style="padding: 0; margin: 0;">
-                <ResetPassBody :step="step" :maxStep="maxStep" :basePath="basePath" class="mt-5" />
+                <ResetPassBody :step="step" class="mt-5" />
             </el-main>
             <el-footer style="padding: 0; margin: 0;">
-                <ResetPassBtns :step="step" :maxStep="maxStep" :basePath="basePath" class="mt-7" />
+                <ResetPassBtns :step="step" class="mt-7" />
             </el-footer>
         </el-container>
     </div>
@@ -25,8 +25,6 @@ import ResetPassBtns from './Btns.vue'
 
 
 const authStore = useAuthStore()
-const basePath = 'authPage.resetPass'
 
 const step = computed( () => authStore.resetPass.contentStep )
-const maxStep = computed( () => authStore.resetPass.lastContentStep )
 </script>

@@ -1,0 +1,120 @@
+Чтобы передать название документа (или другие данные) из одного компонента в другой, вам нужно использовать несколько подходов в зависимости от того, как устроен ваш проект. Рассмотрим несколько способов:
+1. Использование Vue Router с параметрами в URL
+
+Это самый простой способ передать данные между компонентами при переходе между страницами.
+Шаги:
+
+    Когда вы выбираете действие (например, "Подписать документ"), вы можете передать название документа через параметры маршрута.
+
+    В компоненте Subscribe.vue вы получаете эти параметры и используете их.
+
+1.1. Изменение маршрута в onSelect (в Company.vue)
+
+Вместо того чтобы передавать только сам путь маршрута, вы можете добавить параметр, например documentName, в URL:
+
+const onSelect = (option: (typeof LIST_OPTIONS)[0]) => {
+  console.log('option', option)
+  if (option.route) {
+    // Переход с использованием Vue Router с передачей параметра
+    router.push({ 
+      path: option.route, 
+      query: { documentName: 'Название документа' } // Передаем параметр в URL
+    })
+  }
+}
+
+1.2. Получение параметра в Subscribe.vue
+
+В компоненте Subscribe.vue вы можете получить параметры из URL с помощью хука useRoute:
+
+<template>
+  <div>
+    <h1>Подписать документ: {{ documentName }}</h1>
+    <!-- Остальной контент страницы -->
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+// Получаем параметр из query string
+const documentName = route.query.documentName as string
+</script>
+
+2. Использование Vuex или Pinia для глобального состояния
+
+Если вы хотите передавать данные между компонентами без использования URL, можно использовать Vuex или Pinia для управления состоянием приложения.
+Шаги:
+
+    Создайте состояние для хранения названия документа (например, через Pinia).
+
+    Обновите это состояние в Company.vue при выборе документа.
+
+    Используйте это состояние в Subscribe.vue для отображения названия документа.
+
+2.1. Создание Pinia Store:
+
+Для начала создайте Pinia store (если вы не используете Vuex, это предпочтительный способ).
+
+// store/documentStore.ts
+import { defineStore } from 'pinia'
+
+export const useDocumentStore = defineStore('document', {
+  state: () => ({
+    documentName: ''
+  }),
+  actions: {
+    setDocumentName(name: string) {
+      this.documentName = name
+    }
+  }
+})
+
+2.2. Обновление состояния в Company.vue:
+
+import { useDocumentStore } from '~/store/documentStore'
+
+const documentStore = useDocumentStore()
+
+const onSelect = (option: (typeof LIST_OPTIONS)[0]) => {
+  console.log('option', option)
+  if (option.route) {
+    // Обновляем глобальное состояние с названием документа
+    documentStore.setDocumentName('Название документа')
+
+    // Переход по маршруту
+    router.push(option.route)
+  }
+}
+
+2.3. Использование состояния в Subscribe.vue:
+
+<template>
+  <div>
+    <h1>Подписать документ: {{ documentName }}</h1>
+    <!-- Остальной контент страницы -->
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useDocumentStore } from '~/store/documentStore'
+
+const documentStore = useDocumentStore()
+
+// Получаем название документа из глобального состояния
+const documentName = documentStore.documentName
+</script>
+
+3. Использование Prop или Emitting Events для передачи данных между родителем и ребенком
+
+Если компоненты находятся в одном контексте (например, оба — дети одного родителя), вы можете использовать передачу пропсов или эмиттинг событий.
+
+    Company.vue может передавать название документа как prop в дочерний компонент.
+
+    Subscribe.vue может получать это как prop и отображать.
+
+4. Использование Event Bus (менее предпочтительно для Vue 3)
+
+Это устаревшая техника, но если вы хотите, можно создать глобальное событие с помощью Event Bus для передачи данных между компонентами

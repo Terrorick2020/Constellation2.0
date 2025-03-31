@@ -1,38 +1,35 @@
-import { computed } from 'vue';
 <template>
     <div class="sign-in__header">
-        <h2 class="title mt-1">
-            {{ $t( `${ basePath }.header[ ${ props.step } ].title` ) }}
-            <span class="font-light" v-if="$te( `${ props.basePath }.header[ ${ props.step } ].titlePostfix` )">
-                {{ props.email }}
-            </span>
-        </h2>
+        <h2 class="title mt-1">{{ headersList[ props.step ].title }}</h2>
         <p class="description"
-            v-if="Object.keys( $tm( `${ props.basePath }.header[ ${ props.step } ].description` ) ).length"    
+            v-if="headersList[ props.step ].description"
         >
-            {{ $t( `${ props.basePath }.header[ ${ props.step } ].description` ) }}
+            {{ headersList[ props.step ].description }}
         </p>
     </div>
 </template>
 
 <script setup lang="ts">
+import { RPContentStep } from '~/types/auth/reset-pass'
+
+
 const props = defineProps<{
   step: number,
 }>()
 
 const headersList = {
-    "0": {
+    [RPContentStep.EmailStep]: {
         "title": "Восстановление пароля",
-        "description": "Мы отправим код для восстановления пароля на вашу почту"
+        "description": "Мы проверим наличие Вашей регистрации"
     },
-    "1": {
-        "title": "Мы отправили код для восстановления на",
-        "titlePostfix": "<email>"
+    [RPContentStep.CodeStep]: {
+        "title": "Восстановление пароля",
+        "description": "Мы проверим подлинность вашего ключа"
     },
-    "2": {
-        "title": "Придумайте новый пароль"
+    [RPContentStep.RewritePassStep]: {
+        "title": "Изменение пароля",
     },
-    "3": {
+    [RPContentStep.FinalStep]: {
         "title": "Пароль изменен",
         "description": "Пароль успешно изменен. Не забудьте сохранить его в надежном месте."
     }

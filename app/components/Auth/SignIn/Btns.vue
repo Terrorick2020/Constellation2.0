@@ -24,21 +24,23 @@ import { Right } from '@element-plus/icons-vue'
 
 
 const router = useRouter()
-const authStore = useAuthStore()
+const authStore = useAuthStore(); 
 
 const setRoute = clientRoutes.settings.main
 const mainAuthRoute = clientRoutes.auth.main
 const regRoute = mainAuthRoute + clientRoutes.auth.local.signUp
 
 const toProfile = async () => {
-  authStore.fInpErr.value = authStore.username.length < lenUsername.min || authStore.username.length > lenUsername.max
-  authStore.sInpErr.value = authStore.password.length < lenPassword.min || authStore.password.length > lenPassword.max
+  const { username, password } = useAuthStore()
+
+  authStore.fInpErr.value = username.length < lenUsername.min || username.length > lenUsername.max
+  authStore.sInpErr.value = password.length < lenPassword.min || password.length > lenPassword.max
 
   if (!authStore.fInpErr.value && !authStore.sInpErr.value) {
     const response = await authStore.login()
 
     if (response) {
-      router.push(setRoute)
+      // router.push(setRoute)
     }
   }
 }

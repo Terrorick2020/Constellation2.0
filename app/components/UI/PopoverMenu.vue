@@ -36,10 +36,12 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router'  // Импортируем useRouter
 import { ClickOutside as vClickOutside } from 'element-plus'
 import type { TPopoverItemProps } from '~/types/UI/popover'
 
 const optionsVisible = ref(false)
+const router = useRouter()  // Используем useRouter для доступа к маршрутизатору
 
 interface Props {
   list: TPopoverItemProps[]
@@ -55,5 +57,10 @@ const closePopover = () => {
 const handleClickOption = (listItem: TPopoverItemProps) => {
   emit('select', listItem)
   closePopover()
+  
+  if (listItem.route) {
+    // Переход с использованием Vue Router
+    router.push(listItem.route)
+  }
 }
 </script>

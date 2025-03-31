@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="flex flex-col gap-[15px] pt-[20px]">
     <span class="text-base font-bold text-black">Кого вы ищите?</span>
     <div class="flex flex-col gap-[10px]">
@@ -45,4 +45,10 @@ const companiesFilter = [
     count: '123'
   }
 ]
-</script>
+</script> -->
+
+
+
+<template>
+  
+</template>

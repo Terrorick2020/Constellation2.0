@@ -1,6 +1,6 @@
 <template>
     <el-form class="flex min-h-[600px] w-full flex-col">
-        <span class="settings-title mb-[10px]">Портрет клиентов</span>
+        <span class="settings-title mb-[10px]">TODO://ПЕРЕДЕЛАТЬ ВСЕ</span>
         <span class="settings-subtitle">Опишите рекальный профиль клиентов вашего бизнеса</span>
             
         <span class="font-bold">ГЕО</span>
