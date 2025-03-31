@@ -7,13 +7,11 @@
         class="h-[199px] w-full object-cover object-center lg:h-full lg:rounded-xl"
         alt="fon-img"
       />
-      <div v-else class="h-[199px] w-full bg-gray-300 flex justify-center items-center rounded-xl">
-        <img 
-          :src="Image" 
-          alt="VKA IMAGE" 
-          class="image_logo" 
-        />
-      </div>
+      <div
+        v-else
+        class="bg-fon h-[199px] w-full bg-gray-300 flex justify-center items-center rounded-xl"
+        :style="`background-image: url(${Image});`"
+        ></div>
     </div>
     
     <div
@@ -27,17 +25,15 @@
             class="absolute bottom-14 lg:bottom-0"
           />
         </div>
-        <h2 class="custom-h2">Профиль: {{ props.username }}</h2>
-        <h1 class="custom-h1">ФИО:<br>{{ props.fio }}</h1>
         <div class="flex flex-col items-center lg:items-stretch">
           <span class="text-2xl font-extrabold">{{ profileInfo.name }}</span>
           <span class="text-sm">{{ profileInfo.organization }}</span>
         </div>
       </div>
       
-      <div class="item2 flex">
+      <div class="item2 flex justify-end">
         
-        <NuxtLink :to="`/chats/`">
+        <NuxtLink :to="`/chats/`" class="mr-3">
           <el-button round size="large" class="btn-main long fill-none !px-[134px] !text-[10xp]">
             <template #icon>
               <SvgoMessage filled />
@@ -53,6 +49,8 @@
         </UIPopoverMenu>
         <!-- <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button> -->
       </div>
+      <h2 class="custom-h2"><big class="text-700">Пользователь:</big>  {{ persone.name }}</h2>
+      <h1 class="custom-h1"><big class="text-700">ФИО:</big> {{ persone.fio }}</h1>
 
       <!-- <p class="text-center text-sm opacity-40 lg:text-left">
         {{ profileInfo.description }}
@@ -78,6 +76,7 @@ import { useProfileStore } from '~/stores/profile'
 import Image from '~/assets/image/image.png'
 import Avatar from '~/assets/image/avatar.png'
 import type { TPopoverItemProps } from '~/types/UI/popover'
+import { onMounted, reactive } from 'vue'
 
 
 const { profileInfo } = useProfileStore()
@@ -90,9 +89,29 @@ const LIST_OPTIONS: TPopoverItemProps[] = [
 
 const props = defineProps<{
   username: string,
-  fio: string,
 }>()
 
+const persone = reactive({
+  name: 'user 1',
+  fio: 'Тараскин Илья Дмитриевич',
+})
+
+const getProfile = async () => {
+  // const response = await getProfile(props.username)
+  const response = {
+    data: {
+      name: 'user 1',
+      fio: 'Тараскин Илья Дмитриевич',
+    }
+  }
+
+  persone.name = response.data.name
+  persone.fio = response.data.fio
+}
+
+onMounted(() => {
+  getProfile()
+})
 
 </script>
 
@@ -117,7 +136,11 @@ const props = defineProps<{
 .custom-h1{
   font-size: 15px;
   margin-left:20px;
-  white-space: nowrap;
 }
 
+.bg-fon {
+  background-repeat: no-repeat;
+  background-size:contain;
+  background-position: top;
+}
 </style>

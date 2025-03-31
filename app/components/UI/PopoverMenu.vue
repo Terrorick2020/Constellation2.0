@@ -25,6 +25,7 @@
             :is="`svgo-${listItem.icon}`"
             :font-controlled="false"
             class="size-6 !fill-transparent text-[#E44820]"
+            :key="`popover-${listItem.key}`"
           />
           <span class="text-base font-extrabold text-black">
             {{ listItem.label }}
@@ -36,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'  // Импортируем useRouter
+import { useRouter } from 'vue-router' 
 import { ClickOutside as vClickOutside } from 'element-plus'
 import type { TPopoverItemProps } from '~/types/UI/popover'
 
@@ -45,6 +46,7 @@ const router = useRouter()  // Используем useRouter для досту�
 
 interface Props {
   list: TPopoverItemProps[]
+  slug: string
 }
 
 const props = defineProps<Props>()
@@ -58,9 +60,9 @@ const handleClickOption = (listItem: TPopoverItemProps) => {
   emit('select', listItem)
   closePopover()
   
-  if (listItem.route) {
+  if (listItem.key === 'viewdoc') {
     // Переход с использованием Vue Router
-    router.push(listItem.route + `/${listItem.key}`)
+    router.push(`/docs/${props.slug}`)
   }
 }
 </script>

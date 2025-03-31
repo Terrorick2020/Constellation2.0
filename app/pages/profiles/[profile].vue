@@ -1,6 +1,6 @@
 <template>
     <div class="w-full flex flex-col gap-[30px]">
-        <ProfileCurrentUser :username="profileName" :fio="profileFIO"/>
+        <ProfileCurrentUser :username="profileName"/>
     </div>
 </template>
   
@@ -11,12 +11,6 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute(); 
 const profileName = route.params.profile as string;
-const profileFIO = route.query.current_name as string;
-
-
-
-// const profileName = route.params.profile as string;
-// const profileFIO = route.query.fio as string;
 
 useSeoMeta({
     title: profileName,
