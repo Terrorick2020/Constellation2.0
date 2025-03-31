@@ -15,6 +15,7 @@
         <Filters />
         <Sort />
       </div>
+      <el-button @click="setDrawer(true)">Загрузить новые приказы</el-button>
     </div>
     <div class="space-y-[100px]">
       <div class="flex w-full flex-col gap-[10px]" v-for="companyIndex in listDocs">
@@ -41,6 +42,7 @@
       </div>
     </div>
   </div>
+  <DrawersLoadDoc :drawer="drawer" :setDrawer="setDrawer" />
 </template>
 
 <script setup lang="ts">
@@ -72,6 +74,12 @@ const decrease = () => {
   if (percentage.value < 0) {
     percentage.value = 0
   }
+}
+
+const drawer = ref(false)
+
+const setDrawer = (value: boolean) => {
+  drawer.value = value
 }
 
 useSeoMeta({
