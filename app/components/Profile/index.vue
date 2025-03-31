@@ -26,7 +26,7 @@
             <h4 class="user-name">{{ o.name }}</h4>
             <h5 class="user-fio">{{ o.fio }}</h5>
           </div>
-          <NuxtLink :to="`/profiles/${o.name}`">
+          <NuxtLink :to="`/profiles/${o.name}?current_name=${o.fio}`">
             <el-button class="profile-description">
               <span class="mr-2 text-[#ffffff]">Перейти к профилю</span>
               <el-icon>
@@ -45,7 +45,6 @@ import { ref, computed, watch } from 'vue';
 import Avatar from '~/assets/image/avatar.png'
 import { Right } from '@element-plus/icons-vue'
 
-// Массив пользователей
 const users = [
   { name: 'User 1', fio: 'Тараскин Илья Дмитриевич' },
   { name: 'User 2', fio: 'Иванов Иван Иванович' },
@@ -63,7 +62,6 @@ const filteredUsers = ref(users);
 
 const searchQuery = ref('');
 
-// Функция для фильтрации пользователей по имени или фамилии
 const filterUsers = () => {
   filteredUsers.value = users.filter(user =>
     user.name.toLowerCase().includes(searchQuery.value.toLowerCase().trim()) || 
@@ -73,7 +71,7 @@ const filterUsers = () => {
 
 let timeout: ReturnType<typeof setTimeout>;
 
-// Watcher для searchQuery с задержкой 500 мс
+// Watcher для searchQuery с задержкой
 watch(searchQuery, (newQuery) => {
   clearTimeout(timeout);
   timeout = setTimeout(() => {
@@ -106,10 +104,10 @@ watch(searchQuery, (newQuery) => {
 
 .user-card-content {
   display: flex;
-  justify-content: space-between; /* Ensure space between avatar, user info and the button */
+  justify-content: space-between;
   align-items: center;
   .user-info {
-    flex-grow: 1; /* Allows the user info section to take up available space */
+    flex-grow: 1; 
     display: flex;
     flex-direction: column;
     margin-left: 35px;

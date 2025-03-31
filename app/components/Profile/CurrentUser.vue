@@ -10,12 +10,12 @@
       <div v-else class="h-[199px] w-full bg-gray-300 flex justify-center items-center rounded-xl">
         <img 
           :src="Image" 
-          alt="your image" 
+          alt="VKA IMAGE" 
           class="image_logo" 
         />
       </div>
     </div>
-
+    
     <div
       class="block-wrapper profile-header-container relative z-[2] mt-[199px] gap-y-5 !rounded-t-none lg:mt-[155px] lg:rounded-[20px]"
     >
@@ -27,13 +27,16 @@
             class="absolute bottom-14 lg:bottom-0"
           />
         </div>
+        <h2 class="custom-h2">Профиль: {{ props.username }}</h2>
+        <h1 class="custom-h1">ФИО:<br>{{ props.fio }}</h1>
         <div class="flex flex-col items-center lg:items-stretch">
           <span class="text-2xl font-extrabold">{{ profileInfo.name }}</span>
           <span class="text-sm">{{ profileInfo.organization }}</span>
         </div>
       </div>
-
+      
       <div class="item2 flex">
+        
         <NuxtLink :to="`/chats/`">
           <el-button round size="large" class="btn-main long fill-none !px-[134px] !text-[10xp]">
             <template #icon>
@@ -42,7 +45,7 @@
             Сообщение
           </el-button>
         </NuxtLink>
-        <h1> {{ props.username }}</h1>
+        
         <UIPopoverMenu :list="LIST_OPTIONS" @select="onSelect">
           <template #reference>
             <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button>
@@ -86,8 +89,11 @@ const LIST_OPTIONS: TPopoverItemProps[] = [
 ]
 
 const props = defineProps<{
-  username: string
+  username: string,
+  fio: string,
 }>()
+
+
 </script>
 
 
@@ -100,7 +106,18 @@ const props = defineProps<{
 
 <style scoped>
 .image_logo {
-  width: 920px;
+  width: 1040px;
   height: 195px;
 }
+.custom-h2{
+  font-size: 15px;
+  margin-left:20px
+}
+
+.custom-h1{
+  font-size: 15px;
+  margin-left:20px;
+  white-space: nowrap;
+}
+
 </style>

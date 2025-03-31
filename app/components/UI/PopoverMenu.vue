@@ -60,7 +60,7 @@ const handleClickOption = (listItem: TPopoverItemProps) => {
   
   if (listItem.route) {
     // Переход с использованием Vue Router
-    router.push(listItem.route)
+    router.push(listItem.route + `/${listItem.key}`)
   }
 }
 </script>

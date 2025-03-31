@@ -16,7 +16,6 @@
         <Sort />
       </div>
     </div>
-
     <div class="space-y-[100px]">
       <div class="flex w-full flex-col gap-[10px]" v-for="companyIndex in 5">
         <!-- Here keep document info -->
@@ -34,12 +33,7 @@
                 :duration="duration"
                 :text-inside="true"
               />
-              <!-- <el-button-group>
-                <el-button :icon="Minus" @click="decrease" />
-                <el-button :icon="Plus" @click="increase" />
-              </el-button-group> -->
             </div>
-            <!-- Количество подписавших -->
             <p class="text-sm text-gray-500">Подписали: {{ 50 }} из {{ 100 }}</p> 
           </div>
         </div>
