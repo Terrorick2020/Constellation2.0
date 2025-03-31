@@ -15,17 +15,12 @@ export default defineNuxtConfig({
     'nuxt-svgo',
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
-    '@nuxtjs/i18n',
     'pinia-plugin-persistedstate/nuxt',
     'nuxt-viewport',
   ],
 
   svgo: {
     autoImportPath: './assets/icons/'
-  },
-
-  i18n: {
-    vueI18n: fileURLToPath(new URL('./i18n/i18n.config.ts', import.meta.url))
   },
 
   css: [
@@ -106,13 +101,4 @@ export default defineNuxtConfig({
     inject: true,
     display: 'swap'
   },
-
-  alias: {
-    '@Components': fileURLToPath(new URL('./components', import.meta.url)),
-    '@Store': fileURLToPath(new URL('./store', import.meta.url)),
-    '@I18n': fileURLToPath(new URL('./i18n', import.meta.url)),
-    '@Types': fileURLToPath(new URL('./types', import.meta.url)),
-    '@Public': fileURLToPath(new URL('./public', import.meta.url)),
-    '@Assets': fileURLToPath(new URL('./assets', import.meta.url))
-  }
 })

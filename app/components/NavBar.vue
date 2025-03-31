@@ -17,10 +17,10 @@
 </template>
 <script setup lang="ts">
 const navigationLinks = [
-  { id: 1, title: 'Пользователи', path: '/profiles', iconName: 'compass' },
-  { id: 2, title: 'Документы', path: '/docs', iconName: 'search' },
-  { id: 3, title: 'Чаты', path: '/chats', iconName: 'message' },
-  { id: 4, title: 'Обьявления', path: '/offers', iconName: 'fire' },
-  { id: 5, title: 'Настройки', path: '/settings', iconName: 'settings' },
+  { id: 1, title: 'Пользователи', path: '/profiles', iconName: 'compass', isBadge: false },
+  { id: 2, title: 'Документы', path: '/docs', iconName: 'search', isBadge: true },
+  { id: 3, title: 'Чаты', path: '/chats', iconName: 'message', isBadge: true },
+  { id: 4, title: 'Уведомления', path: '/offers', iconName: 'fire', isBadge: true },
+  { id: 5, title: 'Настройки', path: '/settings', iconName: 'settings', isBadge: false },
 ]
 </script>

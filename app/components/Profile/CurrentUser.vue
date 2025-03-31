@@ -113,6 +113,9 @@ onMounted(() => {
   getProfile()
 })
 
+const onSelect = (option: (typeof LIST_OPTIONS)[0]) => {
+  console.log('option', option)
+}
 </script>
 
 
