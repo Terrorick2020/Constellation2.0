@@ -6,6 +6,7 @@
       size="large"
       placeholder="Поиск по имени или фамилии..."
       class="h-[60px] max-w-full lg:max-w-[935px]"
+      @input="searchProfile"
     >
       <template #prefix>
         <SvgoSearch filled class="h-6 w-[30px]" :font-controlled="false" />
@@ -15,7 +16,7 @@
     <!-- Контейнер для карточек -->
     <div class="item-container">
       <el-card
-        v-for="o in filteredUsers"
+        v-for="o in visibleUser"
         :key="o.name"
         class="user-card"
         shadow="always"
@@ -56,18 +57,50 @@ const users = [
   { name: 'User 8', fio: 'Григорьев Георгий Игоревич' },
   { name: 'User 9', fio: 'Смолин Алексей Николаевич' },
   { name: 'User 10', fio: 'Глушков Сергей Павлович' },
+  { name: 'User 11', fio: 'Николаев Владимир Игоревич' },
+  { name: 'User 12', fio: 'Королев Алексей Владимирович' },
+  { name: 'User 13', fio: 'Федоров Сергей Андреевич' },
+  { name: 'User 14', fio: 'Морозова Ирина Юрьевна' },
+  { name: 'User 15', fio: 'Крылов Алексей Иванович' },
+  { name: 'User 16', fio: 'Васильев Дмитрий Олегович' },
+  { name: 'User 17', fio: 'Лебедев Алексей Петрович' },
+  { name: 'User 18', fio: 'Тимофеев Сергей Павлович' },
+  { name: 'User 19', fio: 'Семенов Иван Павлович' },
+  { name: 'User 20', fio: 'Романова Екатерина Александровна' },
 ];
 
 const filteredUsers = ref(users);
 
 const searchQuery = ref('');
+const visibleUser = ref(users.slice(0, 5))
 
 const filterUsers = () => {
   filteredUsers.value = users.filter(user =>
     user.name.toLowerCase().includes(searchQuery.value.toLowerCase().trim()) || 
     user.fio.toLowerCase().includes(searchQuery.value.toLowerCase().trim())
   );
+  visibleUser.value = filteredUsers.value.slice(0, 5);
 };
+
+const loadMoreDocs = () => {
+  const currentLength = visibleUser.value.length
+  if (currentLength < filteredUsers.value.length) {
+    const newDocs = filteredUsers.value.slice(currentLength, currentLength + 5)
+    visibleUser.value.push(...newDocs)
+  }
+}
+
+const onScroll = () => {  
+  const scrollPosition = window.scrollY + window.innerHeight
+  let bottomPosition = document.documentElement.scrollHeight
+
+  const foot = document.getElementById('app-footer')
+  if (foot) bottomPosition -= foot.offsetHeight;
+
+  if (scrollPosition >= bottomPosition) {
+    loadMoreDocs()
+  }
+}
 
 let timeout: ReturnType<typeof setTimeout>;
 
@@ -83,9 +116,14 @@ const getUsers = async () => {
 
 }
 
+const searchProfile = () => {
+}
+
 onMounted(() => {
   getUsers()
+  window.addEventListener('scroll', onScroll)
 })
+
 </script>
 
 <style scoped lang="scss">
@@ -94,7 +132,6 @@ onMounted(() => {
   margin-top: 7px;
   color: #555;
 }
-
 
 .item-container {
   margin-top: 20px;
@@ -136,6 +173,4 @@ onMounted(() => {
     color: #333;
   }
 }
-
-
 </style>
