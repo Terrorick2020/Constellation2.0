@@ -14,18 +14,7 @@ export const useSettingsStore = defineStore('settings', () => {
     const { $api } = useNuxtApp()
     // TODO:Удалить линки
     const mediaList = ref<UploadUserFile[]>([
-        // {
-        //     name: 'food.jpeg',
-        //     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-        // },
-        // {
-        //     name: 'food.jpeg',
-        //     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-        // },
-        // {
-        //     name: 'food.jpeg',
-        //     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-        // },
+       
     ])
 
     const common = reactive({
@@ -62,22 +51,22 @@ export const useSettingsStore = defineStore('settings', () => {
                 },
             ]
         },
-        {
-            id: 'theme ',
-            name: 'Тема',
-            scopes: [
-                {
-                    id: 'light',
-                    name: 'Cветлая',
+        // {
+        //     id: 'theme ',
+        //     name: 'Тема',
+        //     scopes: [
+        //         {
+        //             id: 'light',
+        //             name: 'Cветлая',
 
-                },
-                {
-                    id: 'Dark',
-                    name: 'Темная',
+        //         },
+        //         {
+        //             id: 'Dark',
+        //             name: 'Темная',
 
-                },
-            ]
-        },
+        //         },
+        //     ]
+        // },
     ]
 
     const clientsPortrain = reactive({

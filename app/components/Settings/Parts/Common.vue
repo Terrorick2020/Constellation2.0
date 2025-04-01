@@ -1,62 +1,22 @@
 <template>
   <el-form class="flex min-h-[600px] w-full flex-col">
     <span class="settings-title">Изменить данные профиля</span>
-    <span class="pb-[10px] font-bold">Имя пользователя*</span>
+    <span class="pb-[10px] font-bold">ФИО*</span>
     <el-form-item prop="common.name" label-width="16" label-position="top" hide-require-asterisk>
-      <el-input size="large" v-model="store.common.name" />
+        <el-input size="large" v-model="store.common.name" />
     </el-form-item>
 
     <span class="font-bold">Пароль*</span>
-    <!-- <el-form-item prop="common.url" label="Ссылка на ваш профиль Collaba" label-width="16" label-position="top" hide-require-asterisk> -->
     <el-input size="large" v-model="store.common.password"  />
-    <!-- </el-form-item> -->
 
-    <span class="font-bold">Звание*</span>
-    <!-- <el-form-item prop="common.location" label="Где находится Ваш бизнес?" label-width="16" label-position="top" hide-require-asterisk> -->
-    <!-- <GeoSelect v-bind:value="store.common.geo"/> -->
+    <span class="font-bold">Подразделение*</span>
+    
     <el-input size="large" v-model="store.common.rank"  />
-    <!-- <SwitchSelect label="Вся Россия" v-bind:value="store.common.wholeRussia"/>
-            <SwitchSelect label="Не отображать адрес" v-bind:value="store.common.hideAddress"/> -->
-    <!-- </el-form-item> -->
+   
+    <span class="font-bold">Должность*</span>
+    <el-input size="large" v-model="store.common.rank"  />
 
-    <!-- <span class="font-bold">Дескриптор</span> -->
-    <!-- <el-form-item
-      prop="common.descritor"
-      label="Магазин, барбершоп, цветочный салон, школа музыки или как вы себя идентифицируете"
-      label-width="16"
-      label-position="top"
-      hide-require-asterisk
-    >
-      <el-input placeholder="Введите дескриптор..." size="large" v-model="store.common.descritor" />
-      <div class="mt-[10px] text-xs">
-        <span class="opacity-40">Осталось символов: </span>
-        <span class="font-bold">{{ descriptorWidth }}</span>
-      </div>
-    </el-form-item> -->
-
-    <!-- <span class="pb-[10px] font-bold">Описание компании</span>
-    <el-form-item
-      prop="common.description"
-      label-width="16"
-      label-position="top"
-      hide-require-asterisk
-    >
-      <el-input
-        type="textarea"
-        placeholder="Введите описание..."
-        size="large"
-        v-model="store.common.description"
-      />
-      <div class="mt-[10px] text-xs">
-        <span class="opacity-40">Осталось символов: </span>
-        <span class="font-bold">{{ descriptionWidth }}</span>
-      </div>
-    </el-form-item> -->
-
-    <!-- <span class="pb-[10px] font-bold">Сайт компании</span>
-    <el-form-item prop="common.site" label-width="16" label-position="top" hide-require-asterisk>
-      <el-input size="large" placeholder="Вставьте ссылку..." v-model="store.common.site" />
-    </el-form-item> -->
+    
 
     <div class="flex flex-col">
       <div class="settings-logo-infoWrapper">
@@ -84,33 +44,36 @@
         </el-upload>
       </el-form-item>
     </div>
-
-    <!-- <span class="font-bold">Фото и видео</span>
-    <el-form-item
-      prop="common.media"
-      label="Доступные форматы: mp4."
-      label-width="16"
-      label-position="top"
-      hide-require-asterisk
-    >
-      <el-upload
-        v-bind:class="`settings-media-uploader ${store.common.media.length < MAX_MEDIA_COUNT ? '' : 'settings-media-uploader--fulled'}`"
-        v-bind:file-list="store.common.media"
-        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-        list-type="picture-card"
-        :on-preview="handleMediaPreview"
-        :on-remove="handleMediaRemove"
-        :on-success="handleMediaSuccess"
-        :before-upload="beforeMediaUpload"
+    
+    <div class="flex flex-col">
+      <div class="settings-logo-infoWrapper">
+        <div class="flex flex-col">
+          <span class="mb-[5px] font-bold">Фото заднего фона</span>
+          <span class="text-xs opacity-40">Рекомендуемый размер 812х812px.</span>
+          <span class="text-xs opacity-40">Доступные форматы: png, jpeg.</span>
+        </div>
+        <div class="mt-[2px] h-[72px] w-[72px]">
+          <img :src="Image" />
+        </div>
+      </div>
+      <el-form-item
+        prop="common.logo"
+        label=""
+        label-width="16"
+        label-position="top"
+        hide-require-asterisk
       >
-        <el-icon class="settings-media-uploaderIcon"><Plus /></el-icon>
-      </el-upload>
+        <el-upload class="settings-logo-uploader" round size="large" v-model="store.common.logo">
+          <el-button class="btn-grey w-full cursor-pointer" round>
+            <el-icon class="settings-uploader-icon"><svgo-upload color="black" /></el-icon>
+            Загрузить
+          </el-button>
+        </el-upload>
+      </el-form-item>
+    </div>
 
-      <el-dialog v-model="dialogVisible">
-        <img w-full :src="dialogImageUrl" alt="Preview Image" />
-      </el-dialog>
-    </el-form-item> -->
 
+    
     <el-button round class="btn-main">Сохранить</el-button>
   </el-form>
 </template>
@@ -120,6 +83,7 @@ import { ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import type { UploadProps } from 'element-plus'
 import { useSettingsStore } from '~/stores/settings'
+import Image from '~/assets/image/image.png'
 import {
   MAX_DESCRIPTOR_WIDTH,
   MAX_DESCRIPTION_WIDTH,
