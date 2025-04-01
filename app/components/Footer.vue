@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-white w-full flex justify-center text-sm main-block-wrapper">
+  <footer class="bg-white w-full flex justify-center text-sm main-block-wrapper" id="app-footer">
     <div
       class="custom-container py-16 flex lg:flex-row flex-col items-center lg:justify-center justify-between lg:gap-20 gap-10"
     >

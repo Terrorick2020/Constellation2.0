@@ -5,8 +5,8 @@
         <el-avatar :size="48" :src="Avatar" class="border border-black/15" />
         <div class="flex flex-col">
           <!-- TODO: Username -->
-          <span class="font-extrabold text-base">Название профиля </span>
-          <span class="text-sm opacity-80 leading-[140%]">Название документа2222 </span>
+          <span class="font-extrabold text-base">{{ props.item.name }} </span>
+          <span class="text-sm opacity-80 leading-[140%]">{{ props.item.slug }} </span>
           <!-- TODO: Подразделение -->
           <span class="text-sm opacity-40 leading-[140%]">Подразделение</span>
         </div>
@@ -56,3 +56,7 @@ const onSelect = (option: (typeof LIST_OPTIONS)[0]) => {
 }
 </script>
 
+
+<style scoped>
+/* Ваши стили */
+</style>

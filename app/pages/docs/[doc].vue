@@ -1,7 +1,7 @@
 <template>
   <div class="flex w-full flex-col gap-[30px]">
     <div class="flex w-full flex-col gap-[30px]">
-      <Subscribe :docname="docName  " />
+      <Subscribe :docname="docName" />
     </div>
   </div>
 </template>
