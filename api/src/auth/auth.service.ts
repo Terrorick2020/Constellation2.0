@@ -77,4 +77,41 @@ export class AuthService {
 		const { ...data } = user
 		return data
 	}
+
+	async reset(username: string, file: Express.Multer.File, newPass: string) {
+		try {
+			const user = await this.usersService.findByUsername(username)
+			if (!user) {
+				return {
+					result: 'failed',
+					data: 'Пользователь с таким логином не найден'
+				}
+			}
+
+			const key = Buffer.from(file.buffer).toLocaleString()
+
+			const hash = this.rsa.encrypt(username, key)
+			const check = this.rsa.checkSignature(username, hash)
+			if (check != username)
+				return {
+					result: 'failed',
+					data: 'Неверный ключ!'
+				}
+
+			let changeUser = await this.usersService.findByUsername(username)
+			const hashedPassword = await argon.hash(newPass)
+			await this.usersService.update(changeUser.id, {
+				password: hashedPassword
+			})
+			return {
+				result: 'success',
+				data: 'Пароль обновлен!'
+			}
+		} catch (error) {
+			return {
+				result: 'failed',
+				data: error
+			}
+		}
+	}
 }

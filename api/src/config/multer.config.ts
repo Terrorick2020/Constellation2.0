@@ -40,7 +40,7 @@ export const multerOptions = {
 	}),
 
 	limits: {
-		fileSize: 1024 * 1024 * 30 // 5 MB limit
+		fileSize: 1024 * 1024 * 30 // 30 MB Максимальны размер файла
 	}
 
 }

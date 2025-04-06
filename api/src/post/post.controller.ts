@@ -20,7 +20,7 @@ export class PostController {
 		const pageNumber = parseInt(page || '1', 10)
 		const limitNumber = parseInt(limit || '10', 10)
 		return this.postService.findAll(pageNumber, limitNumber)
-	}
+	} 
 
 	@Get(':id')
 	@ApiOperation({ summary: 'Получить один пост' })

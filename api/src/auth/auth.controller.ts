@@ -6,7 +6,9 @@ import {
 	Param,
 	UseGuards,
 	Request,
-	Res
+	Res,
+	UseInterceptors,
+	UploadedFile
 } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiParam } from '@nestjs/swagger'
 import { AuthService } from './auth.service'
@@ -15,6 +17,7 @@ import { LoginDto } from './dto/login.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { Response } from 'express'
 import { createReadStream } from 'fs'
+import { FileInterceptor } from '@nestjs/platform-express'
 
 @ApiTags('Auth') 
 @Controller('auth')
@@ -51,6 +54,12 @@ export class AuthController {
 	@ApiBody({ type: LoginDto })
 	create(@Body() createAuthDto: LoginDto) {
 		return this.authService.login(createAuthDto)
+	}
+
+	@Post('/reset')
+	@UseInterceptors(FileInterceptor('file'))
+	reset(@Request() req, @Body() dto: any, @UploadedFile() file: Express.Multer.File) {
+		return this.authService.reset(dto.username, file, req.password)
 	}
 
 	@UseGuards(AuthGuard('jwt'))

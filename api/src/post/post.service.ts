@@ -4,12 +4,15 @@ import { PrismaService } from 'prisma/prisma.service'
 import { EncryptionService } from 'src/encryption/encryption.service'
 import { CreatePostDto } from './dto/create-post.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
+import { NotificationService } from 'src/notification/notification.service'
+import { title } from 'process'
 
 @Injectable()
 export class PostService {
 	constructor(
 		private prisma: PrismaService,
-		private rsa: EncryptionService
+		private rsa: EncryptionService,
+		private notificationService: NotificationService
 	) {}
 
 	async create(id: number, dto: CreatePostDto, file: Express.Multer.File) {
@@ -39,6 +42,10 @@ export class PostService {
 				userId: data.userId,
 				delivered: data.delivered
 			}
+			let description = "Добавлен документ '" + data.title + "', ознакомьтесь" 
+			await this.notificationService.create(data.date.toISOString(), description)
+
+
 			return {
 				result: 'success',
 				data: payload
