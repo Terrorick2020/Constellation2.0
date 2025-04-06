@@ -4,7 +4,7 @@ import { SignatureService } from './signature.service'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { AuthGuard } from '@nestjs/passport'
 
-@ApiTags('Signature') // Группируем эндпоинты в Swagger
+@ApiTags('Signature') 
 @Controller('signature')
 export class SignatureController {
 	constructor(private readonly signatureService: SignatureService) {}
