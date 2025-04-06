@@ -32,7 +32,6 @@ const nextStep = async () => {
     authStore.sInpErr.index = indP
 
     if ( resUN && resP ) {
-        console.log( 'sdvsdvsd' )
         const response = await authStore.register()
 
         response && router.push( setRoute )

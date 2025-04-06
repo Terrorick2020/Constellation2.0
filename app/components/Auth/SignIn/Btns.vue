@@ -39,9 +39,7 @@ const toProfile = async () => {
   if (!authStore.fInpErr.value && !authStore.sInpErr.value) {
     const response = await authStore.login()
 
-    if (response) {
-      // router.push(setRoute)
-    }
+    response && router.push(setRoute)
   }
 }
 

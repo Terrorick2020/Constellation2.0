@@ -11,8 +11,11 @@ import type { PIImages } from '~/types/profile/media'
 import { patternForProfName, patternForProfUrl } from '~/env/profile.env'
 import { 
   BASE_URL,
+  //@ts-ignore
   PROFILES_ENDPOINT,
+  //@ts-ignore
   USER_CURRENT,
+  //@ts-ignore
   MEDIA_ENDPOINT,
   getHeaders,
 } from '~/env/requests.env'

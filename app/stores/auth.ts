@@ -4,6 +4,7 @@ import validator from 'validator'
 import axios, { AxiosHeaders, type AxiosResponse } from 'axios'
 
 import { SignUpRT } from '~/env/requests.env'
+import { useSettingsStore } from '#imports'
 import {
   lenUsername,
   patternForUsername,
@@ -12,18 +13,9 @@ import {
 } from '~/env/auth.env'
 import {
   BASE_URL,
-  REGISTER_ENDPOINT,
-  LOGIN_ENDPOINT,
-  LOGOUT_ENDPOINT,
-  PROFILE_TYPE_ENDPOINT,
-  PROFILE_LEGAL_FORM_ENDPOINT,
-  WORK_FIELDS_ENDPOINT,
-  HELPERS_PRE_VALIDATION_ENDPOINT,
-  PASSWORD_RECOVERY,
-  PASSWORD_RESET,
-  PROFILES_ENDPOINT,
-  USER_CURRENT,
-  EMAIL_VERIFY,
+  REG_ENDPOINT,
+  LOG_ENDPOINT,
+  RESET_PASS,
   getHeaders
 } from '~/env/requests.env'
 
@@ -98,7 +90,7 @@ export const useAuthStore = defineStore(
     const username = ref<string>( '' )
     const password = ref<string>( '' )
     const saveMe = ref<boolean>( false )
-    const key = ref<string>()
+    const key = ref<FormData>()
 
     const accessToken = ref<string>( '' )
     const resetToken = ref<string>( '' )
@@ -138,246 +130,128 @@ export const useAuthStore = defineStore(
 
         const data = {
           username: username.value,
-          password: password.value
+          password: password.value,
         }
 
-        // const response = await axios.post(`${BASE_URL}${LOGIN_ENDPOINT}`, data)
-
-        // accessToken.value = response.data.data.access_token
+        const response = await axios.post(`${BASE_URL}${LOG_ENDPOINT}`, data)
 
 
 
-        // if (response.status === 200) {
+        const dataRes = response.data.result
+        console.log("НАШИ ДАННЫЕ", response.data.access_token)
 
-        //   userId.value = response.data.id
+        switch (dataRes) {
+        case 'success':
+          accessToken.value = response.data.access_token
 
-        //   apiSuccess.value = true
-        //   apiSuccess.block = 'login'
-        // }
-
-        const result = await delay(1000)
-
-        if ( result ) {
           apiRes.value = true
           apiRes.type = ApiResType.success
           apiRes.title = 'Ура!'
-          apiRes.msg = 'Успешный вход в сиситему!'
+          apiRes.msg = 'Успешнаня авторизация!'
+          break;
+        case 'failed':
+          apiRes.value = true
+          apiRes.type = ApiResType.error
+          apiRes.title = 'Ошибка авторизация'
+          apiRes.msg = 'Что-то пошло не так.. Попробуйте позже.'
+          break;
         }
 
         isLoad.value = false
 
-        return result
+        return dataRes === 'success'
 
       } catch (error: any) {
         isLoad.value = false
       }
     }
-
-    const sendUsername = async () => {
+    const register = async () => {
       try {
         isLoad.value = true
 
-        // const data = {
-        //   email: email.value
-        // }
+        const data = {
+          username: username.value,
+          password: password.value,
+          repass: password.value,
+          name: 'Не задано',
+          job: 'Не задано',
+          division: 'Не задано',
+        }
 
-        // const response = await axios.post(`${BASE_URL}${PASSWORD_RECOVERY}`, data)
+        const response = await axios.post(`${BASE_URL}${REG_ENDPOINT}`, data)
 
-        const result = await delay(1000)
+        const dataRes = response.data.result
 
-        if ( result ) {
+        switch (dataRes) {
+        case 'success':
+          accessToken.value = response.data.access_token
+          
           apiRes.value = true
           apiRes.type = ApiResType.success
           apiRes.title = 'Ура!'
-          apiRes.msg = 'Имя пользователя прошло проверку!'
+          apiRes.msg = 'Успешнаня регистрация!'
+          break;
+        case 'failed':
+          apiRes.value = true
+          apiRes.type = ApiResType.error
+          apiRes.title = 'Ошибка регистрации'
+          apiRes.msg = response.data.data
+          break;
         }
 
         isLoad.value = false
 
-        return result
+        return dataRes === 'success'
       } catch (error: any) {
-        // apiErr.value = true
-        // apiErr.block = 'sendEmail'
-        // apiErr.statusCode = error.status ? error.status : 500
-        // isLoad.value = false
-      }
-    }
-    const checkingCode = async () => {
-      try {
-        isLoad.value = true
-
-        const result = await delay(1000)
-
-        if ( result ) {
-          apiRes.value = true
-          apiRes.type = ApiResType.success
-          apiRes.title = 'Ура!'
-          apiRes.msg = 'Успешная проверка ключа!'
-        }
-
+        apiRes.value = true
+        apiRes.type = ApiResType.error
+        apiRes.title = 'Ошибка регистрации'
+        apiRes.msg = 'Что-то пошло не так.. Попробуйте позже.'
         isLoad.value = false
-
-        return result
-      } catch (error: any) {
-        // apiErr.value = true
-        // apiErr.block = 'checkingCode'
-        // apiErr.statusCode = error.status ? error.status : 500
-        // isLoad.value = false
       }
     }
     const rewritePass = async () => {
       try {
         isLoad.value = true
 
-        const result = await delay(1000)
-
-        if ( result ) {
-          apiRes.value = true
-          apiRes.type = ApiResType.success
-          apiRes.title = 'Ура!'
-          apiRes.msg = 'Пароль успешно изменён!'
-        }
-
-        isLoad.value = false
-
-        return result
-      } catch (error: any) {
-        // apiErr.value = true
-        // apiErr.block = 'rewritePass'
-        // apiErr.statusCode = error.status ? error.status : 500
-        // isLoad.value = false
-      }
-    }
-
-    const getSingUpData = async (type: string) => {
-      try {
-        isLoad.value = true
-
-        let uri: string = ''
-
-        switch (type) {
-          case SignUpRT.profileTypes:
-            uri = `${BASE_URL}${PROFILE_TYPE_ENDPOINT}`
-            break
-          case SignUpRT.profileLegalForms:
-            uri = `${BASE_URL}${PROFILE_LEGAL_FORM_ENDPOINT}`
-            break
-          case SignUpRT.workFieldParents:
-            uri = `${BASE_URL}${WORK_FIELDS_ENDPOINT}?parent_only=1`
-            break
-          case SignUpRT.workFieldBlocks:
-            uri = `${BASE_URL}${WORK_FIELDS_ENDPOINT}?parent_only=1&with_children=1`
-            break
-        }
-
-        const response = await axios.get(uri)
-
-        isLoad.value = false
-
-        return response.data
-      } catch (error: any) {
-        // apiErr.value = true
-        // apiErr.block = 'getSingUpData'
-        // apiErr.statusCode = error.status ? error.status : 500
-        // isLoad.value = false
-      }
-    }
-
-    const predictValid = async () => {
-      isLoad.value = true
-
-      const profileStore = useProfileStore()
-
-      const baseUri = `${BASE_URL}${HELPERS_PRE_VALIDATION_ENDPOINT}`
-      const nameParams = `?field_name=name&value=${profileStore.companyName}`
-      const slugParams = `?field_name=slug&value=${profileStore.companyUrl}`
-
-      try {
-        await axios.get(baseUri + nameParams)
-      } catch (error: any) {
-        // if (error.status === 422) {
-        //   fInpErr.value = true
-        //   fInpErr.index = 3
-        // } else {
-        //   apiErr.value = true
-        //   apiErr.block = 'predictValid'
-        //   apiErr.statusCode = error.status ? error.status : null
-        // }
-      }
-
-      try {
-        await axios.get(baseUri + slugParams)
-      } catch (error: any) {
-        // if (error.status === 422) {
-        //   sInpErr.value = true
-        //   sInpErr.index = 3
-        // } else {
-        //   apiErr.value = true
-        //   apiErr.block = 'predictValid'
-        //   apiErr.statusCode = error.status ? error.status : null
-        // }
-      }
-
-      isLoad.value = false
-
-      // return !fInpErr.value && !sInpErr.value && !apiErr.value
-    }
-
-    const register = async () => {
-      try {
-        isLoad.value = true
-
-        const result = await delay(1000)
-
-        if ( result ) {
-          apiRes.value = true
-          apiRes.type = ApiResType.success
-          apiRes.title = 'Ура!'
-          apiRes.msg = 'Успешнаня регистрация!'
-        }
-        
-        isLoad.value = false
-
-        return result
-      } catch (error: any) {
-        // apiErr.value = true
-        // apiErr.block = block
-        // apiErr.statusCode = status
-        isLoad.value = false
-      }
-    }
-
-    const verifyEmail = async (query: any) => {
-      try {
-        isLoad.value = true
-
-        if (!query.hash) {
-          isLoad.value = true
-          return false
-        }
-
         const data = {
-          hash: query.hash
+          username: username.value,
+          file: key.value,
+          password: password.value,
         }
 
-        const response = await axios.post(`${BASE_URL}${EMAIL_VERIFY}`, data)
+        console.log(  data )
 
-        if (response.status !== 200) {
-          isLoad.value = true
-          return false
+        const response = await axios.post(`${BASE_URL}${RESET_PASS}`, data)
+
+        const dataRes = response.data.result
+
+        switch (dataRes) {
+        case 'success':
+          apiRes.value = true
+          apiRes.type = ApiResType.success
+          apiRes.title = 'Ура!'
+          apiRes.msg = 'Успешнаное изменение пароля!'
+          break;
+        case 'failed':
+          apiRes.value = true
+          apiRes.type = ApiResType.error
+          apiRes.title = 'Ошибка изменения пароля'
+          apiRes.msg = 'Что-то пошло не так.. Попробуйте позже.'
+          break;
         }
-
-        const { getUserData } = useProfileStore()
-        const resUser: false | AxiosResponse = await getUserData()
 
         isLoad.value = false
 
-        return resUser && resUser.status === 200
-      } catch {
+        return dataRes === 'success'
+      } catch (error: any) {
+        apiRes.value = true
+        apiRes.type = ApiResType.error
+        apiRes.title = 'Ошибка изменения пароля'
+        apiRes.msg = 'Что-то пошло не так.. Попробуйте позже.'
         isLoad.value = false
       }
     }
-
 
     return {
       userId,
@@ -401,15 +275,9 @@ export const useAuthStore = defineStore(
 
       login,
 
-      sendUsername,
-      checkingCode,
       rewritePass,
 
-      getSingUpData,
-      predictValid,
       register,
-
-      verifyEmail,
     }
   },
   isBrowser

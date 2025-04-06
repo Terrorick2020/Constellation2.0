@@ -57,8 +57,11 @@ const handleFileChange = (file: UploadRawFile, fileList: UploadRawFile[]) => {
   reader.readAsDataURL(file.raw)
 
   reader.onload = () => {
-    const base64Data = reader.result as string
-    authStore.key = base64Data
+    const formData = new FormData()
+    formData.append('title', file.raw.name)
+    formData.append('file', file.raw)
+
+    authStore.key = formData
   }
 
   reader.onerror = (error) => {

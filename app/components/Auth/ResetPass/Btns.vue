@@ -39,11 +39,7 @@ const nextStep = async () => {
       authStore.fInpErr.index = indUN
 
       if ( resUN ) {
-        const response = await authStore.sendUsername()
-
-        if (response) {
-          authStore.resetPass.contentStep = RPContentStep.CodeStep
-        }
+        authStore.resetPass.contentStep = RPContentStep.CodeStep
       }
       break
     case RPContentStep.CodeStep:
@@ -51,11 +47,7 @@ const nextStep = async () => {
       authStore.fInpErr.index = authStore.fInpErr.value ? 0 : null
 
       if (!authStore.fInpErr.value) {
-        const response = await authStore.checkingCode()
-
-        if (response) {
-          authStore.resetPass.contentStep = RPContentStep.RewritePassStep
-        }
+        authStore.resetPass.contentStep = RPContentStep.RewritePassStep
       }
       break
     case RPContentStep.RewritePassStep:

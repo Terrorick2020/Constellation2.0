@@ -60,8 +60,11 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { useProfileStore } from '~/stores/profile.js'
-import { useFiltersStore } from '~/stores/filters.js'
+import { BASE_URL, POSTS_ENDPOINT, getHeaders } from '~/env/requests.env'
+import { useAuthStore } from '#imports'
+import { useProfileStore } from '~/stores/profile'
+import { useFiltersStore } from '~/stores/filters'
+import axios from 'axios';
 
 const percentage = ref<number>(50) // Начальный процент
 const searchQuery = ref(''); // Строка поиска
@@ -138,7 +141,62 @@ watch(searchQuery, (newQuery) => {
   }, 500)
 })
 
+const page = ref<number>(1)
+const limit = ref<number>(1)
+let all_posts = []
+
+const getDocs = async () => {
+  const postListResponse = await axios.get(`${BASE_URL}/post`, {
+					params: { page: page, limit: limit }
+				})
+
+  all_posts = postListResponse.data
+  console.log('all_posts', all_posts)
+        
+  const response = await axios.get(
+    `${BASE_URL}${POSTS_ENDPOINT}`,
+    {
+      params: { page: page, limit: limit }
+    }
+  )
+
+  const resDocs = response.data.result
+
+  switch( resDocs ) {
+    case 'success':
+      page.value ++
+      limit.value ++
+      break
+    case 'failed':
+      break
+  }
+}
+
+const getNextDocs = async () => {
+  const response = await axios.get(
+    `${BASE_URL}${POSTS_ENDPOINT}`,
+    {
+      params: { page: page, limit: limit }
+    }
+  )
+
+  const resDocs = response.data.result
+
+  switch( resDocs ) {
+    case 'success':
+      
+      page.value ++
+      limit.value ++
+      break
+    case 'failed':
+      break
+  }
+}
+
+const getTargetDoc = async () => {}
+
 onMounted(() => {
+  getDocs()
   window.addEventListener('scroll', onScroll)
 })
 </script>

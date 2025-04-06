@@ -5,9 +5,9 @@ WORKDIR /app
 RUN apk update && apk upgrade
 COPY . .
 
-RUN npm i 
+RUN npm i --legacy-peer-deps
 
-EXPOSE 3000
+EXPOSE 7000
 
 # Command to run the application
 CMD ["sh", "-c", "npx prisma migrate dev && npm run start"]
