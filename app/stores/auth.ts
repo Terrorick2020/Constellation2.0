@@ -90,7 +90,7 @@ export const useAuthStore = defineStore(
     const username = ref<string>( '' )
     const password = ref<string>( '' )
     const saveMe = ref<boolean>( false )
-    const key = ref<FormData>()
+    const key = ref<File>()
 
     const accessToken = ref<string>( '' )
     const resetToken = ref<string>( '' )
@@ -179,18 +179,31 @@ export const useAuthStore = defineStore(
         }
 
         const response = await axios.post(`${BASE_URL}${REG_ENDPOINT}`, data)
-
         const dataRes = response.data.result
 
         switch (dataRes) {
         case 'success':
+
           accessToken.value = response.data.access_token
+
+          const keyResponse = await axios.get(`${BASE_URL}${response.data.keyPath}`, {
+            responseType: 'blob',
+          });
+
+          const url = window.URL.createObjectURL(new Blob([keyResponse.data]));
+          const link = document.createElement('a');
+          link.href = url;
+
+          link.setAttribute('download', `${username.value}-public.pem`);
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
           
           apiRes.value = true
           apiRes.type = ApiResType.success
           apiRes.title = 'Ура!'
           apiRes.msg = 'Успешнаня регистрация!'
-          break;
+          return true
         case 'failed':
           apiRes.value = true
           apiRes.type = ApiResType.error
@@ -220,9 +233,10 @@ export const useAuthStore = defineStore(
           password: password.value,
         }
 
-        console.log(  data )
-
-        const response = await axios.post(`${BASE_URL}${RESET_PASS}`, data)
+        const response = await axios.post(
+          `${BASE_URL}${RESET_PASS}`,
+          data
+        )
 
         const dataRes = response.data.result
 

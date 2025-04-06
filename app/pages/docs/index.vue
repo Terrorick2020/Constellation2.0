@@ -23,35 +23,39 @@
       </div>
     </div>
 
-    <div class="space-y-[10px]">
-      <div
-        v-for="(doc, index) in displayedDocs"
-        :key="doc.id"
-        class="flex w-full flex-col gap-[10px]"
-      >
-        <!-- Here keep document info -->
-        <Company :item="doc" :setTable="setTable" index-page />
+    <el-container class="w-full" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
+      <el-main style="padding: 0; margin: 0; background: transparent;">
+        <div class="space-y-[10px]">
+          <div
+            v-for="(doc, index) in displayedDocs"
+            :key="doc.id"
+            class="flex w-full flex-col gap-[10px]"
+          >
+            <!-- Here keep document info -->
+            <Company :item="doc" :setTable="setTable" index-page />
 
-        <div class="border border-black/15 p-4 flex flex-col gap-y-[20px] bg-white rounded-2xl">
-          <div class="flex flex-col gap-[10px]">
-            <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">Количество людей, подписавших документ</h2>
-            <div class="demo-progress">
-              <el-progress
-                :percentage="percentage"
-                :stroke-width="15"
-                status="success"
-                striped
-                striped-flow 
-                :duration="duration"
-                :text-inside="true"
-                color="#409EFF"
-              />
+            <div class="border border-black/15 p-4 flex flex-col gap-y-[20px] bg-white rounded-2xl">
+              <div class="flex flex-col gap-[10px]">
+                <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">Количество людей, подписавших документ</h2>
+                <div class="demo-progress">
+                  <el-progress
+                    :percentage="percentage"
+                    :stroke-width="15"
+                    status="success"
+                    striped
+                    striped-flow 
+                    :duration="duration"
+                    :text-inside="true"
+                    color="#409EFF"
+                  />
+                </div>
+                <p class="text-sm text-gray-500">Подписали: {{ 50 }} из {{ 100 }}</p> 
+              </div>
             </div>
-            <p class="text-sm text-gray-500">Подписали: {{ 50 }} из {{ 100 }}</p> 
           </div>
         </div>
-      </div>
-    </div>
+      </el-main>
+    </el-container>
 
     <DrawersLoadDoc :drawer="drawer" :setDrawer="setDrawer" />
     <DrawersStatistic :table="table" :setTable="setTable" />
@@ -68,28 +72,39 @@ import axios from 'axios';
 
 const percentage = ref<number>(50) // Начальный процент
 const searchQuery = ref(''); // Строка поиска
+const load = ref(true)
 
 const duration = computed(() => Math.floor(percentage.value / 5)) // Длительность анимации
 
-const listDocs = [
-  { id: 0, name: 'Документ 1', slug: 'doc-1' },
-  { id: 1, name: 'Документ 2', slug: 'doc-2' },
-  { id: 2, name: 'Документ 3', slug: 'doc-3' },
-  { id: 3, name: 'Документ 4', slug: 'doc-4' },
-  { id: 4, name: 'Документ 5', slug: 'doc-5' },
-  { id: 5, name: 'Документ 6', slug: 'doc-6' },
-  { id: 6, name: 'Документ 7', slug: 'doc-7' },
-  { id: 7, name: 'Документ 8', slug: 'doc-8' },
-  { id: 8, name: 'Документ 9', slug: 'doc-9' },
-  { id: 9, name: 'Документ 10', slug: 'doc-10' },
-  { id: 10, name: 'Документ 11', slug: 'doc-11' },
-  { id: 11, name: 'Документ 12', slug: 'doc-12' },
-  { id: 12, name: 'Документ 13', slug: 'doc-13' },
-  { id: 13, name: 'Документ 14', slug: 'doc-14' },
-  { id: 14, name: 'Документ 15', slug: 'doc-15' },
-  { id: 15, name: 'Документ 16', slug: 'doc-16' },
-  { id: 16, name: 'Документ 17', slug: 'doc-17' },
-]
+interface Document {
+  id: number;
+  title: string;
+  date: string;
+}
+
+const listDocs: Document[] = []; // Указываем тип массива
+
+//docs: id, title, date
+
+// const listDocs = [
+  // { id: 0, name: 'Документ 1', slug: 'doc-1' },
+  // { id: 1, name: 'Документ 2', slug: 'doc-2' },
+  // { id: 2, name: 'Документ 3', slug: 'doc-3' },
+  // { id: 3, name: 'Документ 4', slug: 'doc-4' },
+  // { id: 4, name: 'Документ 5', slug: 'doc-5' },
+  // { id: 5, name: 'Документ 6', slug: 'doc-6' },
+  // { id: 6, name: 'Документ 7', slug: 'doc-7' },
+  // { id: 7, name: 'Документ 8', slug: 'doc-8' },
+  // { id: 8, name: 'Документ 9', slug: 'doc-9' },
+  // { id: 9, name: 'Документ 10', slug: 'doc-10' },
+  // { id: 10, name: 'Документ 11', slug: 'doc-11' },
+  // { id: 11, name: 'Документ 12', slug: 'doc-12' },
+  // { id: 12, name: 'Документ 13', slug: 'doc-13' },
+  // { id: 13, name: 'Документ 14', slug: 'doc-14' },
+  // { id: 14, name: 'Документ 15', slug: 'doc-15' },
+  // { id: 15, name: 'Документ 16', slug: 'doc-16' },
+  // { id: 16, name: 'Документ 17', slug: 'doc-17' },
+// ]
 
 const visibleDocs = ref(listDocs.slice(0, 5))
 
@@ -97,7 +112,7 @@ const visibleDocs = ref(listDocs.slice(0, 5))
 const searchResults = computed(() => {
   if (!searchQuery.value.trim()) return [] // Если строка поиска пустая, возвращаем пустой массив
   return listDocs.filter(doc =>
-    doc.name.toLowerCase().includes(searchQuery.value.toLowerCase().trim())
+    doc.title.toLowerCase().includes(searchQuery.value.toLowerCase().trim())
   )
 })
 
@@ -143,16 +158,40 @@ watch(searchQuery, (newQuery) => {
 
 const page = ref<number>(1)
 const limit = ref<number>(1)
-let all_posts = []
 
 const getDocs = async () => {
+  load.value = true
   const postListResponse = await axios.get(`${BASE_URL}/post`, {
-					params: { page: page, limit: limit }
+					// params: { page: page.value, limit: limit.value }
 				})
 
-  all_posts = postListResponse.data
-  console.log('all_posts', all_posts)
-        
+  
+  console.log('список документов ', postListResponse.data.data)
+  console.log("id документа", postListResponse.data.data[0].id)
+  console.log("title документа", postListResponse.data.data[0].title)
+  console.log("date документа", postListResponse.data.data[0].date)
+
+
+  postListResponse.data.data.forEach((doc: any) => {
+    listDocs.push({
+      id: doc.id,        // id документа
+      title: doc.title,  // Заголовок документа
+      date: doc.date,    // Дата документа
+    });
+  });
+
+  console.log('список документов в массиве', listDocs)
+  visibleDocs.value = listDocs.slice(0, 5);
+  // if (Array.isArray(postListResponse.data.data) && postListResponse.data.data.length > 0) {
+  //     // Добавляем новые документы, извлекая только нужные поля (id, title, date)
+  //     postListResponse.data.data.forEach((doc: any) => {
+  //       listDocs.push({
+  //         id: doc.id,        // id документа
+  //         title: doc.title,  // Заголовок документа
+  //         date: doc.date,    // Дата документа
+  //       });
+  //     });
+  //   }
   const response = await axios.get(
     `${BASE_URL}${POSTS_ENDPOINT}`,
     {
@@ -170,6 +209,8 @@ const getDocs = async () => {
     case 'failed':
       break
   }
+
+  load.value = false
 }
 
 const getNextDocs = async () => {
@@ -211,5 +252,9 @@ onMounted(() => {
 
 .btn-add {
   height: 100%;
+}
+
+.is-loading {
+  background: transparent !important;
 }
 </style>

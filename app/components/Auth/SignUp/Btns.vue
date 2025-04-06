@@ -34,7 +34,8 @@ const nextStep = async () => {
     if ( resUN && resP ) {
         const response = await authStore.register()
 
-        response && router.push( setRoute )
+        console.log( response )
+        if(response ) router.push( setRoute );
     }
 }
 const prevStep = () => {

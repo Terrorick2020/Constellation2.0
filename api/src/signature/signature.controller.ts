@@ -20,7 +20,7 @@ export class SignatureController {
 	@ApiBody({
 		schema: {
 			type: 'object',
-			properties: {
+			properties: { 
 				postId: { type: 'number', example: 1 },
 				file: { type: 'string', format: 'binary' }
 			}

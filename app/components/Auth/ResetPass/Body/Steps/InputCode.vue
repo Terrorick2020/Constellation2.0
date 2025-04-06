@@ -57,11 +57,7 @@ const handleFileChange = (file: UploadRawFile, fileList: UploadRawFile[]) => {
   reader.readAsDataURL(file.raw)
 
   reader.onload = () => {
-    const formData = new FormData()
-    formData.append('title', file.raw.name)
-    formData.append('file', file.raw)
-
-    authStore.key = formData
+    authStore.key = file.raw
   }
 
   reader.onerror = (error) => {

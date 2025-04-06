@@ -5,10 +5,10 @@
         <el-avatar :size="48" :src="Avatar" class="border border-black/15" />
         <div class="flex flex-col">
           <!-- TODO: Username -->
-          <span class="font-extrabold text-base">{{ props.item.name }} </span>
-          <span class="text-sm opacity-80 leading-[140%]">{{ props.item.slug }} </span>
+          <span class="font-extrabold text-base">{{ props.item.title }} </span>
+          <span class="text-sm opacity-80 leading-[140%]">{{ formatDate(props.item.date)}}</span>
           <!-- TODO: Подразделение -->
-          <span class="text-sm opacity-40 leading-[140%]">Подразделение</span>
+          <!-- <span class="text-sm opacity-40 leading-[140%]">61 кафедра</span> -->
         </div>
       </div>
       <div v-if="indexPage" class="flex items-center transition-all group-hover:translate-x-[2px] gap-x-[10px]">
@@ -35,13 +35,26 @@ const documentStore = useDocumentStore()
 const props = withDefaults(
   defineProps<{
     indexPage?: boolean
-    item: any
+    item: { name: string; date: string; title: string }
     setTable: (value: boolean) => void
   }>(),
   {
     indexPage: false
   }
 )
+
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${hours}:${minutes}:${seconds} ${day}-${month}-${year} `;
+}
 
 const LIST_OPTIONS: TPopoverItemProps[] = [
   { key: 'viewdoc', label: 'К документу', },

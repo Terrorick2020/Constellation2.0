@@ -136,7 +136,7 @@ export const postStore = defineStore('postStore', {
 					`${BASE_URL}/sign/${subscribeConfig.id}`,
 					formData,
 					{
-						headers: {
+						headers: { 
 							Authorization: `Bearer ${authStore().token}`
 						}
 					}
