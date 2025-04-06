@@ -46,7 +46,7 @@ const router = useRouter()  // Используем useRouter для досту�
 
 interface Props {
   list: TPopoverItemProps[]
-  slug: string
+  id: string
   setTable?: (value: boolean) => void
 }
 
@@ -63,7 +63,7 @@ const handleClickOption = (listItem: TPopoverItemProps) => {
   
   if (listItem.key === 'viewdoc') {
     // Переход с использованием Vue Router
-    router.push(`/docs/${props.slug}`)
+    router.push(`/docs/${props.id}`)
   }
 
   if (listItem.key === 'statistics') {

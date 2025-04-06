@@ -10,9 +10,10 @@ async function bootstrap() {
 	app.setGlobalPrefix('api')
 	// Настройка CORS
 	const corsOptions = {
-		origin: process.env.CORS_ORIGIN || '*',
-		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-		allowedHeaders: ['Content-Type', 'Authorization']
+		origin: '*',
+		// origin: process.env.CORS_ORIGIN || '*',
+		// methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+		// allowedHeaders: ['Content-Type', 'Authorization']
 	}
 
 	const config = new DocumentBuilder()

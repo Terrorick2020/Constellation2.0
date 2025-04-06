@@ -50,7 +50,7 @@
         <!-- <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button> -->
       </div>
       <h2 class="custom-h2"><big class="text-700">Пользователь:</big>  {{ persone.name }}</h2>
-      <h1 class="custom-h1"><big class="text-700">ФИО:</big> {{ persone.fio }}</h1>
+      <h1 class="custom-h1"><big class="text-700">ФИО:</big> ДОДЕЛАТЬ </h1>
 
       <!-- <p class="text-center text-sm opacity-40 lg:text-left">
         {{ profileInfo.description }}
@@ -77,6 +77,11 @@ import Image from '~/assets/image/image.png'
 import Avatar from '~/assets/image/avatar.png'
 import type { TPopoverItemProps } from '~/types/UI/popover'
 import { onMounted, reactive } from 'vue'
+import axios from 'axios';
+import { useRoute } from 'vue-router';
+import { BASE_URL, getHeaders } from '~/env/requests.env'
+
+
 
 
 const { profileInfo } = useProfileStore()
@@ -98,6 +103,20 @@ const persone = reactive({
 
 const getProfile = async () => {
   // const response = await getProfile(props.username)
+  const route = useRoute();
+  console.log("route", route);
+  const id = route.params.id;
+  console.log("id пользователя", id);
+
+  const getCurrentUser = await axios.get(`${BASE_URL}/user/${id}`, {
+    headers: {
+      'Content-Type': 'application/json', 
+    },
+  });
+    console.log(getCurrentUser.data)
+    // username = getCurrentUser.data; // Присваиваем данные пользователя
+    // console.log(user.value); 
+
   const response = {
     data: {
       name: 'user 1',

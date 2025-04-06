@@ -12,7 +12,7 @@
         </div>
       </div>
       <div v-if="indexPage" class="flex items-center transition-all group-hover:translate-x-[2px] gap-x-[10px]">
-        <UIPopoverMenu :list="LIST_OPTIONS" :setTable="setTable" :slug="props.item.slug" @select="onSelect">
+        <UIPopoverMenu :list="LIST_OPTIONS" :setTable="setTable" :id="props.item.id" @select="onSelect">
           <template #reference>
             <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button>
           </template>
@@ -35,7 +35,7 @@ const documentStore = useDocumentStore()
 const props = withDefaults(
   defineProps<{
     indexPage?: boolean
-    item: { name: string; date: string; title: string }
+    item: { name: string; date: string; title: string, slug: string, id: string}
     setTable: (value: boolean) => void
   }>(),
   {

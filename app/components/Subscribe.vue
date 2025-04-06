@@ -30,7 +30,35 @@
 
 <script lang="ts" setup>
 import { ArrowDownBold } from '@element-plus/icons-vue'
+import { BASE_URL, getHeaders } from '~/env/requests.env'
 import pdfFile from '~/assets/image/1.pdf'
+import axios from 'axios';
+import { useRoute } from 'vue-router';
+import { ref, computed, onMounted, watch } from 'vue'
+
+const props = defineProps<{
+  docId: string;  // Тип для docId
+}>();
+
+
+const getDoc = async () => {
+  console.log('id документа', props.docId)
+  const getCurrentDoc = await axios.get(`${BASE_URL}/post/${props.docId}`, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+  console.log(getCurrentDoc.data)
+
+  };
+
+
+
+onMounted(() => {
+  getDoc()
+})
+
 </script>
 
 <style scoped lang="scss">

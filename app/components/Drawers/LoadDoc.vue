@@ -30,7 +30,7 @@
 import { ElMessageBox } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
 import axios from 'axios'
-import { BASE_URL, UPLOAD_ENDPOINT, getHeaders } from '~/env/requests.env'
+import { BASE_URL, getHeaders } from '~/env/requests.env'
 import { useAuthStore } from '~/stores/auth'
 
 
