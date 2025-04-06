@@ -57,7 +57,6 @@ export class AuthController {
 	}
 
 	@Post('/reset')
-	@UseGuards(AuthGuard('jwt'))
 	@UseInterceptors(FileInterceptor('file'))
 	reset(@Request() req, @Body() dto: any, @UploadedFile() file: Express.Multer.File) {
 		return this.authService.reset(dto.username, file, req.password)
