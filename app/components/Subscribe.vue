@@ -5,7 +5,7 @@
         <el-button type="warning">Назад</el-button>
       </NuxtLink>
 
-      <el-button type="info" class="down">
+      <el-button type="info" class="down" >
         <div class="flex flex-col items-center">
           <el-icon>
             <ArrowDownBold />
@@ -24,36 +24,60 @@
         height="95%"
         />
     </div>
-    <el-button type="success" class="subscribe">Подписать</el-button>
+    <el-button type="success" class="subscribe" @click="SubscribeDoc">Подписать</el-button>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ArrowDownBold } from '@element-plus/icons-vue'
 import { BASE_URL, getHeaders } from '~/env/requests.env'
-import pdfFile from '~/assets/image/1.pdf'
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import { ref, computed, onMounted, watch } from 'vue'
+import { useAuthStore } from '~/stores/auth'
+
 
 const props = defineProps<{
   docId: string;  // Тип для docId
 }>();
 
-
+const pdfFile = ref('');
+//функция для отображения документа
 const getDoc = async () => {
-  console.log('id документа', props.docId)
   const getCurrentDoc = await axios.get(`${BASE_URL}/post/${props.docId}`, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     });
 
-  console.log(getCurrentDoc.data)
+  // console.log("Запрос сделан", getCurrentDoc.data.data.content)
+  const base64Data = getCurrentDoc.data.data.content;
+  // console.log("Запрос на base64", base64Data);
+  pdfFile.value = `data:application/pdf;base64,${base64Data}`;
+  // console.log("PDF файл готов", pdfFile.value);
 
-  };
+};
 
 
+//функция для подписи документов
+// какой id использовать userid или просто id
+const SubscribeDoc = async () => {
+  const formData = new FormData();
+  formData.append('postId', props.docId);
+  const pdfFile_data =  pdfFile.value.split('data:application/pdf;base64,')[1];
+  formData.append('file', pdfFile_data);
+  // const { accessToken } = useAuthStore()
+  const subscribeCurrentDoc = await axios.post(`${BASE_URL}/signature/create`,formData,{
+    
+    headers: {
+      'Content-Type': 'multipart/form-data',
+
+    },
+
+  });
+  console.log("Подпись успешно создана:", subscribeCurrentDoc);
+};
+  
 
 onMounted(() => {
   getDoc()
@@ -64,20 +88,20 @@ onMounted(() => {
 <style scoped lang="scss">
 .Main-block {
   position: relative;
-  height: 100vh; /* Высота 100% от экрана */
+  height: 100vh; 
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Центрируем элементы по вертикали */
-  align-items: center; /* Центрируем элементы по горизонтали */
+  justify-content: center; 
+  align-items: center; 
 }
 
 .button-container {
   position: absolute;
-  top: 25px; /* Располагаем кнопки на верхней части экрана */
-  left: 25px; /* Добавляем отступ слева */
-  right: 25px; /* Добавляем отступ справа */
+  top: 25px; 
+  left: 25px; 
+  right: 25px; 
   display: flex;
-  justify-content: space-between; /* Распределяем кнопки по краям */
+  justify-content: space-between; 
   align-items: center;
 }
 
@@ -99,10 +123,10 @@ onMounted(() => {
 .pdf-container {
   position: relative;
   display: flex;
-  justify-content: center; /* Центрируем PDF по горизонтали */
-  margin-top: 100px; /* Отступ сверху, чтобы кнопки не перекрывались с документом */
+  justify-content: center; 
+  margin-top: 100px; 
   width: 100%;
-  height: 80vh; /* Ограничиваем высоту для PDF */
-  overflow: hidden; /* Чтобы избежать прокрутки */
+  height: 80vh; 
+  overflow: hidden;
 }
 </style>

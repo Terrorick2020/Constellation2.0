@@ -10,10 +10,7 @@
 import { useRoute } from 'vue-router';
 
 const route = useRoute(); 
-// const docId = route.params.id as string;
-const documentId = String(route.params.id);
-console.log(documentId)
-
+const documentId = String(route.params.doc);
 
 definePageMeta({
     layout: 'preview',

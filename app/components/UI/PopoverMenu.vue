@@ -63,6 +63,7 @@ const handleClickOption = (listItem: TPopoverItemProps) => {
   
   if (listItem.key === 'viewdoc') {
     // Переход с использованием Vue Router
+    console.log('Переход на /docs/' + props.id)
     router.push(`/docs/${props.id}`)
   }
 
