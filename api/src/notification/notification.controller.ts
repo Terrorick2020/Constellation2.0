@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Request, Query, UseGuards, ForbiddenException } from '@nestjs/common'
+import { Controller, Post, Get, Request, Query, UseGuards, ForbiddenException, Body } from '@nestjs/common'
 import { NotificationService } from './notification.service'
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 
@@ -16,11 +16,11 @@ export class NotificationController {
 		}
 
 	@Post()
-	create(@Request() req) {
+	create(@Request() req, @Body() dto: any) {
 			if (req.user.role !== 'Admin') {
 					throw new ForbiddenException('Not admin')
 				}
-			return this.notificationService.create(req.data.title, req.data.description)
+			return this.notificationService.create(dto.title, dto.description)
 		}
 
 }
