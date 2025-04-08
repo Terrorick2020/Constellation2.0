@@ -37,25 +37,34 @@ export class UserService {
 					name: true
 				}
 			})
-
+	
 			const signedUsers = await this.prisma.signature.findMany({
 				where: {
 					postId: postId
 				},
 				select: {
-					userId: true
+					userId: true,
+					assignedAt: true
 				}
 			})
-
-			const signedUserIds = new Set(
-				signedUsers.map(signature => signature.userId)
-			)
-			const result = users.map(user => ({
-				id: user.id,
-				name: user.name,
-				signed: signedUserIds.has(user.id)
-			}))
-
+	
+			const signedMap = new Map<number, Date>()
+			for (const sig of signedUsers) {
+				signedMap.set(sig.userId, sig.assignedAt)
+			}
+	
+			const result = users.map(user => {
+				const signedDate = signedMap.get(user.id)
+				return {
+					id: user.id,
+					name: user.name,
+					signed: signedDate !== undefined,
+					assignedAt: signedDate
+						? new Date(signedDate).toLocaleDateString('ru-RU')
+						: null
+				}
+			})
+	
 			return {
 				result: 'success',
 				data: result
@@ -67,6 +76,8 @@ export class UserService {
 			}
 		}
 	}
+	
+	
 
 	findOne(id: number) {
 		return this.prisma.user.findFirst({
