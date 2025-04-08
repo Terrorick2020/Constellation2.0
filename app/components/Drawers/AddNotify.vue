@@ -31,6 +31,9 @@
 <script lang="ts" setup>
 import { ElMessageBox } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
+import axios from 'axios'
+import { BASE_URL} from '~/env/requests.env'
+import { useAuthStore } from '~/stores/auth'
 
 
 const props = defineProps<{
@@ -76,16 +79,45 @@ const rules = reactive<FormRules<RuleForm>>({
   desc: [{ required: true, message: 'Заполните описание', trigger: 'blur' }],
 })
 
+
+
+
+
+const sendNoty = async () => {
+  const data = {
+    title: ruleForm.name,
+    description: ruleForm.desc
+  }
+
+  const { accessToken } = useAuthStore();
+  const sendNoty = await axios.post(`${BASE_URL}/notify`, data, {
+
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+    
+  })
+  console.log(sendNoty)
+
+}
+
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
       console.log('submit!')
+      sendNoty()
+
     } else {
       console.log('error submit!', fields)
     }
   })
 }
+
+
+
+
+
 
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return

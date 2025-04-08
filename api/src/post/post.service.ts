@@ -42,7 +42,7 @@ export class PostService {
 				userId: data.userId,
 				delivered: data.delivered
 			}
-			let description = "Добавлен документ '" + data.title + "', ознакомьтесь" 
+			let description = "🚀Добавлен документ '" + data.title + "', ознакомьтесь" 
 			await this.notificationService.create(data.date.toISOString(), description)
 
 

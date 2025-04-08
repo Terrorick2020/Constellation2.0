@@ -64,9 +64,24 @@ const formatDate = (dateString: string) => {
 const LIST_OPTIONS: TPopoverItemProps[] = [
   { key: 'viewdoc', label: 'К документу', },
   { key: 'copy', label: 'Скопировать ссылку'},
-  { key: 'statistics', label: 'Посмотреть статистику' },
-  { key: 'delete', label: 'Удалить документ' }
+  // { key: 'statistics', label: 'Посмотреть статистику' },
+  // { key: 'delete', label: 'Удалить документ' }
 ]
+
+import {useAuthStore} from "~/stores/auth"
+
+
+const authStore = useAuthStore()
+
+if (authStore.isAdmin) {
+
+    LIST_OPTIONS.push(
+    { key: 'statistics', label: 'Посмотреть статистику' },
+    { key: 'delete', label: 'Удалить документ' }
+    )
+
+}
+
 
 const onSelect = (option: (typeof LIST_OPTIONS)[0]) => {
   console.log('option', option)

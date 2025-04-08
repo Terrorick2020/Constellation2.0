@@ -167,7 +167,7 @@ const getProfileInfo = async () => {
   store.common.name  = userData.data.name
   store.common.rank  = userData.data.division
   store.common.descritor  = userData.data.job
-  console.log("ГОВНО", userData)
+  // console.log("ГОВНО", userData)
 
 
 }

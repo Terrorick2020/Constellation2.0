@@ -22,7 +22,6 @@
                 </el-tag>
             </template>
         </el-table-column>
-        <el-table-column property="username" label="Пользователь" sortable width="200" />
         <el-table-column property="fullname" label="Фио" sortable />
       </el-table>
       <br>
@@ -31,7 +30,7 @@
 </template>
   
 <script lang="ts" setup>
-import { ElMessageBox } from 'element-plus'
+import { dateEquals, ElMessageBox } from 'element-plus'
 import { BASE_URL } from '~/env/requests.env'
 import {ref, onMounted, watch} from 'vue'
 import axios from 'axios'
@@ -51,35 +50,17 @@ const handleClose = (done) => {
 }
 
 const sendNotify = () => {
-    console.log( 'уведомления для неподписавших отправлены!' )
+    sendNoty()
 }
-  
-const gridData = [
-    {
-        date: '2016-05-02',
-        status: 'success',
-        username: 'User 1',
-        fullname: 'Лоскутов Егор Алексеевич',
-    },
-    {
-        date: '2015-05-02',
-        status: 'none',
-        username: 'User 2',
-        fullname: 'Лоскутов Егор Алексеевич',
-    },
-    {
-        date: '2016-05-07',
-        status: 'success',
-        username: 'User 1',
-        fullname: 'Лоскутов Егор Алексеевич',
-    },
-    {
-        date: '2016-10-02',
-        status: 'none',
-        username: 'User 1',
-        fullname: 'Лоскутов Егор Алексеевич',
-    },
-]
+
+interface GridDataitem {
+    date: string,
+    status: string,
+    fullname: string
+    
+}
+const gridData = ref<GridDataitem[]>([
+])
 
 
 const getStatistic = async(newValue:string) => {
@@ -93,17 +74,66 @@ const getStatistic = async(newValue:string) => {
         'Authorization': `Bearer ${accessToken}`
     }
   })
+  gridData.value = []
+  getStat.data.data.forEach((element:any) => {
+      gridData.value.push({
+        date: element.assignedAt,
+        status: element.signed ? 'success' : 'none',
+        fullname: element.name,
+      })
+  })
   console.log("ЧТО ТО", getStat)
 
 
 }
 
+
+
+
+const sendNoty = async () => {
+  const {accessToken} = useAuthStore()
+  const getDocs = await axios.get(`${BASE_URL}/post/${props.docId}`, {
+    headers: {
+        'Authorization': `Bearer ${accessToken}`
+    }
+  })
+
+
+  const title = getDocs.data.data.title
+  let text = `🔥Нижеуказанным пользователям неодходимо подписать документ: «${title}»🔥\n\n` 
+  gridData.value.forEach((element:any) => {
+      if (element.status === 'none') {
+          text += `❌ ${element.fullname },\n`
+
+      }
+  })
+  
+  const data = {
+    title: 'Напоминание о подписи',
+    description: text,
+  }
+
+  const sendNoty = await axios.post(`${BASE_URL}/notify`, data, {
+
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+    
+  })
+  console.log(sendNoty)
+
+}
+
+
 // onMounted(() => {
 //     getStatistic()
 // })
-watch(() => props.docId, (newValue) => {
-    getStatistic(newValue)
-})
 
+watch(() => props.table, (newValue) => {   
+    if (newValue) {
+        getStatistic(props.docId)
+    }
+
+})
 
 </script>

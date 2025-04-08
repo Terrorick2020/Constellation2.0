@@ -37,9 +37,19 @@
           @click="setDialog(true)"
         />
       </div>
+      <div class="mt-[15px] flex flex-col gap-[15px]">
+        <el-card style="width: 100%; border-radius: 10px;" v-for="item in notiList">
+        <template #header>
+          <div class="card-header">
+            <span>{{ item.title }}</span>
+          </div>
+        </template>
+        <p style="white-space: pre-line;">{{item.description}}</p>
+        </el-card>
+      </div>
 
-      <!-- Here was Rostov-on-Don item -->
-       
+
+
       <!-- <div class="el-select__selected-item">
         <span
           class="el-tag is-closable el-tag--info el-tag--default el-tag--light"
@@ -99,8 +109,12 @@ const getNot = async () => {
   });
 
   console.log("ГОВНО", getNotQuery)
+  notiList.value = getNotQuery.data.data
 
 }
+
+
+
 
 
 onMounted (() => {

@@ -70,7 +70,6 @@ const getDoc = async () => {
       }
     });
   isDelivered.value = getCurrentDoc.data.data.delivered
-  console.log("Запрос ", getCurrentDoc)
   console.log("Запрос сделан", getCurrentDoc.data.data)
   const base64Data = getCurrentDoc.data.data.content;
   // console.log("Запрос на base64", base64Data);
@@ -89,10 +88,11 @@ const SubscribeDoc = async () => {
 
   const formData = new FormData();
   formData.append('file', keyfile.value);
-  formData.append('postId', props.docId);
 
   const { accessToken } = useAuthStore();
-  const subscribeCurrentDoc = await axios.post(`${BASE_URL}/signature/create`,formData,{
+  console.log("ФУНКЦИЯИ33 ")
+
+  const subscribeCurrentDoc = await axios.post(`${BASE_URL}/sign/${props.docId}`,formData,{
     
     headers: {
       'Content-Type': 'multipart/form-data',

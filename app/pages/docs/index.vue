@@ -186,10 +186,6 @@ const getTargetDoc = (id: string) => {
 }
 
 
-
-
-
-
 onMounted(() => {
   getDocs()
   window.addEventListener('scroll', onScroll)
