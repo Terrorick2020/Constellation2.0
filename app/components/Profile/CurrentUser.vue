@@ -120,7 +120,7 @@ const getProfile = async () => {
   const response = {
     data: {
       name: getCurrentUser.data.username,
-      fio: getCurrentUser.data.role,
+      fio: getCurrentUser.data.name,
     }
   }
 

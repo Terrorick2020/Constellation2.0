@@ -27,7 +27,7 @@
               <el-avatar :size="48" :src="Avatar" class="border border-black/15" />
               <div class="user-info">
                 <h4 class="user-name">{{ o.username }}</h4>
-                <!-- <h5 class="user-fio">{{ o.fio }}</h5> -->
+                <h5 class="user-fio">{{ o.name }}</h5>
               </div>
               <NuxtLink :to="`/profiles/${o.id}`">
                 <el-button class="profile-description">
@@ -56,33 +56,12 @@ import { useAuthStore } from '~/stores/auth'
 interface usersAll {
   id: number;
   username: string;
+  name: string;
 }
 
 const users: usersAll[] = [];
 
 
-// const users = [
-//   { name: 'User 1', fio: 'Тараскин Илья Дмитриевич' },
-//   { name: 'User 2', fio: 'Иванов Иван Иванович' },
-//   { name: 'User 3', fio: 'Петров Петр Петрович' },
-//   { name: 'User 4', fio: 'Смирнов Сергей Александрович' },
-//   { name: 'User 5', fio: 'Кузнецов Николай Владимирович' },
-//   { name: 'User 6', fio: 'Алексеев Александр Павлович' },
-//   { name: 'User 7', fio: 'Дмитриев Дмитрий Викторович' },
-//   { name: 'User 8', fio: 'Григорьев Георгий Игоревич' },
-//   { name: 'User 9', fio: 'Смолин Алексей Николаевич' },
-//   { name: 'User 10', fio: 'Глушков Сергей Павлович' },
-//   { name: 'User 11', fio: 'Николаев Владимир Игоревич' },
-//   { name: 'User 12', fio: 'Королев Алексей Владимирович' },
-//   { name: 'User 13', fio: 'Федоров Сергей Андреевич' },
-//   { name: 'User 14', fio: 'Морозова Ирина Юрьевна' },
-//   { name: 'User 15', fio: 'Крылов Алексей Иванович' },
-//   { name: 'User 16', fio: 'Васильев Дмитрий Олегович' },
-//   { name: 'User 17', fio: 'Лебедев Алексей Петрович' },
-//   { name: 'User 18', fio: 'Тимофеев Сергей Павлович' },
-//   { name: 'User 19', fio: 'Семенов Иван Павлович' },
-//   { name: 'User 20', fio: 'Романова Екатерина Александровна' },
-// ];
 
 const filteredUsers = ref(users);
 
@@ -93,9 +72,9 @@ const load = ref(true)
 
 const filterUsers = () => {
   filteredUsers.value = users.filter(user =>
-      user.username.toLowerCase().includes(searchQuery.value.toLowerCase().trim())
-    // user.username.toLowerCase().includes(searchQuery.value.toLowerCase().trim()) || 
-    // user.fio.toLowerCase().includes(searchQuery.value.toLowerCase().trim())
+      // user.username.toLowerCase().includes(searchQuery.value.toLowerCase().trim())
+    user.username.toLowerCase().includes(searchQuery.value.toLowerCase().trim()) || 
+    user.name.toLowerCase().includes(searchQuery.value.toLowerCase().trim())
   );
   visibleUser.value = filteredUsers.value.slice(0, 5);
 };
@@ -146,10 +125,11 @@ const getUsers = async () => {
   usersListResponse.data.forEach((usr: any) => {
     users.push({
       id: usr.id,   
-      username: usr.username,  
+      username: usr.username,
+      name:usr.name,  
     });
   });
-  visibleUser.value = users.slice(0, 5);
+  visibleUser.value = users.slice(0, 4);
   // load.value = false
   setTimeout(() => {
     load.value = false;  // Скрываем лоадер после задержки
@@ -168,7 +148,6 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-// rename to prevent conflicts
 .search {
   margin-top: 7px;
   color: #555;

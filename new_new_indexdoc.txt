@@ -290,3 +290,149 @@ onMounted(() => {
   background: transparent !important;
 }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------
+old after 5 hour
+<script setup lang="ts">
+import { ref, computed, onMounted, watch } from 'vue'
+import {useAuthStore} from "~/stores/auth"
+import { BASE_URL } from '~/env/requests.env'
+import axios from 'axios'
+
+
+const authStore = useAuthStore()
+
+const targetDocId = ref<string>('')
+const percentage = ref<number>(50)
+const searchQuery = ref('')
+const load = ref(true)
+const sortOption = ref<string>('1') // Значение по умолчанию для сортировки
+
+const duration = computed(() => Math.floor(percentage.value / 5))
+
+interface Document {
+  id: number
+  title: string
+  date: string
+  signatures?: number
+  volume?: number
+}
+
+const listDocs: Document[] = []
+
+const visibleDocs = ref<Document[]>(listDocs.slice(0, 5))
+
+const searchResults = computed(() => {
+  if (!searchQuery.value.trim()) return []
+  return listDocs.filter(doc =>
+    doc.title.toLowerCase().includes(searchQuery.value.toLowerCase().trim())
+  )
+})
+
+// Сортировка
+const sortedDocs = computed(() => {
+  const docs = searchQuery.value.trim() ? searchResults.value : visibleDocs.value
+  return [...docs].sort((a, b) => {
+    switch (sortOption.value) {
+      case '2': // По дате (новые сверху)
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
+      case '3': // По количеству подписей
+        return (b.signatures || 0) - (a.signatures || 0)
+      case '4': // По объему документа
+        return (b.volume || 0) - (a.volume || 0)
+      default: // По умолчанию (релевантность)
+        return a.id - b.id
+    }
+  })
+})
+
+const displayedDocs = computed(() => sortedDocs.value)
+
+const drawer = ref(false)
+const setDrawer = (value: boolean) => drawer.value = value
+
+const table = ref(false)
+const setTable = (value: boolean) => table.value = value
+
+const loadMoreDocs = () => {
+  const currentLength = visibleDocs.value.length
+  if (currentLength < listDocs.length) {
+    const newDocs = listDocs.slice(currentLength, currentLength + 5)
+    visibleDocs.value.push(...newDocs)
+  }
+}
+
+const onScroll = () => {
+  const scrollPosition = window.scrollY + window.innerHeight
+  let bottomPosition = document.documentElement.scrollHeight
+
+  const foot = document.getElementById('app-footer')
+  if (foot) bottomPosition -= foot.offsetHeight
+
+  if (scrollPosition >= bottomPosition) {
+    loadMoreDocs()
+  }
+}
+
+let timeout: ReturnType<typeof setTimeout>
+
+watch(searchQuery, () => {
+  clearTimeout(timeout)
+  timeout = setTimeout(() => {}, 500)
+})
+
+// Получение документов
+const getDocs = async () => {
+  load.value = true
+  try {
+    const response = await axios.get(`${BASE_URL}/post`)
+    const data = response.data.data
+
+    data.forEach((doc: any) => {
+      listDocs.push({
+        id: doc.id,
+        title: doc.title,
+        date: doc.date,
+        signatures: doc.signatures || Math.floor(Math.random() * 100), // Пример, если нет данных
+        volume: doc.volume || Math.floor(Math.random() * 50), // Пример, если нет данных
+      })
+    })
+
+    visibleDocs.value = listDocs.slice(0, 5)
+  } catch (error) {
+    console.error('Ошибка при загрузке документов:', error)
+  } finally {
+    load.value = false
+  }
+}
+
+// Обработчик выбора сортировки
+const handleSortChange = (selectedSort: string) => {
+  sortOption.value = selectedSort
+}
+
+
+
+const getTargetDoc = (id: string) => {
+  targetDocId.value = id
+}
+
+
+onMounted(() => {
+  getDocs()
+  window.addEventListener('scroll', onScroll)
+})
+</script>
