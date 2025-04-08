@@ -12,8 +12,8 @@
           <SvgoSearch filled class="h-6 w-[30px]" :font-controlled="false" />
         </template>
       </el-input>
-      <div class="flex items-center gap-x-[10px] grow">
-        <Sort />
+      <div v-if="authStore.isAdmin" class="flex items-center gap-x-[10px] grow">
+        <Sort @sortChange="handleSortChange" />
         <UIButton
           ref="add"
           icon-name="plus"
@@ -31,8 +31,7 @@
             :key="doc.id"
             class="flex w-full flex-col gap-[10px]"
           >
-            <!-- Here keep document info -->
-            <Company :item="doc" :setTable="setTable" index-page />
+            <Company :func="getTargetDoc" :item="doc" :setTable="setTable" index-page />
 
             <div class="border border-black/15 p-4 flex flex-col gap-y-[20px] bg-white rounded-2xl">
               <div class="flex flex-col gap-[10px]">
@@ -43,13 +42,13 @@
                     :stroke-width="15"
                     status="success"
                     striped
-                    striped-flow 
+                    striped-flow
                     :duration="duration"
                     :text-inside="true"
                     color="#409EFF"
                   />
                 </div>
-                <p class="text-sm text-gray-500">Подписали: {{ 50 }} из {{ 100 }}</p> 
+                <p class="text-sm text-gray-500">Подписали: {{ 50 }} из {{ 100 }}</p>
               </div>
             </div>
           </div>
@@ -58,68 +57,64 @@
     </el-container>
 
     <DrawersLoadDoc :drawer="drawer" :setDrawer="setDrawer" />
-    <DrawersStatistic :table="table" :setTable="setTable" />
+    <DrawersStatistic :docId="targetDocId" :table="table" :setTable="setTable" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { BASE_URL, POSTS_ENDPOINT, getHeaders } from '~/env/requests.env'
-import { useAuthStore } from '#imports'
-import { useProfileStore } from '~/stores/profile'
-import { useFiltersStore } from '~/stores/filters'
-import axios from 'axios';
+import {useAuthStore} from "~/stores/auth"
+import { BASE_URL } from '~/env/requests.env'
+import axios from 'axios'
 
-const percentage = ref<number>(50) // Начальный процент
-const searchQuery = ref(''); // Строка поиска
+
+const authStore = useAuthStore()
+
+const targetDocId = ref<string>('')
+const percentage = ref<number>(50)
+const searchQuery = ref('')
 const load = ref(true)
+const sortOption = ref<string>('1') // Значение по умолчанию для сортировки
 
-const duration = computed(() => Math.floor(percentage.value / 5)) // Длительность анимации
+const duration = computed(() => Math.floor(percentage.value / 5))
 
 interface Document {
-  id: number;
-  title: string;
-  date: string;
+  id: number
+  title: string
+  date: string
+  signatures?: number
+  volume?: number
 }
 
-const listDocs: Document[] = []; // Указываем тип массива
+const listDocs: Document[] = []
 
-//docs: id, title, date
+const visibleDocs = ref<Document[]>(listDocs.slice(0, 5))
 
-// const listDocs = [
-  // { id: 0, name: 'Документ 1', slug: 'doc-1' },
-  // { id: 1, name: 'Документ 2', slug: 'doc-2' },
-  // { id: 2, name: 'Документ 3', slug: 'doc-3' },
-  // { id: 3, name: 'Документ 4', slug: 'doc-4' },
-  // { id: 4, name: 'Документ 5', slug: 'doc-5' },
-  // { id: 5, name: 'Документ 6', slug: 'doc-6' },
-  // { id: 6, name: 'Документ 7', slug: 'doc-7' },
-  // { id: 7, name: 'Документ 8', slug: 'doc-8' },
-  // { id: 8, name: 'Документ 9', slug: 'doc-9' },
-  // { id: 9, name: 'Документ 10', slug: 'doc-10' },
-  // { id: 10, name: 'Документ 11', slug: 'doc-11' },
-  // { id: 11, name: 'Документ 12', slug: 'doc-12' },
-  // { id: 12, name: 'Документ 13', slug: 'doc-13' },
-  // { id: 13, name: 'Документ 14', slug: 'doc-14' },
-  // { id: 14, name: 'Документ 15', slug: 'doc-15' },
-  // { id: 15, name: 'Документ 16', slug: 'doc-16' },
-  // { id: 16, name: 'Документ 17', slug: 'doc-17' },
-// ]
-
-const visibleDocs = ref(listDocs.slice(0, 5))
-
-// Результаты поиска
 const searchResults = computed(() => {
-  if (!searchQuery.value.trim()) return [] // Если строка поиска пустая, возвращаем пустой массив
+  if (!searchQuery.value.trim()) return []
   return listDocs.filter(doc =>
     doc.title.toLowerCase().includes(searchQuery.value.toLowerCase().trim())
   )
 })
 
-// Отображаемые документы: либо результаты поиска, либо видимые документы
-const displayedDocs = computed(() => {
-  return searchQuery.value.trim() ? searchResults.value : visibleDocs.value
+// Сортировка
+const sortedDocs = computed(() => {
+  const docs = searchQuery.value.trim() ? searchResults.value : visibleDocs.value
+  return [...docs].sort((a, b) => {
+    switch (sortOption.value) {
+      case '2': // По дате (новые сверху)
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
+      case '3': // По количеству подписей
+        return (b.signatures || 0) - (a.signatures || 0)
+      case '4': // По объему документа
+        return (b.volume || 0) - (a.volume || 0)
+      default: // По умолчанию (релевантность)
+        return a.id - b.id
+    }
+  })
 })
+
+const displayedDocs = computed(() => sortedDocs.value)
 
 const drawer = ref(false)
 const setDrawer = (value: boolean) => drawer.value = value
@@ -149,92 +144,47 @@ const onScroll = () => {
 
 let timeout: ReturnType<typeof setTimeout>
 
-watch(searchQuery, (newQuery) => {
+watch(searchQuery, () => {
   clearTimeout(timeout)
-  timeout = setTimeout(() => {
-
-  }, 500)
+  timeout = setTimeout(() => {}, 500)
 })
 
-const page = ref<number>(1)
-const limit = ref<number>(1)
-
+// Получение документов
 const getDocs = async () => {
   load.value = true
-  const postListResponse = await axios.get(`${BASE_URL}/post`, {
-					// params: { page: page.value, limit: limit.value }
-				})
+  try {
+    const response = await axios.get(`${BASE_URL}/post`)
+    const data = response.data.data
 
-  
-  console.log('список документов ', postListResponse.data.data)
-  console.log("id документа", postListResponse.data.data[0].id)
-  console.log("title документа", postListResponse.data.data[0].title)
-  console.log("date документа", postListResponse.data.data[0].date)
+    data.forEach((doc: any) => {
+      listDocs.push({
+        id: doc.id,
+        title: doc.title,
+        date: doc.date,
+        signatures: doc.signatures || Math.floor(Math.random() * 100), // Пример, если нет данных
+        volume: doc.volume || Math.floor(Math.random() * 50), // Пример, если нет данных
+      })
+    })
 
-
-  postListResponse.data.data.forEach((doc: any) => {
-    listDocs.push({
-      id: doc.id,        // id документа
-      title: doc.title,  // Заголовок документа
-      date: doc.date,    // Дата документа
-    });
-  });
-
-  console.log('список документов в массиве', listDocs)
-  visibleDocs.value = listDocs.slice(0, 5);
-  // if (Array.isArray(postListResponse.data.data) && postListResponse.data.data.length > 0) {
-  //     // Добавляем новые документы, извлекая только нужные поля (id, title, date)
-  //     postListResponse.data.data.forEach((doc: any) => {
-  //       listDocs.push({
-  //         id: doc.id,        // id документа
-  //         title: doc.title,  // Заголовок документа
-  //         date: doc.date,    // Дата документа
-  //       });
-  //     });
-  //   }
-  const response = await axios.get(
-    `${BASE_URL}${POSTS_ENDPOINT}`,
-    {
-      params: { page: page, limit: limit }
-    }
-  )
-
-  const resDocs = response.data.result
-
-  switch( resDocs ) {
-    case 'success':
-      page.value ++
-      limit.value ++
-      break
-    case 'failed':
-      break
-  }
-
-  load.value = false
-}
-
-const getNextDocs = async () => {
-  const response = await axios.get(
-    `${BASE_URL}${POSTS_ENDPOINT}`,
-    {
-      params: { page: page, limit: limit }
-    }
-  )
-
-  const resDocs = response.data.result
-
-  switch( resDocs ) {
-    case 'success':
-      
-      page.value ++
-      limit.value ++
-      break
-    case 'failed':
-      break
+    visibleDocs.value = listDocs.slice(0, 5)
+  } catch (error) {
+    console.error('Ошибка при загрузке документов:', error)
+  } finally {
+    load.value = false
   }
 }
 
-const getTargetDoc = async () => {}
+// Обработчик выбора сортировки
+const handleSortChange = (selectedSort: string) => {
+  sortOption.value = selectedSort
+}
+
+
+
+const getTargetDoc = (id: string) => {
+  targetDocId.value = id
+}
+
 
 onMounted(() => {
   getDocs()
@@ -249,11 +199,9 @@ onMounted(() => {
   border: 2px solid black;
   border-radius: 15px;
 }
-
 .btn-add {
   height: 100%;
 }
-
 .is-loading {
   background: transparent !important;
 }

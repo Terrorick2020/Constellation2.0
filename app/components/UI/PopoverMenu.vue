@@ -40,6 +40,10 @@
 import { useRouter } from 'vue-router' 
 import { ClickOutside as vClickOutside } from 'element-plus'
 import type { TPopoverItemProps } from '~/types/UI/popover'
+import axios from 'axios';
+import { BASE_URL } from '~/env/requests.env'
+import {useAuthStore} from "~/stores/auth"
+
 
 const optionsVisible = ref(false)
 const router = useRouter()  // Используем useRouter для доступа к маршрутизатору
@@ -47,6 +51,7 @@ const router = useRouter()  // Используем useRouter для досту�
 interface Props {
   list: TPopoverItemProps[]
   id: string
+  func: (id: string) => void
   setTable?: (value: boolean) => void
 }
 
@@ -56,6 +61,45 @@ const emit = defineEmits(['select'])
 const closePopover = () => {
   optionsVisible.value = false
 }
+
+
+const delDoc = async () => {
+  const {accessToken} = useAuthStore()
+
+  const delCurrentDoc = await axios.delete(`${BASE_URL}/admin/post/${props.id}`,{
+
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+
+
+    }
+
+  });
+
+  console.log(delCurrentDoc)
+
+}
+
+
+const delUser = async () => {
+  const {accessToken} = useAuthStore()
+
+  const delCurrentDoc = await axios.delete(`${BASE_URL}/admin/user/${props.id}`,{
+
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+
+    }
+
+  });
+
+
+  if (delCurrentDoc.status === 200) {
+    router.push('/profiles')
+  }
+}
+
+
 
 const handleClickOption = (listItem: TPopoverItemProps) => {
   emit('select', listItem)
@@ -67,8 +111,19 @@ const handleClickOption = (listItem: TPopoverItemProps) => {
     router.push(`/docs/${props.id}`)
   }
 
+
   if (listItem.key === 'statistics') {
     props.setTable( true )
+    props.func(props.id)
   }
+
+  if (listItem.key === 'delete') {
+    delDoc()
+  }
+
+  if (listItem.key === 'delete-user') {
+    delUser()
+  }
+
 }
 </script>

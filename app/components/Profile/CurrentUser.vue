@@ -42,7 +42,7 @@
           </el-button>
         </NuxtLink>
         
-        <UIPopoverMenu :list="LIST_OPTIONS" @select="onSelect">
+        <UIPopoverMenu :id="route.params.profile" :list="LIST_OPTIONS" @select="onSelect">
           <template #reference>
             <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button>
           </template>
@@ -80,6 +80,7 @@ import { onMounted, reactive } from 'vue'
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import { BASE_URL, getHeaders } from '~/env/requests.env'
+import {useAuthStore} from "~/stores/auth"
 
 
 
@@ -87,9 +88,12 @@ import { BASE_URL, getHeaders } from '~/env/requests.env'
 const { profileInfo } = useProfileStore()
 
 
+
+
 const LIST_OPTIONS: TPopoverItemProps[] = [
-  { key: 'complain', label: 'Пожаловаться', route: '/subscribe' },
-  { key: 'block', label: 'Заблокировать', route: '/message' },
+  { key: 'complain-user', label: 'Пожаловаться' },
+  
+
 ]
 
 const props = defineProps<{
@@ -101,8 +105,8 @@ const persone = reactive({
   fio: 'Тараскин Илья Дмитриевич',
 })
 
+const route = useRoute();
 const getProfile = async () => {
-  const route = useRoute();
   const id = route.params.profile;
 
   const getCurrentUser = await axios.get(`${BASE_URL}/user/${id}`, {
@@ -123,6 +127,22 @@ const getProfile = async () => {
   persone.name = response.data.name
   persone.fio = response.data.fio
 }
+
+
+const authStore = useAuthStore()
+
+if (authStore.isAdmin) {
+
+    LIST_OPTIONS.push(
+      { key: 'block-user', label: 'Заблокировать' },
+      { key: 'delete-user', label: 'Удалить'},
+    )
+
+}
+
+
+
+
 
 onMounted(() => {
   getProfile()

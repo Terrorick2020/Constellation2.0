@@ -86,7 +86,7 @@ export const useAuthStore = defineStore(
   () => {
 
     const userId = ref<number | null>( null )
-
+    const isAdmin = ref<boolean>( false )
     const username = ref<string>( '' )
     const password = ref<string>( '' )
     const saveMe = ref<boolean>( false )
@@ -138,12 +138,14 @@ export const useAuthStore = defineStore(
 
 
         const dataRes = response.data.result
-        console.log("НАШИ ДАННЫЕ", response.data.access_token)
+        console.log("НАШИ ДАННЫЕ", response.data)
 
         switch (dataRes) {
         case 'success':
           accessToken.value = response.data.access_token
-
+          isAdmin.value = response.data.data.role === 'Admin'
+          userId.value = response.data.data.id
+          username.value = response.data.data.username
           apiRes.value = true
           apiRes.type = ApiResType.success
           apiRes.title = 'Ура!'
@@ -185,7 +187,9 @@ export const useAuthStore = defineStore(
         case 'success':
 
           accessToken.value = response.data.access_token
-
+          isAdmin.value = response.data.data.role === 'Admin'
+          userId.value = response.data.data.id
+          username.value = response.data.data.username
           const keyResponse = await axios.get(`${BASE_URL}${response.data.keyPath}`, {
             responseType: 'blob',
           });
@@ -273,7 +277,7 @@ export const useAuthStore = defineStore(
       username,
       password,
       accessToken,
-
+      isAdmin,
       saveMe,
       key,
 
@@ -302,14 +306,21 @@ export const useAuthStore = defineStore(
           serializer: {
             serialize: (state) => {
               return JSON.stringify({
-                accessToken: state.accessToken
+                accessToken: state.accessToken,
+                isAdmin: state.isAdmin,
+                username: state.username,
+                userId : state.userId,
               })
             },
             deserialize: (data) => {
               const parsed = JSON.parse(data)
 
               return {
-                accessToken: parsed.accessToken || ''
+                accessToken: parsed.accessToken || '',
+                isAdmin: parsed.isAdmin,
+                username: parsed.username,
+                userId: parsed.userId,
+
               }
             }
           }
