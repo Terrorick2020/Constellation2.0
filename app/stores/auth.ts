@@ -227,11 +227,12 @@ export const useAuthStore = defineStore(
       try {
         isLoad.value = true
 
-        const data = {
-          username: username.value,
-          file: key.value,
-          password: password.value,
-        }
+        if( !key.value ) return;
+
+        const data = new FormData();
+        data.append('username', username.value);
+        data.append('file', key.value);
+        data.append('password', password.value);
 
         const response = await axios.post(
           `${BASE_URL}${RESET_PASS}`,
