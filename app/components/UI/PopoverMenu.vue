@@ -47,6 +47,7 @@ const router = useRouter()  // Используем useRouter для досту�
 interface Props {
   list: TPopoverItemProps[]
   id: string
+  func: (id: string) => void
   setTable?: (value: boolean) => void
 }
 
@@ -67,8 +68,10 @@ const handleClickOption = (listItem: TPopoverItemProps) => {
     router.push(`/docs/${props.id}`)
   }
 
+
   if (listItem.key === 'statistics') {
     props.setTable( true )
+    props.func(props.id)
   }
 }
 </script>

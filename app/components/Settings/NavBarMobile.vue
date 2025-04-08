@@ -43,10 +43,10 @@ const notifications = [
 ]
 
 const profileSettings = [
-  { id: 1, title: 'Профиль', path: '/settings/common', iconName: 'brief-case', color: '#FF6C46' },
-  { id: 2, title: 'Сфера деятельности', path: '/settings/scope', iconName: 'move', color: '#FF6C46' },
-  { id: 3, title: 'Портрет клиентов', path: '/settings/clients', iconName: 'people', color: '#FF6C46' },
-  { id: 4, title: 'Рекламный инвентарь', path: '/settings/inventory', iconName: 'list', color: '#FF6C46' },
+  { id: 1, title: 'Настройки профиля', path: '/settings/common', iconName: 'brief-case', color: '#FF6C46' },
+  { id: 2, title: 'Настройки сервиса', path: '/settings/scope', iconName: 'move', color: '#FF6C46' },
+  // { id: 3, title: 'Портрет клиентов', path: '/settings/clients', iconName: 'people', color: '#FF6C46' },
+  // { id: 4, title: 'Рекламный инвентарь', path: '/settings/inventory', iconName: 'list', color: '#FF6C46' },
 ]
 
 const serviceSettings = []

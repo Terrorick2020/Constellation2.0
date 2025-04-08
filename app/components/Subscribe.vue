@@ -15,6 +15,7 @@
       
     </div>
     
+  
     <!-- Центрируем PDF -->
     <div class="pdf-container">
         <embed
@@ -24,7 +25,23 @@
         height="95%"
         />
     </div>
-    <el-button type="success" class="subscribe" @click="SubscribeDoc">Подписать</el-button>
+
+    <el-button v-if="!isDelivered" type="success" class="subscribe" @click="SubscribeDoc">Подписать</el-button>
+    <p v-else>Документ подписан</p>
+    <el-upload
+    ref="upload"
+    class="upload-cert"
+    :limit="1"
+    :on-exceed="handleExceed"
+    :auto-upload="false"
+    :on-change="handleFileChange"
+    :on-remove="handleFileRemove"
+    accept=".pem, .key, .crt"
+  >
+    <template #trigger>
+      <el-button type="primary">Загрузить цифровую подпись...</el-button>
+    </template>
+  </el-upload>
   </div>
 </template>
 
@@ -37,11 +54,14 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '~/stores/auth'
 
 
+
 const props = defineProps<{
   docId: string;  // Тип для docId
 }>();
-
+const upload = ref<UploadInstance>()
+const keyfile = ref<File>()
 const pdfFile = ref('');
+const isDelivered = ref(false)
 //функция для отображения документа
 const getDoc = async () => {
   const getCurrentDoc = await axios.get(`${BASE_URL}/post/${props.docId}`, {
@@ -49,8 +69,9 @@ const getDoc = async () => {
         'Content-Type': 'multipart/form-data'
       }
     });
-
-  // console.log("Запрос сделан", getCurrentDoc.data.data.content)
+  isDelivered.value = getCurrentDoc.data.data.delivered
+  console.log("Запрос ", getCurrentDoc)
+  console.log("Запрос сделан", getCurrentDoc.data.data)
   const base64Data = getCurrentDoc.data.data.content;
   // console.log("Запрос на base64", base64Data);
   pdfFile.value = `data:application/pdf;base64,${base64Data}`;
@@ -62,22 +83,67 @@ const getDoc = async () => {
 //функция для подписи документов
 // какой id использовать userid или просто id
 const SubscribeDoc = async () => {
+  console.log("ФУНКЦИЯИ ")
+  if (!keyfile.value) return;
+  console.log("ФУНКЦИЯИ222 ")
+
   const formData = new FormData();
+  formData.append('file', keyfile.value);
   formData.append('postId', props.docId);
-  const pdfFile_data =  pdfFile.value.split('data:application/pdf;base64,')[1];
-  formData.append('file', pdfFile_data);
-  // const { accessToken } = useAuthStore()
+
+  const { accessToken } = useAuthStore();
   const subscribeCurrentDoc = await axios.post(`${BASE_URL}/signature/create`,formData,{
     
     headers: {
       'Content-Type': 'multipart/form-data',
-
+      'Authorization': `Bearer ${accessToken}`
     },
 
   });
   console.log("Подпись успешно создана:", subscribeCurrentDoc);
 };
   
+
+
+
+const handleExceed: UploadProps['onExceed'] = (files) => {
+  upload.value!.clearFiles()
+  const file = files[0] as UploadRawFile
+  file.uid = genFileId()
+  upload.value!.handleStart(file)
+}
+
+const handleFileChange = (file: UploadRawFile, fileList: UploadRawFile[]) => {
+  if (!file || !file.raw) {
+    
+    return
+  }
+
+  
+  
+  const reader = new FileReader()
+  reader.readAsDataURL(file.raw)
+
+  reader.onload = () => {
+    console.log("rfkfkfkfkf")
+    keyfile.value = file.raw
+  }
+
+  reader.onerror = (error) => {
+    console.log(error)
+  }
+
+
+}
+
+const handleFileRemove: UploadProps['onRemove'] = (file, fileList) => {  
+  authStore.fInpErr.value = true
+  authStore.fInpErr.index = 0
+  authStore.key = ''
+}
+
+
+
 
 onMounted(() => {
   getDoc()

@@ -32,11 +32,16 @@
   
 <script lang="ts" setup>
 import { ElMessageBox } from 'element-plus'
+import { BASE_URL } from '~/env/requests.env'
+import {ref, onMounted, watch} from 'vue'
+import axios from 'axios'
+import {useAuthStore} from "~/stores/auth"
 
 
 const props = defineProps<{
     table: boolean
     setTable: (value: boolean) => void
+    docId: string
 }>()
 
 const table = ref(false)
@@ -75,4 +80,30 @@ const gridData = [
         fullname: 'Лоскутов Егор Алексеевич',
     },
 ]
+
+
+const getStatistic = async(newValue:string) => {
+  console.log('docId для запроса:', newValue)
+  if (!newValue) return;
+  console.log('docId для запроса:', newValue)
+
+  const {accessToken} = useAuthStore()
+  const getStat = await axios.get(`${BASE_URL}/admin/subs/${newValue}`, {
+    headers: {
+        'Authorization': `Bearer ${accessToken}`
+    }
+  })
+  console.log("ЧТО ТО", getStat)
+
+
+}
+
+// onMounted(() => {
+//     getStatistic()
+// })
+watch(() => props.docId, (newValue) => {
+    getStatistic(newValue)
+})
+
+
 </script>

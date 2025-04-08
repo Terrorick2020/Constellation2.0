@@ -3,6 +3,7 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-x-[10px]">
         <el-avatar :size="48" :src="Avatar" class="border border-black/15" />
+        
         <div class="flex flex-col">
           <!-- TODO: Username -->
           <span class="font-extrabold text-base">{{ props.item.title }} </span>
@@ -12,7 +13,7 @@
         </div>
       </div>
       <div v-if="indexPage" class="flex items-center transition-all group-hover:translate-x-[2px] gap-x-[10px]">
-        <UIPopoverMenu :list="LIST_OPTIONS" :setTable="setTable" :id="props.item.id" @select="onSelect">
+        <UIPopoverMenu :func="props.func" :list="LIST_OPTIONS" :setTable="setTable" :id="props.item.id" @select="onSelect">
           <template #reference>
             <el-button circle :icon="'svgo-more'" class="btn-empty"></el-button>
           </template>
@@ -36,6 +37,7 @@ const props = withDefaults(
   defineProps<{
     indexPage?: boolean
     item: { name: string; date: string; title: string, slug: string, id: string}
+    func: (id: string) => void
     setTable: (value: boolean) => void
   }>(),
   {
@@ -56,9 +58,11 @@ const formatDate = (dateString: string) => {
   return `${hours}:${minutes}:${seconds} ${day}-${month}-${year} `;
 }
 
+
+
+
 const LIST_OPTIONS: TPopoverItemProps[] = [
   { key: 'viewdoc', label: 'К документу', },
-  { key: 'download', label: 'Скачать документ' },
   { key: 'copy', label: 'Скопировать ссылку'},
   { key: 'statistics', label: 'Посмотреть статистику' },
   { key: 'delete', label: 'Удалить документ' }
@@ -67,6 +71,13 @@ const LIST_OPTIONS: TPopoverItemProps[] = [
 const onSelect = (option: (typeof LIST_OPTIONS)[0]) => {
   console.log('option', option)
 }
+
+
+
+
+
+
+
 </script>
 
 

@@ -30,7 +30,7 @@
         </div>
         <Filters />
         <Sort />
-        <UIButton
+        <UIButton v-if="authStore.isAdmin"
           ref="add"
           icon-name="plus"
           :class="{ '!bg-white': false }"
@@ -66,6 +66,15 @@
 </template>
 
 <script setup lang="ts">
+import {useAuthStore} from "~/stores/auth"
+import axios from 'axios'
+import {ref, onMounted} from 'vue'
+import { BASE_URL } from '~/env/requests.env'
+
+
+
+const authStore = useAuthStore()
+
 useSeoMeta({
   title: 'Уведомления',
   ogTitle: 'Уведомления',
@@ -76,4 +85,30 @@ useSeoMeta({
 const add = ref<ButtonInstance>( )
 const dialog = ref<boolean>( false )
 const setDialog = ( value: boolean ) => dialog.value = value;
+
+const notiList = ref([])
+const limit = ref(5)
+const page = ref(1)
+const getNot = async () => {
+  const { accessToken } = useAuthStore();
+  const getNotQuery = await axios.get(`${BASE_URL}/notify?page=${page.value}&limit=${limit.value}`, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+    }
+
+  });
+
+  console.log("ГОВНО", getNotQuery)
+
+}
+
+
+onMounted (() => {
+
+  getNot()
+
+})
+
+
+
 </script>
