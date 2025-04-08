@@ -47,6 +47,7 @@ export class NotificationService {
 
 	async create(title: string, description: string) {
 		try {
+
 			const notification = await this.prisma.notification.create({
 				data: { title: title, description: description }
 			})
