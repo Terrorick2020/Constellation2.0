@@ -131,9 +131,18 @@ const getDocs = async (page = 1, limit = 5) => {
     return
   }
 
+  const {accessToken} = useAuthStore()
   load.value = true
   try {
-    const response = await axios.get(`${BASE_URL}/post?page=${page}&limit=${limit}`)
+    const response = await axios.get(`${BASE_URL}/post?page=${page}&limit=${limit}`,{
+
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+
+    }
+
+    )
     const data = response.data.data
 
     const responseHash = JSON.stringify(data)

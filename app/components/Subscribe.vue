@@ -67,9 +67,11 @@ const pdfFile = ref('');
 const isDelivered = ref(false)
 //функция для отображения документа
 const getDoc = async () => {
+  const {accessToken} = useAuthStore()
   const getCurrentDoc = await axios.get(`${BASE_URL}/post/${props.docId}`, {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${accessToken}`
       }
     });
   isDelivered.value = getCurrentDoc.data.data.delivered

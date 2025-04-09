@@ -84,6 +84,7 @@ const rules = reactive<FormRules<RuleForm>>({
 
 
 const sendNoty = async () => {
+  console.log("dadadadadadada")
   const data = {
     title: ruleForm.name,
     description: ruleForm.desc
@@ -97,7 +98,6 @@ const sendNoty = async () => {
     }
     
   })
-  console.log(sendNoty)
 
 }
 
@@ -116,10 +116,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   reloadNuxtApp()
   
 }
-
-
-
-
 
 
 const resetForm = (formEl: FormInstance | undefined) => {

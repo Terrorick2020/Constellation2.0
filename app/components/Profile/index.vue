@@ -6,7 +6,6 @@
       size="large"
       placeholder="Поиск по имени или фамилии..."
       class="h-[60px] max-w-full lg:max-w-[935px]"
-      @input="searchProfile"
     >
       <template #prefix>
         <SvgoSearch filled class="h-6 w-[30px]" :font-controlled="false" />
@@ -14,11 +13,11 @@
     </el-input>
 
     <!-- Контейнер для карточек -->
-  <el-container class="w-full profiles" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
-    <el-main style="padding: 0; margin: 0; background: transparent;">
+    <el-container class="w-full profiles" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
+      <el-main style="padding: 0; margin: 0; background: transparent;">
         <div class="item-container">
           <el-card
-            v-for="o in visibleUser"
+            v-for="o in filteredUsers"
             :key="o.username"
             class="user-card"
             shadow="always"
@@ -46,12 +45,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import Avatar from '~/assets/image/avatar.png'
 import { Right } from '@element-plus/icons-vue'
-import { BASE_URL, POSTS_ENDPOINT, getHeaders } from '~/env/requests.env'
+import { BASE_URL } from '~/env/requests.env'
 import axios from 'axios';
 import { useAuthStore } from '~/stores/auth'
+
+
 
 interface usersAll {
   id: number;
@@ -59,93 +60,58 @@ interface usersAll {
   name: string;
 }
 
-const users: usersAll[] = [];
-
-
-
-const filteredUsers = ref(users);
-
+const users = ref<usersAll[]>([]);
+const filteredUsers = ref<usersAll[]>([]);
 const searchQuery = ref('');
-const visibleUser = ref(users.slice(0, 5))
-const load = ref(true)
-
+const load = ref(false);
 
 const filterUsers = () => {
-  filteredUsers.value = users.filter(user =>
-      // user.username.toLowerCase().includes(searchQuery.value.toLowerCase().trim())
-    user.username.toLowerCase().includes(searchQuery.value.toLowerCase().trim()) || 
-    user.name.toLowerCase().includes(searchQuery.value.toLowerCase().trim())
-  );
-  visibleUser.value = filteredUsers.value.slice(0, 5);
+  const query = searchQuery.value.toLowerCase().trim();
+  if (query === '') {
+    filteredUsers.value = users.value;
+  } else {
+    filteredUsers.value = users.value.filter(user =>
+      user.username.toLowerCase().includes(query) ||
+      user.name.toLowerCase().includes(query)
+    );
+  }
 };
 
-const loadMoreDocs = () => {
-  const currentLength = visibleUser.value.length
-  if (currentLength < filteredUsers.value.length) {
-    const newDocs = filteredUsers.value.slice(currentLength, currentLength + 5)
-    visibleUser.value.push(...newDocs)
-  }
-}
+const timeout = ref<number | undefined>();
 
-const onScroll = () => {  
-  const scrollPosition = window.scrollY + window.innerHeight
-  let bottomPosition = document.documentElement.scrollHeight
-
-  const foot = document.getElementById('app-footer')
-  if (foot) bottomPosition -= foot.offsetHeight;
-
-  if (scrollPosition >= bottomPosition) {
-    loadMoreDocs()
-  }
-}
-
-let timeout: ReturnType<typeof setTimeout>;
-
-// Watcher для searchQuery с задержкой
 watch(searchQuery, (newQuery) => {
-  clearTimeout(timeout);
-  timeout = setTimeout(() => {
+  clearTimeout(timeout.value);
+  timeout.value = window.setTimeout(() => {
     filterUsers();
   }, 500);
 });
-
 const getUsers = async () => {
-  load.value = true
+  load.value = true;
 
-  const usersListResponse = await axios.get(`${BASE_URL}/user`,{
+  const { accessToken } = useAuthStore();
+  const response = await axios.get(`${BASE_URL}/user`, {
     headers: {
       'Content-Type': 'application/json',
-      
+      'Authorization': `Bearer ${accessToken}`
     }
-
   });
 
-  console.log(usersListResponse.data[0].username)
-  console.log(usersListResponse)
+  users.value = response.data.map((usr: any) => ({
+    id: usr.id,
+    username: usr.username,
+    name: usr.name,
+  }));
 
-  usersListResponse.data.forEach((usr: any) => {
-    users.push({
-      id: usr.id,   
-      username: usr.username,
-      name:usr.name,  
-    });
-  });
-  visibleUser.value = users.slice(0, 4);
-  // load.value = false
+  filteredUsers.value = users.value;
+  
   setTimeout(() => {
-    load.value = false;  // Скрываем лоадер после задержки
+    load.value = false;  
   }, 2000);
-
-}
-
-const searchProfile = () => {
-}
+};
 
 onMounted(() => {
-  getUsers()
-  window.addEventListener('scroll', onScroll)
-})
-
+  getUsers();
+});
 </script>
 
 <style scoped lang="scss">
@@ -172,11 +138,13 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   .user-info {
-    flex-grow: 1; 
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     margin-left: 35px;
+
     .user-name {
       font-size: 18px;
       color: #333;
@@ -187,6 +155,7 @@ onMounted(() => {
       color: #333;
     }
   }
+
   .profile-description {
     background-color: #FF6C46;
     border-radius: 7px;
@@ -194,6 +163,7 @@ onMounted(() => {
     color: #333;
   }
 }
+
 .btn-add {
   height: 100%;
 }

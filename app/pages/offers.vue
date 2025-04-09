@@ -37,19 +37,20 @@
           @click="setDialog(true)"
         />
       </div>
-      <div class="mt-[15px] flex flex-col gap-[15px]">
-        <el-card style="width: 100%; border-radius: 10px;" v-for="item in notiList">
-        <template #header>
-          <div class="card-header">
-            <span>{{ item.title }}</span>
+      <el-container class="w-full notify" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
+        <el-main style="padding: 0; margin: 0; background: transparent;">
+          <div class="mt-[15px] flex flex-col gap-[15px]">
+            <el-card style="width: 100%; border-radius: 10px;" v-for="item in notiList">
+            <template #header>
+              <div class="card-header">
+                <span>{{ item.title }}</span>
+              </div>
+            </template>
+            <p style="white-space: pre-line;">{{item.description}}</p>
+            </el-card>
           </div>
-        </template>
-        <p style="white-space: pre-line;">{{item.description}}</p>
-        </el-card>
-      </div>
-
-
-
+        </el-main>
+      </el-container>
       <!-- <div class="el-select__selected-item">
         <span
           class="el-tag is-closable el-tag--info el-tag--default el-tag--light"
@@ -64,15 +65,9 @@
         ></span>
       </div> -->
     </div>
-    <div class="flex flex-wrap justify-between gap-7">
-      <Offer />
-      <Offer />
-      <Offer />
-      <Offer />
-      <Offer />
-    </div>
   </div>
   <DrawersAddNotify :dialog="dialog" :setDialog="setDialog" />
+
 </template>
 
 <script setup lang="ts">
@@ -99,7 +94,10 @@ const setDialog = ( value: boolean ) => dialog.value = value;
 const notiList = ref([])
 const limit = ref(5)
 const page = ref(1)
+const load = ref(true)
 const getNot = async () => {
+  load.value = true
+  console.log("фывфывфв")
   const { accessToken } = useAuthStore();
   const getNotQuery = await axios.get(`${BASE_URL}/notify?page=${page.value}&limit=${limit.value}`, {
     headers: {
@@ -108,8 +106,13 @@ const getNot = async () => {
 
   });
 
-  console.log("ГОВНО", getNotQuery)
+  // console.log("ГОВНО", getNotQuery)
   notiList.value = getNotQuery.data.data
+  console.log("фывфывфв")
+  load.value = false;
+  // setTimeout(() => {
+  //   load.value = false;  // Скрываем лоадер после задержки
+  // }, 2000);
 
 }
 
@@ -129,4 +132,5 @@ onMounted (() => {
 
 
 <style scoped lang="scss">
+
 </style>

@@ -31,7 +31,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
                     }
                 }
             )
-    
+
             if ( response.status !== 200 ) {
                 return navigateTo('/auth/sign-in')
             }

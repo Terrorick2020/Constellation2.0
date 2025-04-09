@@ -108,13 +108,14 @@ const persone = reactive({
 const route = useRoute();
 const getProfile = async () => {
   const id = route.params.profile;
-
+  const {accessToken} = useAuthStore()
   const getCurrentUser = await axios.get(`${BASE_URL}/user/${id}`, {
     headers: {
       'Content-Type': 'application/json', 
+      'Authorization': `Bearer ${accessToken}`
     },
   });
-    console.log("CurrentUSERname", getCurrentUser.data.username)
+  console.log("CurrentUSERname", getCurrentUser.data.username)
     
 
   const response = {

@@ -26,16 +26,14 @@ body {
 
   .profiles {
     .el-loading-mask {
+      margin-top: 1vh;
+    }
+  }
+
+  .notify {
+    .el-loading-mask {
       margin-top: 23vh;
     }
   }
 
-  .el-loading-mask {
-    // top: 25vh;
-    background: transparent !important;
-
-    .el-loading-spinner {
-      background: transparent !important;
-    }
-  }
 }
