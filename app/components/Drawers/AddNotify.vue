@@ -34,6 +34,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import axios from 'axios'
 import { BASE_URL} from '~/env/requests.env'
 import { useAuthStore } from '~/stores/auth'
+import { ApiResType } from '../../types/auth'
 
 
 const props = defineProps<{
@@ -98,6 +99,25 @@ const sendNoty = async () => {
     }
     
   })
+<<<<<<< HEAD
+=======
+  console.log(sendNoty)
+  const authStore = useAuthStore()
+
+  switch (sendNoty.data.result) {
+    case 'success': 
+    authStore.apiRes.value = true
+    authStore.apiRes.type = ApiResType.success
+    authStore.apiRes.title = 'Ура!'
+    authStore.apiRes.msg = 'Успешная отправка уведомления'
+    break
+    case 'failed':
+    authStore.apiRes.value = true
+    authStore.apiRes.type = ApiResType.error
+    authStore.apiRes.title = 'Ошибка!'
+    authStore.apiRes.msg = 'Не удалось отправить уведомление'
+  }
+>>>>>>> b40e95de2f32e342860e9bf1846f2af4b387c62f
 
 }
 
