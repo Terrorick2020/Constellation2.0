@@ -32,7 +32,7 @@ import { UploadFilled } from '@element-plus/icons-vue'
 import axios from 'axios'
 import { BASE_URL, getHeaders } from '~/env/requests.env'
 import { useAuthStore } from '~/stores/auth'
-
+import { ApiResType } from '../../types/auth'
 
 
 
@@ -68,12 +68,27 @@ const loadDocs = async () => {
 
       const { accessToken } = useAuthStore()
 
-      await axios.post(`${BASE_URL}/admin/post`, formData, {
+      const response = await axios.post(`${BASE_URL}/admin/post`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data', 
           'Authorization': `Bearer ${accessToken}`
         },
       })
+      const authStore = useAuthStore()
+
+  switch (response.data.result) {
+    case 'success': 
+    authStore.apiRes.value = true
+    authStore.apiRes.type = ApiResType.success
+    authStore.apiRes.title = 'Ура!'
+    authStore.apiRes.msg = `Успешное добавление документа ${response.data.data.title}`
+    break
+    case 'failed':
+    authStore.apiRes.value = true
+    authStore.apiRes.type = ApiResType.error
+    authStore.apiRes.title = 'Ошибка!'
+    authStore.apiRes.msg = `Не удалось добавить документ ${response.data.data.title}`
+  }
   }
 
   props.setDrawer( false )

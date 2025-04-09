@@ -36,15 +36,13 @@ export class PostService {
 			const payload = {
 				title: data.title,
 				filename: data.filename,
-				hash: data.hash,
-				date: data.date,
-				content: buffer.toString('base64'),
-				userId: data.userId,
-				delivered: data.delivered
+				date: data.date
 			}
-			let description = "🚀Добавлен документ '" + data.title + "', ознакомьтесь" 
-			await this.notificationService.create(data.date.toISOString(), description)
-
+			let description = "🚀Добавлен документ '" + data.title + "', ознакомьтесь"
+			await this.notificationService.create(
+				data.date.toISOString(),
+				description
+			)
 
 			return {
 				result: 'success',
@@ -61,7 +59,7 @@ export class PostService {
 	async findAll(page: number, limit: number, req) {
 		const skip = (page - 1) * limit
 		const take = limit
-	
+
 		try {
 			const posts = await this.prisma.post.findMany({
 				skip,
@@ -76,15 +74,15 @@ export class PostService {
 					}
 				}
 			})
-	
+
 			const totalCount = await this.prisma.post.count()
 			const scroll = totalCount - skip - take > 0
-	
+
 			const payloads = posts.map(post => {
-				const isSigned = post.signatures.some(signature =>
-					signature.user.username === req.user.username
+				const isSigned = post.signatures.some(
+					signature => signature.user.username === req.user.username
 				)
-	
+
 				return {
 					id: post.id,
 					title: post.title,
@@ -93,7 +91,7 @@ export class PostService {
 					sign: isSigned
 				}
 			})
-	
+
 			return {
 				result: 'success',
 				data: payloads,
@@ -106,54 +104,53 @@ export class PostService {
 			}
 		}
 	}
-	
 
 	async findOne(id: number, req) {
 		try {
-		  const post = await this.prisma.post.findFirst({
-			where: { id },
-			include: {
-			  signatures: {
-				select: {
-				  hash: true,
-				  user: { select: { id: true, username: true, name: true } }
+			const post = await this.prisma.post.findFirst({
+				where: { id },
+				include: {
+					signatures: {
+						select: {
+							hash: true,
+							user: { select: { id: true, username: true, name: true } }
+						}
+					}
 				}
-			  }
+			})
+
+			if (!post) {
+				return {
+					result: 'failed',
+					code: `Пост с ID ${id} не найден`
+				}
 			}
-		  })
-	  
-		  if (!post) {
+
+			const isSigned = post.signatures.some(
+				signature => signature.user.username === req.user.username
+			)
+
+			const payload = {
+				title: post.title,
+				filename: post.filename,
+				date: post.date,
+				content: Buffer.from(post.content).toString('base64'),
+				delivered: post.delivered,
+				sign: isSigned
+			}
+
 			return {
-			  result: 'failed',
-			  code: `Пост с ID ${id} не найден`
+				result: 'success',
+				data: payload
 			}
-		  }
-	  
-		  const isSigned = post.signatures.some(signature =>
-			signature.user.username === req.user.username
-		  )
-	  
-		  const payload = {
-			title: post.title,
-			filename: post.filename,
-			date: post.date,
-			content: Buffer.from(post.content).toString('base64'),
-			delivered: post.delivered,
-			sign: isSigned
-		  }
-	  
-		  return {
-			result: 'success',
-			data: payload
-		  }
 		} catch (error) {
-		  return {
-			result: 'failed',
-			code: `Ошибка при получении поста с ID ${id}`
-		  }
+			return {
+				result: 'failed',
+				code: `Ошибка при получении поста с ID ${id}`
+			}
 		}
-	  }
-	  
+	}
+
 	async service(id: number) {
 		return await this.prisma.post.findFirst({
 			include: {
@@ -172,7 +169,11 @@ export class PostService {
 		try {
 			const data = await this.prisma.post.update({
 				data: updatePostDto,
-				where: { id: id }
+				where: { id: id },
+				omit: {
+					content: true,
+					userId: true
+				}
 			})
 			return {
 				result: 'success',
@@ -188,7 +189,13 @@ export class PostService {
 
 	async remove(id: number) {
 		try {
-			const data = await this.prisma.post.delete({ where: { id: id } })
+			const data = await this.prisma.post.delete({
+				where: { id: id },
+				omit: {
+					content: true,
+					userId: true
+				}
+			})
 			console.log(data)
 			return {
 				result: 'success',
