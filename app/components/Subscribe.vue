@@ -94,7 +94,7 @@ const SubscribeDoc = async () => {
   const { accessToken } = useAuthStore();
   console.log("ФУНКЦИЯИ33 ")
 
-  const subscribeCurrentDoc = await axios.post(`${BASE_URL}/sign/${props.docId}`,formData,{
+  const subscribeCurrentDoc = await axios.post(`${BASE_URL}/sign/${props.docId}`, formData, {
     
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -103,7 +103,7 @@ const SubscribeDoc = async () => {
 
   });
 
-
+  isDelivered.value = subscribeCurrentDoc.data.result === 'success';
   console.log("Подпись успешно создана:", subscribeCurrentDoc);
 };
   
