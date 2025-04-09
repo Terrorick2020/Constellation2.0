@@ -72,6 +72,9 @@ const getDoc = async () => {
         'Content-Type': 'multipart/form-data'
       }
     });
+
+  isDelivered.value = getCurrentDoc.data.data.sign
+
   isDelivered.value = getCurrentDoc.data.data.delivered
   console.log("Запрос сделан", getCurrentDoc.data.data)
   const base64Data = getCurrentDoc.data.data.content;
