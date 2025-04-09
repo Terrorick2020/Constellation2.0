@@ -99,8 +99,6 @@ const sendNoty = async () => {
     }
     
   })
-<<<<<<< HEAD
-=======
   console.log(sendNoty)
   const authStore = useAuthStore()
 
@@ -117,7 +115,6 @@ const sendNoty = async () => {
     authStore.apiRes.title = 'Ошибка!'
     authStore.apiRes.msg = 'Не удалось отправить уведомление'
   }
->>>>>>> b40e95de2f32e342860e9bf1846f2af4b387c62f
 
 }
 
