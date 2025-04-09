@@ -9,7 +9,7 @@
   <Footer class="hidden lg:flex" />
 </template>
 
-<script scoped lang="ts">
+<script setup lang="ts">
 const { $socket } = useNuxtApp()
 
 
