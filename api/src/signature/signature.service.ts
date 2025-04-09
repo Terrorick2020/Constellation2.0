@@ -14,21 +14,27 @@ export class SignatureService {
 	) {}
 	async create(postId: number, file: Express.Multer.File, req) {
 		try {
+			console.log('tut')
 			const key = Buffer.from(file.buffer).toLocaleString()
+			console.log('tut1')
 			const post = await this.postService.service(postId)
+			console.log('tut2')
 			if (!post)
 				return {
 					result: 'failed',
 					data: 'No such post'
 				}
-
+			console.log('tut3')
 			const hash = this.rsa.encrypt(post.title, key)
+			console.log('tut4')
 			const check = this.rsa.checkSignature(req.user.username, hash)
+			console.log('tut5')
 			if (check != post.title)
 				return {
 					result: 'failed',
 					data: 'Неверный ключ!'
 				}
+			console.log('tu6t')
 			let sig = await this.prisma.post.update({
 				where: { id: post.id },
 				data: {
@@ -60,9 +66,10 @@ export class SignatureService {
 				data: sig
 			}
 		} catch (error) {
+			console.log(error)
 			return {
 				result: 'failed',
-				data: error
+				data: error.message
 			}
 		}
 	}

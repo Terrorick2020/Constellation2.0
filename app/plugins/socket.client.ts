@@ -1,13 +1,13 @@
 import { io, Socket } from 'socket.io-client'
 
 export default defineNuxtPlugin(() => {
-  const socket: Socket = io('http://localhost:7000', {
-    path: '/',
+  const socket: Socket = io('http://localhost', {
+    path: '/socket.io',
     transports: ['websocket'],
     withCredentials: true,
   })
 
-  console.log( "Подключение к socket.io" )
+  console.log("Подключение к socket.io")
 
   return {
     provide: {

@@ -5,12 +5,14 @@ import { CreatePostDto } from './dto/create-post.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { AuthGuard } from '@nestjs/passport'
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 
 @ApiTags('Post') // Группируем эндпоинты в Swagger
 @Controller('post')
 export class PostController {
 	constructor(private readonly postService: PostService) {}
 
+	@UseGuards(JwtAuthGuard)
 	@Get()
 	@ApiOperation({ summary: 'Получить список постов' })
 	@ApiResponse({ status: 200, description: 'Список постов' })
@@ -22,13 +24,14 @@ export class PostController {
 		return this.postService.findAll(pageNumber, limitNumber)
 	} 
 
+	@UseGuards(JwtAuthGuard)
 	@Get(':id')
 	@ApiOperation({ summary: 'Получить один пост' })
 	@ApiResponse({ status: 200, description: 'Пост найден' })
 	@ApiResponse({ status: 404, description: 'Пост не найден' })
 	@ApiParam({ name: 'id', example: '1', description: 'ID поста' })
-	findOne(@Param('id') id: string) {
-		return this.postService.findOne(+id)
+	findOne(@Request() req, @Param('id') id: string) {
+		return this.postService.findOne(+id, req)
 	}
 
 	@UseGuards(AuthGuard('jwt'))

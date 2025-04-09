@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Put, Delete } from '@nestjs/common'
+import { Controller, Get, Param, Post, Body, Put, Delete, UseGuards } from '@nestjs/common'
 import { UserService } from './user.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
@@ -11,12 +11,13 @@ import {
 	ApiParam
 } from '@nestjs/swagger'
 import { ErrorResponseDto } from './dto/error-response.dto' // Подключаем DTO для ошибок
+import { AuthGuard } from '@nestjs/passport'
 
 @ApiTags('User') // Группируем эндпоинты в Swagger
 @Controller('user')
 export class UserController {
 	constructor(private readonly userService: UserService) {}
-
+	@UseGuards(AuthGuard('jwt'))
 	@Get()
 	@ApiOperation({ summary: 'Получить всех пользователей' })
 	@ApiResponse({
@@ -33,6 +34,7 @@ export class UserController {
 		return this.userService.findAll()
 	}
 
+	@UseGuards(AuthGuard('jwt'))
 	@Get(':id')
 	@ApiOperation({ summary: 'Получить пользователя по ID' })
 	@ApiResponse({
