@@ -21,3 +21,21 @@ body {
   font-family: Manrope, sans-serif;
   
 }
+
+#__nuxt {
+
+  .profiles {
+    .el-loading-mask {
+      margin-top: 23vh;
+    }
+  }
+
+  .el-loading-mask {
+    // top: 25vh;
+    background: transparent !important;
+
+    .el-loading-spinner {
+      background: transparent !important;
+    }
+  }
+}

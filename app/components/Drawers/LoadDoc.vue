@@ -17,12 +17,12 @@
             </div>
             <template #tip>
                 <div class="el-upload__tip">
-                    pdf файлы с размером не более 1mb
+                    pdf файлы с размером не более 30mb
                 </div>
             </template>
         </el-upload>
       </div>
-      <el-button class="w-full mt-5"  @click="loadDocs">Подать документы</el-button>
+      <el-button class="load-btn w-full mt-5"  @click="loadDocs">Подать документы</el-button>
     </el-drawer>
   </template>
   
@@ -88,3 +88,22 @@ const handleClose = () => {
     props.setDrawer( false )
 }
 </script>
+
+<style scoped lang="scss">
+.el-icon--upload {
+  svg {
+    scale: 2;
+  }
+}
+.load-btn {
+  background: linear-gradient(#ff6c46, #e44820);
+  color: #ffffff;
+  font-weight: 800 !important;
+  border-radius: 26px;
+
+  &:active {
+      border-color: #e44820;
+      scale: 0.99;
+  }
+}
+</style>

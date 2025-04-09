@@ -21,8 +21,8 @@
             </el-form-item>
             <br>
             <el-form-item class="w-full">
-                <el-button class="w-[45%]" type="primary" @click="submitForm(ruleFormRef)">Рассылка</el-button>
-                <el-button class="w-[45%]" @click="resetForm(ruleFormRef)">Сброс</el-button>
+                <el-button class="w-[45%] f_btn" type="primary" @click="submitForm(ruleFormRef)">Рассылка</el-button>
+                <el-button class="w-[45%] s_btn" @click="resetForm(ruleFormRef)">Сброс</el-button>
             </el-form-item>
         </el-form>
     </el-drawer>
@@ -124,3 +124,32 @@ const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields()
 }
 </script>
+
+<style scoped lang="scss">
+.f_btn {
+  background: linear-gradient(#ff6c46, #e44820);
+  color: #ffffff;
+  font-weight: 800 !important;
+  border-color: #724439;
+  border-radius: 26px;
+
+  &:active {
+      border-color: #e44820;
+      scale: 0.99;
+  }
+}
+
+.s_btn {
+  font-weight: 800 !important;
+  border-radius: 26px;
+  --el-button-hover-bg-color: #ff6b4616;
+  --el-button-hover-border-color: #ff6b464d;
+
+
+  &:active {
+      border-color: #e44820;
+      background-color: rgb(253, 100, 61)4d;
+      scale: 0.99;
+  }
+}
+</style>

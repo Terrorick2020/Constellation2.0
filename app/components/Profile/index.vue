@@ -14,7 +14,7 @@
     </el-input>
 
     <!-- Контейнер для карточек -->
-  <el-container class="w-full" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
+  <el-container class="w-full profiles" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
     <el-main style="padding: 0; margin: 0; background: transparent;">
         <div class="item-container">
           <el-card
@@ -169,6 +169,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 // rename to prevent conflicts
+
 .search {
   margin-top: 7px;
   color: #555;

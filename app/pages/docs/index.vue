@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <el-container class="w-full" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
+    <el-container class="w-full docs" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
       <el-main style="padding: 0; margin: 0; background: transparent;">
         <div class="space-y-[10px]">
           <div
@@ -70,11 +70,11 @@ import axios from 'axios'
 
 const authStore = useAuthStore()
 
-const targetDocId = ref<string>('')
-const percentage = ref<number>(50)
-const searchQuery = ref('')
-const load = ref(true)
-const sortOption = ref<string>('1') // Значение по умолчанию для сортировки
+const targetDocId = ref<string>( '' )
+const percentage = ref<number>( 50 )
+const searchQuery = ref( '' )
+const load = ref( true )
+const sortOption = ref<string>( '1' ) // Значение по умолчанию для сортировки
 
 const duration = computed(() => Math.floor(percentage.value / 5))
 
@@ -152,6 +152,8 @@ watch(searchQuery, () => {
 // Получение документов
 const getDocs = async () => {
   load.value = true
+  console.log( load.value )
+
   try {
     const response = await axios.get(`${BASE_URL}/post`)
     const data = response.data.data
@@ -170,7 +172,7 @@ const getDocs = async () => {
   } catch (error) {
     console.error('Ошибка при загрузке документов:', error)
   } finally {
-    load.value = false
+    // load.value = false
   }
 }
 
@@ -192,7 +194,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .demo-progress .el-progress--line {
   margin-bottom: 15px;
   max-width: 600px;
@@ -201,8 +203,5 @@ onMounted(() => {
 }
 .btn-add {
   height: 100%;
-}
-.is-loading {
-  background: transparent !important;
 }
 </style>
