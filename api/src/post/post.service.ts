@@ -66,6 +66,9 @@ export class PostService {
 			const posts = await this.prisma.post.findMany({
 				skip: skip,
 				take: take,
+				orderBy: {
+					date: 'desc' 
+				  },
 				include: {
 					signatures: {
 						select: {
@@ -102,41 +105,52 @@ export class PostService {
 		}
 	}
 
-	async findOne(id: number) {
+	async findOne(id: number, req) {
 		try {
-			const post = await this.prisma.post.findFirst({
-				include: {
-					signatures: {
-						select: {
-							hash: true,
-							user: { select: { id: true, username: true, name: true } }
-						}
-					}
-				},
-				where: { id: id }
-			})
-			const payload = {
-				title: post.title,
-				filename: post.filename,
-				hash: post.hash,
-				date: post.date,
-				content: Buffer.from(post.content).toString('base64'),
-				delivered: post.delivered,
-				userId: post.userId,
-				signatures: post.signatures || []
-			}
-			if (post)
-				return {
-					result: 'success',
-					data: payload
+		  const post = await this.prisma.post.findFirst({
+			where: { id },
+			include: {
+			  signatures: {
+				select: {
+				  hash: true,
+				  user: { select: { id: true, username: true, name: true } }
 				}
-		} catch (error) {
-			return {
-				result: 'failed',
-				code: `Пост с ID ${id} не найден`
+			  }
 			}
+		  })
+	  
+		  if (!post) {
+			return {
+			  result: 'failed',
+			  code: `Пост с ID ${id} не найден`
+			}
+		  }
+	  
+		  const isSigned = post.signatures.some(signature =>
+			signature.user.username === req.user.username
+		  )
+	  
+		  const payload = {
+			title: post.title,
+			filename: post.filename,
+			date: post.date,
+			content: Buffer.from(post.content).toString('base64'),
+			delivered: post.delivered,
+			sign: isSigned
+		  }
+	  
+		  return {
+			result: 'success',
+			data: payload
+		  }
+		} catch (error) {
+		  return {
+			result: 'failed',
+			code: `Ошибка при получении поста с ID ${id}`
+		  }
 		}
-	}
+	  }
+	  
 	async service(id: number) {
 		return await this.prisma.post.findFirst({
 			include: {

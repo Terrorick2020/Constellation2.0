@@ -23,6 +23,9 @@ export class NotificationService {
 			const notifications = await this.prisma.notification.findMany({
 				skip: skip,
 				take: take,
+				orderBy: {
+					id: 'desc' 
+				  }
 			})
 			const scroll =
 				(await this.prisma.notification.findMany()).length - skip * take > 0
