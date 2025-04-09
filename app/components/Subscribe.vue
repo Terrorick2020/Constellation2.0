@@ -26,22 +26,25 @@
         />
     </div>
 
-    <el-button v-if="!isDelivered" type="success" class="subscribe" @click="SubscribeDoc">Подписать</el-button>
-    <p v-else>Документ подписан</p>
+    <!-- <el-button v-if="!isDelivered" type="success" class="subscribe" @click="SubscribeDoc">Подписать</el-button>
+    <p v-else>Документ подписан</p> -->
     <el-upload
-    ref="upload"
-    class="upload-cert"
-    :limit="1"
-    :on-exceed="handleExceed"
-    :auto-upload="false"
-    :on-change="handleFileChange"
-    :on-remove="handleFileRemove"
-    accept=".pem, .key, .crt"
-  >
+      v-if="!isDelivered"
+      ref="upload"
+      class="upload-cert subscribe"
+      :limit="1"
+      :on-exceed="handleExceed"
+      :auto-upload="false"
+      :on-change="handleFileChange"
+      :on-remove="handleFileRemove"
+      accept=".pem, .key, .crt"
+      :show-file-list="false"
+    >
     <template #trigger>
-      <el-button type="primary">Загрузить цифровую подпись...</el-button>
+      <el-button type="success">Подписать</el-button>
     </template>
   </el-upload>
+  <p v-else>Документ подписан</p>
   </div>
 </template>
 
@@ -100,6 +103,8 @@ const SubscribeDoc = async () => {
     },
 
   });
+
+
   console.log("Подпись успешно создана:", subscribeCurrentDoc);
 };
   
@@ -127,6 +132,8 @@ const handleFileChange = (file: UploadRawFile, fileList: UploadRawFile[]) => {
   reader.onload = () => {
     console.log("rfkfkfkfkf")
     keyfile.value = file.raw
+
+    SubscribeDoc()
   }
 
   reader.onerror = (error) => {
@@ -176,6 +183,7 @@ onMounted(() => {
   height: 40px;
   margin-bottom: 40px;
   margin-left: -915px;
+  // background: #67c23a;
 }
 
 .down {
