@@ -1,5 +1,5 @@
 <template>
-    О нас
+    <AboutMe />
 </template>
 
 <script setup lang="ts">

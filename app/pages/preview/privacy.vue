@@ -10,7 +10,7 @@
 		<span style="font-family:Arial; font-size:12pt">&#xa0;</span><span style="font-family:Arial; font-size:12pt">— Закон о</span><span style="font-family:Arial; font-size:12pt">&#xa0;</span>
 		<span style="font-family:Arial; font-size:12pt">персональных данных) и</span><span style="font-family:Arial; font-size:12pt">&#xa0;</span>
 		<span style="font-family:Arial; font-size:12pt">определяет порядок обработки персональных данных и</span><span style="font-family:Arial; font-size:12pt">&#xa0;</span><span style="font-family:Arial; font-size:12pt">меры по</span>
-		<span style="font-family:Arial; font-size:12pt">&#xa0;</span><span style="font-family:Arial; font-size:12pt">обеспечению безопасности персональных данных, предпринимаемые КОЛЛАБА (далее</span>
+		<span style="font-family:Arial; font-size:12pt">&#xa0;</span><span style="font-family:Arial; font-size:12pt">обеспечению безопасности персональных данных, предпринимаемые "Созвездие" (далее</span>
 		<span style="font-family:Arial; font-size:12pt">&#xa0;</span><span style="font-family:Arial; font-size:12pt">— Оператор).</span>
 	</p>
 	<p style="margin-top:6pt; line-height:14pt">
@@ -19,16 +19,16 @@
 		<span style="font-family:Arial; font-size:12pt">свобод человека и</span><span style="font-family:Arial; font-size:12pt">&#xa0;</span>
 		<span style="font-family:Arial; font-size:12pt">гражданина при обработке его персональных данных, в</span><span style="font-family:Arial; font-size:12pt">&#xa0;</span>
 		<span style="font-family:Arial; font-size:12pt">том числе защиты прав на</span><span style="font-family:Arial; font-size:12pt">&#xa0;</span>
-		<span style="font-family:Arial; font-size:12pt">неприкосновенность частной жизни, личную и</span><span style="font-family:Arial; font-size:12pt">&#xa0;</span><span style="font-family:Arial; font-size:12pt">семейную тайну.</span>
+		<span style="font-family:Arial; font-size:12pt">неприкосновенность частной жизни, личную и</span><span style="font-family:Arial; font-size:12pt">&#xa0;</span><span style="font-family:Arial; font-size:12pt">государственную тайну.</span>
 	</p>
 	<p style="margin-top:6pt; line-height:14pt">
 		<span style="font-family:Arial; font-size:12pt">1.2. Настоящая политика Оператора в</span><span style="font-family:Arial; font-size:12pt">&#xa0;</span>
 		<span style="font-family:Arial; font-size:12pt">отношении обработки персональных данных (далее</span><span style="font-family:Arial; font-size:12pt">&#xa0;</span>
 		<span style="font-family:Arial; font-size:12pt">— Политика) применяется ко</span><span style="font-family:Arial; font-size:12pt">&#xa0;</span>
 		<span style="font-family:Arial; font-size:12pt">всей информации, которую Оператор может получить о</span><span style="font-family:Arial; font-size:12pt">&#xa0;</span>
-		<span style="font-family:Arial; font-size:12pt">посетителях веб-сайта </span>
-		<a href="https://collaba.pro./" target="_blank" title="https://collaba.pro." style="text-decoration:none"><span style="font-family:Arial; font-size:12pt; text-decoration:underline; color:#000000">https://collaba.pro.</span></a>
+		<span style="font-family:Arial; font-size:12pt">посетителях веб-сайта.</span>
 	</p>
+	
 	<p style="margin-top:6pt; line-height:14pt">
 		<span style="font-family:Arial; font-size:12pt" class="font-bold">2. Основные понятия, используемые в</span><span  style="font-family:Arial; font-size:12pt">&#xa0;</span><span class="font-bold" style="font-family:Arial; font-size:12pt">Политике</span>
 	</p>

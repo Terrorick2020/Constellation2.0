@@ -1,5 +1,3 @@
-import { fileURLToPath, URL } from 'node:url'
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-03-15',
@@ -19,6 +17,12 @@ export default defineNuxtConfig({
     'nuxt-viewport',
   ],
 
+
+  plugins: [
+    { src: '~/plugins/socket.client.ts', mode: 'client' },
+  ],
+  
+
   svgo: {
     autoImportPath: './assets/icons/'
   },
@@ -30,10 +34,6 @@ export default defineNuxtConfig({
     '~/assets/scss/block.scss',
     '~/assets/scss/offer.scss'
   ],
-
-  // devServer: {
-  //   host: '0.0.0.0'
-  // },
 
   experimental: {
     payloadExtraction: false
