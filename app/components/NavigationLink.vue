@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import type { Badges } from '~/types/props'
+import { PropType } from 'vue'
 
 
 const props = defineProps({
@@ -36,7 +37,10 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  setBadges?: (newBadges: Badges) => void
+  setBadges: {
+    type: Function as PropType<(newBadges: Badges) => void>,
+    default: () => {}
+  }
 })
 
 const route = useRoute()

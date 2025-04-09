@@ -30,10 +30,12 @@ const setBadges = (newBadges: Badges) => {
 }
 
 onMounted(() => {
-  $socket.on('new_notification', (data) => {
-    console.log('Message from server:', data)
-    badges.offersIsBadge = true
-  })
+  if (process.client) {
+    $socket.on('new_notification', (data) => {
+      console.log('Message from server:', data)
+      badges.offersIsBadge = true
+    })
+  }
 })
 
 const authStore = useAuthStore()
