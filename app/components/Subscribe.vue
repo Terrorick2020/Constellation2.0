@@ -1,6 +1,6 @@
 <template>
   <div class="Main-block">
-    <div class="button-container">
+    <div class="w-full flex justify-between p-5">
       <NuxtLink :to="`/docs`" class="back">
         <el-button type="warning">Назад</el-button>
       </NuxtLink>
@@ -21,30 +21,29 @@
         <embed
         :src="pdfFile"
         type="application/pdf"
-        width="90%" 
-        height="95%"
+        width="90%"
         />
     </div>
 
-    <!-- <el-button v-if="!isDelivered" type="success" class="subscribe" @click="SubscribeDoc">Подписать</el-button>
-    <p v-else>Документ подписан</p> -->
-    <el-upload
-      v-if="!isDelivered"
-      ref="upload"
-      class="upload-cert subscribe"
-      :limit="1"
-      :on-exceed="handleExceed"
-      :auto-upload="false"
-      :on-change="handleFileChange"
-      :on-remove="handleFileRemove"
-      accept=".pem, .key, .crt"
-      :show-file-list="false"
-    >
-    <template #trigger>
-      <el-button type="success">Подписать</el-button>
-    </template>
-  </el-upload>
-  <p v-else>Документ подписан</p>
+    <div class="w-full flex justify-start  p-5">
+      <el-upload
+        v-if="!isDelivered"
+        ref="upload"
+        class="upload-cert"
+        :limit="1"
+        :on-exceed="handleExceed"
+        :auto-upload="false"
+        :on-change="handleFileChange"
+        :on-remove="handleFileRemove"
+        accept=".pem, .key, .crt"
+        :show-file-list="false"
+      >
+        <template #trigger>
+          <el-button type="success">Подписать</el-button>
+        </template>
+      </el-upload>
+      <p v-else>Документ подписан</p>
+    </div>
   </div>
 </template>
 
@@ -198,9 +197,9 @@ onMounted(() => {
   position: relative;
   display: flex;
   justify-content: center; 
-  margin-top: 100px; 
+  margin-top: 30px; 
   width: 100%;
-  height: 80vh; 
+  min-height: 50vh;
   overflow: hidden;
 }
 </style>
