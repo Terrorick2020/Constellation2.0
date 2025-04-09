@@ -78,19 +78,29 @@ export class PostService {
 			const totalCount = await this.prisma.post.count()
 			const scroll = totalCount - skip - take > 0
 
-			const payloads = posts.map(post => {
-				const isSigned = post.signatures.some(
-					signature => signature.user.username === req.user.username
-				)
+			const userCount = await this.prisma.user.count({ where: { role: 'Guest' } })
 
-				return {
-					id: post.id,
-					title: post.title,
-					filename: post.filename,
-					date: post.date,
-					sign: isSigned
-				}
-			})
+			const payloads = await Promise.all(
+				posts.map(async post => {
+					const isSigned = post.signatures.some(
+						signature => signature.user.username === req.user.username
+					)
+	
+					const sigCount = await this.prisma.signature.count({
+						where: { postId: post.id }
+					})
+	
+					return {
+						id: post.id,
+						title: post.title,
+						filename: post.filename,
+						date: post.date,
+						sign: isSigned,
+						sigCount,
+						userCount
+					}
+				})
+			)
 
 			return {
 				result: 'success',
