@@ -19,7 +19,10 @@
   </NuxtLink>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { Badges } from '~/types/props'
+
+
 const props = defineProps({
   link: {
     type: Object,
@@ -32,7 +35,8 @@ const props = defineProps({
   useOpacity: {
     type: Boolean,
     default: true
-  }
+  },
+  setBadges?: (newBadges: Badges) => void
 })
 
 const route = useRoute()

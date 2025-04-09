@@ -1,6 +1,6 @@
 <template>
   <div class="Main-block">
-    <div class="button-container">
+    <div class="w-full flex justify-between p-5">
       <NuxtLink :to="`/docs`" class="back">
         <el-button type="warning">Назад</el-button>
       </NuxtLink>
@@ -21,27 +21,29 @@
         <embed
         :src="pdfFile"
         type="application/pdf"
-        width="90%" 
-        height="95%"
+        width="90%"
         />
     </div>
 
-    <el-button v-if="!isDelivered" type="success" class="subscribe" @click="SubscribeDoc">Подписать</el-button>
-    <p v-else>Документ подписан</p>
-    <el-upload
-    ref="upload"
-    class="upload-cert"
-    :limit="1"
-    :on-exceed="handleExceed"
-    :auto-upload="false"
-    :on-change="handleFileChange"
-    :on-remove="handleFileRemove"
-    accept=".pem, .key, .crt"
-  >
-    <template #trigger>
-      <el-button type="primary">Загрузить цифровую подпись...</el-button>
-    </template>
-  </el-upload>
+    <div class="w-full flex justify-start  p-5">
+      <el-upload
+        v-if="!isDelivered"
+        ref="upload"
+        class="upload-cert"
+        :limit="1"
+        :on-exceed="handleExceed"
+        :auto-upload="false"
+        :on-change="handleFileChange"
+        :on-remove="handleFileRemove"
+        accept=".pem, .key, .crt"
+        :show-file-list="false"
+      >
+        <template #trigger>
+          <el-button type="success">Подписать</el-button>
+        </template>
+      </el-upload>
+      <p v-else>Документ подписан</p>
+    </div>
   </div>
 </template>
 
@@ -92,7 +94,7 @@ const SubscribeDoc = async () => {
   const { accessToken } = useAuthStore();
   console.log("ФУНКЦИЯИ33 ")
 
-  const subscribeCurrentDoc = await axios.post(`${BASE_URL}/sign/${props.docId}`,formData,{
+  const subscribeCurrentDoc = await axios.post(`${BASE_URL}/sign/${props.docId}`, formData, {
     
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -100,6 +102,8 @@ const SubscribeDoc = async () => {
     },
 
   });
+
+  isDelivered.value = subscribeCurrentDoc.data.result === 'success';
   console.log("Подпись успешно создана:", subscribeCurrentDoc);
 };
   
@@ -127,6 +131,8 @@ const handleFileChange = (file: UploadRawFile, fileList: UploadRawFile[]) => {
   reader.onload = () => {
     console.log("rfkfkfkfkf")
     keyfile.value = file.raw
+
+    SubscribeDoc()
   }
 
   reader.onerror = (error) => {
@@ -176,6 +182,7 @@ onMounted(() => {
   height: 40px;
   margin-bottom: 40px;
   margin-left: -915px;
+  // background: #67c23a;
 }
 
 .down {
@@ -190,9 +197,9 @@ onMounted(() => {
   position: relative;
   display: flex;
   justify-content: center; 
-  margin-top: 100px; 
+  margin-top: 30px; 
   width: 100%;
-  height: 80vh; 
+  min-height: 50vh;
   overflow: hidden;
 }
 </style>

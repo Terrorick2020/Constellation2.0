@@ -135,8 +135,6 @@ export const useAuthStore = defineStore(
 
         const response = await axios.post(`${BASE_URL}${LOG_ENDPOINT}`, data)
 
-
-
         const dataRes = response.data.result
         console.log("НАШИ ДАННЫЕ", response.data)
 
@@ -155,7 +153,7 @@ export const useAuthStore = defineStore(
           apiRes.value = true
           apiRes.type = ApiResType.error
           apiRes.title = 'Ошибка авторизация'
-          apiRes.msg = 'Что-то пошло не так.. Попробуйте позже.'
+          apiRes.msg = response.data.data
           break;
         }
 

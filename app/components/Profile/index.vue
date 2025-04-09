@@ -114,7 +114,8 @@ const getUsers = async () => {
 
   const usersListResponse = await axios.get(`${BASE_URL}/user`,{
     headers: {
-      'Content-Type': 'application/json', 
+      'Content-Type': 'application/json',
+      
     }
 
   });
