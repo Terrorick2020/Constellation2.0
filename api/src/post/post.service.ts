@@ -58,17 +58,15 @@ export class PostService {
 		}
 	}
 
-	async findAll(page: number, limit: number) {
+	async findAll(page: number, limit: number, req) {
 		const skip = (page - 1) * limit
 		const take = limit
-
+	
 		try {
 			const posts = await this.prisma.post.findMany({
-				skip: skip,
-				take: take,
-				orderBy: {
-					date: 'desc' 
-				  },
+				skip,
+				take,
+				orderBy: { date: 'desc' },
 				include: {
 					signatures: {
 						select: {
@@ -78,24 +76,28 @@ export class PostService {
 					}
 				}
 			})
-
-			const scroll =
-				(await this.prisma.post.findMany()).length - skip * take > 0
-			const payloads = posts.map(post => ({
-				id: post.id,
-				title: post.title,
-				filename: post.filename,
-				hash: post.hash,
-				date: post.date,
-				content: Buffer.from(post.content).toString('base64'),
-				userId: post.userId,
-				signatures: post.signatures || {}
-			}))
-
+	
+			const totalCount = await this.prisma.post.count()
+			const scroll = totalCount - skip - take > 0
+	
+			const payloads = posts.map(post => {
+				const isSigned = post.signatures.some(signature =>
+					signature.user.username === req.user.username
+				)
+	
+				return {
+					id: post.id,
+					title: post.title,
+					filename: post.filename,
+					date: post.date,
+					sign: isSigned
+				}
+			})
+	
 			return {
 				result: 'success',
 				data: payloads,
-				scroll: scroll
+				scroll
 			}
 		} catch (error) {
 			return {
@@ -104,6 +106,7 @@ export class PostService {
 			}
 		}
 	}
+	
 
 	async findOne(id: number, req) {
 		try {

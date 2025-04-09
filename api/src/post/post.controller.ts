@@ -18,10 +18,10 @@ export class PostController {
 	@ApiResponse({ status: 200, description: 'Список постов' })
 	@ApiQuery({ name: 'page', required: false, example: '1', description: 'Номер страницы' })
 	@ApiQuery({ name: 'limit', required: false, example: '10', description: 'Количество постов на странице' })
-	findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+	findAll(@Request() req, @Query('page') page?: string, @Query('limit') limit?: string) {
 		const pageNumber = parseInt(page || '1', 10)
 		const limitNumber = parseInt(limit || '10', 10)
-		return this.postService.findAll(pageNumber, limitNumber)
+		return this.postService.findAll(pageNumber, limitNumber, req)
 	} 
 
 	@UseGuards(JwtAuthGuard)
