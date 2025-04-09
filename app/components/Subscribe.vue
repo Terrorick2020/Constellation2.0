@@ -22,10 +22,11 @@
         :src="pdfFile"
         type="application/pdf"
         width="90%"
+        height="90%"
         />
     </div>
 
-    <div class="w-full flex justify-start  p-5">
+    <div class="w-full flex justify-start p-5">
       <el-upload
         v-if="!isDelivered"
         ref="upload"
@@ -199,7 +200,7 @@ onMounted(() => {
   justify-content: center; 
   margin-top: 30px; 
   width: 100%;
-  min-height: 50vh;
+  height: 90vh;
   overflow: hidden;
 }
 </style>
