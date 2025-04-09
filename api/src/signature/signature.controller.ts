@@ -25,7 +25,6 @@ export class SignatureController {
 		@UploadedFile() file: Express.Multer.File,
 		@Request() req
 	) {
-		console.log(postId)
 		return this.signatureService.create(+postId, file, req)
 	}
 

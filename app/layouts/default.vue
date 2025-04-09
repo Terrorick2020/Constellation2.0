@@ -10,10 +10,11 @@
 <script setup lang="ts">
 const { $socket } = useNuxtApp()
 
-
-onMounted(() => {
-  $socket.on('new_notification', (data) => {
-    console.log('Message from server:', data)
+if (process.client) {
+  onMounted(() => {
+    $socket.on('new_notification', (data) => {
+      console.log('Message from server:', data)
+    })
   })
-})
+}
 </script>

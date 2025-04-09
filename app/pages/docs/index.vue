@@ -160,7 +160,7 @@ const getDocs = async (page = 1, limit = 5) => {
     visibleDocs.value = listDocs.slice(0, listDocs.length)
   } catch (error) {
   } finally {
-    // load.value = false
+    load.value = false
   }
 }
 
