@@ -16,11 +16,18 @@
   </aside>
 </template>
 <script setup lang="ts">
-const navigationLinks = [
-  { id: 1, title: 'Пользователи', path: '/profiles', iconName: 'compass', isBadge: false },
-  { id: 2, title: 'Документы', path: '/docs', iconName: 'search', isBadge: true },
-  { id: 3, title: 'Чаты', path: '/chats', iconName: 'message', isBadge: true },
-  { id: 4, title: 'Уведомления', path: '/offers', iconName: 'fire', isBadge: true },
-  { id: 5, title: 'Настройки', path: '/settings', iconName: 'settings', isBadge: false },
-]
+import type { Badges } from '~/types/props'
+
+const props = defineProps<{
+  badges: Badges
+  setBadges: (newBadges: Badges) => void
+}>()
+
+const navigationLinks = reactive([
+  { id: 1, title: 'Пользователи', path: '/profiles', iconName: 'compass', isBadge: props.badges.profIsBadge },
+  { id: 2, title: 'Документы', path: '/docs', iconName: 'search', isBadge: props.badges.docsIsBadge },
+  { id: 3, title: 'Чаты', path: '/chats', iconName: 'message', isBadge: props.badges.chatsIsBadge },
+  { id: 4, title: 'Уведомления', path: '/offers', iconName: 'fire', isBadge: props.badges.offersIsBadge },
+  { id: 5, title: 'Настройки', path: '/settings', iconName: 'settings', isBadge: props.badges.setIsBadge },
+])
 </script>

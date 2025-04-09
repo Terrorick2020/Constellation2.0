@@ -56,8 +56,6 @@ const loadDocs = async () => {
 
   if (!fileList.value.length) return;
 
-  const filesList: FormData[] = []
-
   for (let file: UploadFile of fileList.value) {
       const formData = new FormData()
       formData.append('title', file.raw.name)
@@ -76,11 +74,12 @@ const loadDocs = async () => {
           'Authorization': `Bearer ${accessToken}`
         },
       })
-
-      filesList.push(formData)
   }
 
   props.setDrawer( false )
+
+  reloadNuxtApp()
+
 }
 
 
