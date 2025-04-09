@@ -5,16 +5,17 @@
         v-model="searchQuery"
         size="large"
         placeholder="Поиск по названию и др...."
-        class="h-[60px] max-w-full lg:max-w-[835px]"
+        class="h-[60px] max-w-full w-full"
         @input="searchDocs"
       >
         <template #prefix>
           <SvgoSearch filled class="h-6 w-[30px]" :font-controlled="false" />
         </template>
       </el-input>
-      <div v-if="authStore.isAdmin" class="flex items-center gap-x-[10px] grow">
+      <div class="flex items-center gap-x-[10px] grow">
         <Sort @sortChange="handleSortChange" />
         <UIButton
+          v-if="authStore.isAdmin"
           ref="add"
           icon-name="plus"
           :class="{ '!bg-white': false }"
@@ -63,18 +64,19 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import {useAuthStore} from "~/stores/auth"
+import { useAuthStore } from '~/stores/auth'
 import { BASE_URL } from '~/env/requests.env'
 import axios from 'axios'
 
-
 const authStore = useAuthStore()
 
-const targetDocId = ref<string>( '' )
-const percentage = ref<number>( 50 )
-const searchQuery = ref( '' )
-const load = ref( true )
-const sortOption = ref<string>( '1' ) // Значение по умолчанию для сортировки
+const targetDocId = ref<string>('')
+const percentage = ref<number>(50)
+const searchQuery = ref('')
+const load = ref(false)
+const sortOption = ref<string>('1')
+
+const allDataLoaded = ref(false)
 
 const duration = computed(() => Math.floor(percentage.value / 5))
 
@@ -87,8 +89,7 @@ interface Document {
 }
 
 const listDocs: Document[] = []
-
-const visibleDocs = ref<Document[]>(listDocs.slice(0, 5))
+const visibleDocs = ref<Document[]>([])
 
 const searchResults = computed(() => {
   if (!searchQuery.value.trim()) return []
@@ -102,13 +103,13 @@ const sortedDocs = computed(() => {
   const docs = searchQuery.value.trim() ? searchResults.value : visibleDocs.value
   return [...docs].sort((a, b) => {
     switch (sortOption.value) {
-      case '2': // По дате (новые сверху)
+      case '2':
         return new Date(b.date).getTime() - new Date(a.date).getTime()
-      case '3': // По количеству подписей
+      case '3':
         return (b.signatures || 0) - (a.signatures || 0)
-      case '4': // По объему документа
+      case '4':
         return (b.volume || 0) - (a.volume || 0)
-      default: // По умолчанию (релевантность)
+      default:
         return a.id - b.id
     }
   })
@@ -122,12 +123,54 @@ const setDrawer = (value: boolean) => drawer.value = value
 const table = ref(false)
 const setTable = (value: boolean) => table.value = value
 
-const loadMoreDocs = () => {
-  const currentLength = visibleDocs.value.length
-  if (currentLength < listDocs.length) {
-    const newDocs = listDocs.slice(currentLength, currentLength + 5)
-    visibleDocs.value.push(...newDocs)
+let currentPage = 1
+let lastResponseHash = ''
+
+const getDocs = async (page = 1, limit = 5) => {
+  if (allDataLoaded.value) {
+    return
   }
+
+  load.value = true
+  try {
+    const response = await axios.get(`${BASE_URL}/post?page=${page}&limit=${limit}`)
+    const data = response.data.data
+
+    const responseHash = JSON.stringify(data)
+
+    if (responseHash === lastResponseHash) {
+      return
+    }
+
+    lastResponseHash = responseHash
+
+    if (data.length === 0) {
+      allDataLoaded.value = true // Флаг, что всё загружено
+      return
+    }
+
+    data.forEach((doc: any) => {
+      listDocs.push({
+        id: doc.id,
+        title: doc.title,
+        date: doc.date,
+      })
+    })
+
+    visibleDocs.value = listDocs.slice(0, listDocs.length)
+  } catch (error) {
+  } finally {
+    // load.value = false
+  }
+}
+
+const loadMoreDocs = () => {
+  if (load.value || allDataLoaded.value) {
+    return
+  }
+
+  currentPage++
+  getDocs(currentPage)
 }
 
 const onScroll = () => {
@@ -142,54 +185,12 @@ const onScroll = () => {
   }
 }
 
-let timeout: ReturnType<typeof setTimeout>
-
-watch(searchQuery, () => {
-  clearTimeout(timeout)
-  timeout = setTimeout(() => {}, 500)
-})
-
-// Получение документов
-const getDocs = async () => {
-  load.value = true
-  console.log( load.value )
-
-  try {
-    const response = await axios.get(`${BASE_URL}/post`)
-    const data = response.data.data
-
-    data.forEach((doc: any) => {
-      listDocs.push({
-        id: doc.id,
-        title: doc.title,
-        date: doc.date,
-        signatures: doc.signatures || Math.floor(Math.random() * 100), // Пример, если нет данных
-        volume: doc.volume || Math.floor(Math.random() * 50), // Пример, если нет данных
-      })
-    })
-
-    visibleDocs.value = listDocs.slice(0, 5)
-  } catch (error) {
-    console.error('Ошибка при загрузке документов:', error)
-  } finally {
-    // load.value = false
-  }
-}
-
-// Обработчик выбора сортировки
-const handleSortChange = (selectedSort: string) => {
-  sortOption.value = selectedSort
-}
-
-
-
 const getTargetDoc = (id: string) => {
   targetDocId.value = id
 }
 
-
 onMounted(() => {
-  getDocs()
+  getDocs(currentPage)
   window.addEventListener('scroll', onScroll)
 })
 </script>

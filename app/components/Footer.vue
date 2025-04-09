@@ -30,19 +30,41 @@
           <nuxt-link v-else href="/auth/sign-in"><el-button round class="btn-main w-full">Вход/Регистрация</el-button></nuxt-link>
         </div>
         <div class="w-full">
-          <el-button round class="btn-empty w-full" icon="svgo-bomb" @click="handleErr">Сообщить о проблеме</el-button>
+          <el-button round class="btn-empty w-full" icon="svgo-bomb" @click="dialogVisible = true">Сообщить о проблеме</el-button>
         </div>
       </div>
     </div>
   </footer>
+
+  <el-dialog
+    v-model="dialogVisible"
+    title="Cообщить об ошибке?"
+    width="500"
+    :before-close="handleClose"
+  >
+    <span>Система автоматически определит место возникновения ошибки после подтверждения действия.</span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button class="s_btn" @click="dialogVisible = false">Отклонить</el-button>
+        <el-button class="f_btn" type="primary" @click="dialogVisible = false">
+          Подтвердить
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
+const dialogVisible = ref(false)
+
+const handleClose = (done: () => void) => {
+  done()
+}
+
 const isAuth = ref<boolean>( true )
 
-const handleErr = () => {
-  console.log( 'сообщиь о проблеме' )
-}
 </script>
 
 <style scoped lang="scss">
@@ -51,6 +73,33 @@ const handleErr = () => {
   --el-button-hover-border-color: #ff6b464d;
 
   color: #000000;;
+}
+
+.f_btn {
+  background: linear-gradient(#ff6c46, #e44820);
+  color: #ffffff;
+  font-weight: 800 !important;
+  border-color: #724439;
+  border-radius: 26px;
+
+  &:active {
+      border-color: #e44820;
+      scale: 0.99;
+  }
+}
+
+.s_btn {
+  font-weight: 800 !important;
+  border-radius: 26px;
+  --el-button-hover-bg-color: #ff6b4616;
+  --el-button-hover-border-color: #ff6b464d;
+
+
+  &:active {
+      border-color: #e44820;
+      background-color: rgb(253, 100, 61)4d;
+      scale: 0.99;
+  }
 }
 </style>
 
