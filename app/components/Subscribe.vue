@@ -55,16 +55,22 @@ import axios from 'axios';
 import { useRoute } from 'vue-router';
 import { ref, computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '~/stores/auth'
+import { useSignStore } from '~/stores/signStore'
+
 
 
 
 const props = defineProps<{
   docId: string;  // Тип для docId
 }>();
+
 const upload = ref<UploadInstance>()
 const keyfile = ref<File>()
 const pdfFile = ref('');
 const isDelivered = ref(false)
+
+const signStore = useSignStore()
+
 //функция для отображения документа
 const getDoc = async () => {
   const {accessToken} = useAuthStore()
@@ -83,12 +89,15 @@ const getDoc = async () => {
   // console.log("Запрос на base64", base64Data);
   pdfFile.value = `data:application/pdf;base64,${base64Data}`;
   // console.log("PDF файл готов", pdfFile.value);
+  signStore.setDocumentStatus(props.docId, getCurrentDoc.data.data.sign ? 'success' : 'failed')
+
 
 };
 
 
 //функция для подписи документов
 // какой id использовать userid или просто id
+
 const SubscribeDoc = async () => {
   console.log("ФУНКЦИЯИ ")
   if (!keyfile.value) return;
@@ -110,7 +119,17 @@ const SubscribeDoc = async () => {
   });
 
   isDelivered.value = subscribeCurrentDoc.data.result === 'success';
+  
+  if (subscribeCurrentDoc.data.result === 'success') {
+    isDelivered.value = true
+    signStore.setDocumentStatus(props.docId, 'success')
+  } else {
+    signStore.setDocumentStatus(props.docId, 'failed')
+  }
   console.log("Подпись успешно создана:", subscribeCurrentDoc);
+  console.log("RESULT", subscribeCurrentDoc.data.result);
+
+  
 };
   
 

@@ -92,7 +92,7 @@ const dialog = ref<boolean>( false )
 const setDialog = ( value: boolean ) => dialog.value = value;
 
 const notiList = ref([])
-const limit = ref(5)
+const limit = ref(9999)
 const page = ref(1)
 const load = ref(true)
 const getNot = async () => {

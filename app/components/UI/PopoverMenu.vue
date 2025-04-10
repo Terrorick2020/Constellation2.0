@@ -77,6 +77,7 @@ const delDoc = async () => {
   });
 
   console.log(delCurrentDoc)
+  reloadNuxtApp()
 
 }
 

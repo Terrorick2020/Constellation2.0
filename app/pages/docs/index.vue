@@ -142,6 +142,10 @@ const getDocs = async (page = 1, limit = 5) => {
 
     }
 
+
+
+
+
     )
     const data = response.data.data
 
@@ -200,8 +204,24 @@ const getTargetDoc = (id: string) => {
   targetDocId.value = id
 }
 
+
+
+const getProgressBar = async () => {
+
+
+  const response = await axios.get(`${BASE_URL}/post`,{
+    headers: {
+      'Authorization': `Bearer ${authStore.accessToken}`
+    }
+
+  })
+  console.log("htcgjyctttt", response)
+
+}
+
 onMounted(() => {
   getDocs(currentPage)
+  getProgressBar()
   window.addEventListener('scroll', onScroll)
 })
 </script>
