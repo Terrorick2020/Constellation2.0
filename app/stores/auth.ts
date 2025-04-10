@@ -186,7 +186,7 @@ export const useAuthStore = defineStore(
         switch (dataRes) {
         case 'success':
 
-          accessToken.value = response.data.access_token
+          accessToken.value = response.data.token
           isAdmin.value = response.data.data.role === 'Admin'
           userId.value = response.data.data.id
           username.value = response.data.data.username
