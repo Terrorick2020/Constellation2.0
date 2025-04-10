@@ -8,6 +8,11 @@
           <!-- TODO: Username -->
           <span class="font-extrabold text-base">{{ props.item.title }} </span>
           <span class="text-sm opacity-80 leading-[140%]">{{ formatDate(props.item.date)}}</span>
+          <span class="text-sm opacity-80 leading-[140%]">
+            {{ documentStatus === 'success' ? '✅ Подписан' : '❌ Не подписан' }}
+          </span>
+
+
           <!-- TODO: Подразделение -->
           <!-- <span class="text-sm opacity-40 leading-[140%]">61 кафедра</span> -->
         </div>
@@ -29,7 +34,14 @@ import { useRouter } from 'vue-router'
 import { useDocumentStore } from '~/stores/documentStore'
 import Avatar from '~/assets/image/avatar.png'
 import type { TPopoverItemProps } from '~/types/UI/popover'
+import { onMounted, ref, computed } from 'vue'
+import axios from 'axios';
+import { BASE_URL, getHeaders } from '~/env/requests.env'
+import { useSignStore } from '~/stores/signStore'
 
+
+
+const signStore = useSignStore()
 const router = useRouter()
 const documentStore = useDocumentStore()
 
@@ -45,6 +57,7 @@ const props = withDefaults(
   }
 )
 
+const documentStatus = computed(() => signStore.getDocumentStatus(props.item.id))
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -89,8 +102,30 @@ const onSelect = (option: (typeof LIST_OPTIONS)[0]) => {
 
 
 
+const checkSign = async () => {
+  const { accessToken } = useAuthStore();
+
+  const check = await axios.get(`${BASE_URL}/post/${props.item.id}`, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    // isSigned.value = check.data.data.sign === true;
+    // console.log("Статус подписи", isSigned.value)
+    const isSigned = check.data.data.sign === true
+    signStore.setDocumentStatus(props.item.id, isSigned ? 'success' : 'failed')
+    console.log("чтото", check)
 
 
+
+}
+
+
+onMounted(() => {
+  checkSign()
+})
 
 
 </script>
