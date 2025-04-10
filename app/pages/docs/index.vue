@@ -145,6 +145,8 @@ const getDocs = async (page = 1, limit = 5) => {
     )
     const data = response.data.data
 
+    console.log( data )
+
     const responseHash = JSON.stringify(data)
 
     if (responseHash === lastResponseHash) {

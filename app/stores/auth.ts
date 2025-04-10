@@ -181,6 +181,8 @@ export const useAuthStore = defineStore(
         const response = await axios.post(`${BASE_URL}${REG_ENDPOINT}`, data)
         const dataRes = response.data.result
 
+        console.log( resData )
+
         switch (dataRes) {
         case 'success':
 
