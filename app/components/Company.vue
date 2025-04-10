@@ -8,7 +8,7 @@
           <!-- TODO: Username -->
           <span class="font-extrabold text-base">{{ props.item.title }} </span>
           <span class="text-sm opacity-80 leading-[140%]">{{ formatDate(props.item.date)}}</span>
-          <span class="text-sm opacity-80 leading-[140%]">
+          <span v-if="!authStore.isAdmin" class="text-sm opacity-80 leading-[140%]">
             {{ documentStatus === 'success' ? '✅ Подписан' : '❌ Не подписан' }}
           </span>
 
@@ -38,17 +38,19 @@ import { onMounted, ref, computed } from 'vue'
 import axios from 'axios';
 import { BASE_URL, getHeaders } from '~/env/requests.env'
 import { useSignStore } from '~/stores/signStore'
+import { useAuthStore } from '~/stores/auth'
 
 
 
 const signStore = useSignStore()
 const router = useRouter()
 const documentStore = useDocumentStore()
+const authStore = useAuthStore()
 
 const props = withDefaults(
   defineProps<{
     indexPage?: boolean
-    item: { name: string; date: string; title: string, slug: string, id: string}
+    item: { name: string; date: string; title: string, signCount: number,usersCount: number, slug: string, id: string}
     func: (id: string) => void
     setTable: (value: boolean) => void
   }>(),
@@ -80,11 +82,6 @@ const LIST_OPTIONS: TPopoverItemProps[] = [
   // { key: 'statistics', label: 'Посмотреть статистику' },
   // { key: 'delete', label: 'Удалить документ' }
 ]
-
-import {useAuthStore} from "~/stores/auth"
-
-
-const authStore = useAuthStore()
 
 if (authStore.isAdmin) {
 

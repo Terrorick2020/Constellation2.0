@@ -25,7 +25,7 @@
         <el-table-column property="fullname" label="Фио" sortable />
       </el-table>
       <br>
-      <el-button class="w-full mt-5"  @click="sendNotify">Отправить напомнание неподписавшим</el-button>
+      <el-button v-if="isNeed" class="w-full mt-5"  @click="sendNotify">Отправить напомнание неподписавшим</el-button>
     </el-drawer>
 </template>
   
@@ -44,9 +44,11 @@ const props = defineProps<{
 }>()
 
 const table = ref(false)
+const isNeed = ref(true)
 
 const handleClose = (done) => {
-    props.setTable( false )
+  done()
+  props.setTable( false )
 }
 
 const sendNotify = () => {
@@ -84,7 +86,7 @@ const getStatistic = async(newValue:string) => {
   })
   console.log("ЧТО ТО", getStat)
 
-
+  isNeed.value = !getStat.data.data.every(item => item.signed)
 }
 
 

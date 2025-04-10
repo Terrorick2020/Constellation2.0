@@ -88,7 +88,7 @@ watch(searchQuery, (newQuery) => {
 const getUsers = async () => {
   load.value = true;
 
-  const { accessToken } = useAuthStore();
+  const { accessToken, userId } = useAuthStore();
   const response = await axios.get(`${BASE_URL}/user`, {
     headers: {
       'Content-Type': 'application/json',
@@ -96,7 +96,9 @@ const getUsers = async () => {
     }
   });
 
-  users.value = response.data.map((usr: any) => ({
+  users.value = response.data
+  .filter((usr: any) => usr.id !== userId)
+  .map((usr: any) => ({
     id: usr.id,
     username: usr.username,
     name: usr.name,

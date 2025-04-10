@@ -83,7 +83,6 @@ const getDoc = async () => {
 
   isDelivered.value = getCurrentDoc.data.data.sign
 
-  isDelivered.value = getCurrentDoc.data.data.delivered
   console.log("Запрос сделан", getCurrentDoc.data.data)
   const base64Data = getCurrentDoc.data.data.content;
   // console.log("Запрос на base64", base64Data);
@@ -117,8 +116,6 @@ const SubscribeDoc = async () => {
     },
 
   });
-
-  isDelivered.value = subscribeCurrentDoc.data.result === 'success';
   
   if (subscribeCurrentDoc.data.result === 'success') {
     isDelivered.value = true

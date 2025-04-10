@@ -36,7 +36,6 @@ import { BASE_URL} from '~/env/requests.env'
 import { useAuthStore } from '~/stores/auth'
 import { ApiResType } from '../../types/auth'
 
-
 const props = defineProps<{
     dialog: boolean
     setDialog: (value: boolean) => void

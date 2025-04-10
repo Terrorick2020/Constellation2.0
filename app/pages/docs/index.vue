@@ -39,7 +39,7 @@
                 <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">Количество людей, подписавших документ</h2>
                 <div class="demo-progress">
                   <el-progress
-                    :percentage="percentage"
+                    :percentage="Math.floor((doc.signCount / doc.usersCount) * 100)"
                     :stroke-width="15"
                     status="success"
                     striped
@@ -49,7 +49,7 @@
                     color="#409EFF"
                   />
                 </div>
-                <p class="text-sm text-gray-500">Подписали: {{ 50 }} из {{ 100 }}</p>
+                <p class="text-sm text-gray-500">Подписали: {{ doc.signCount }} из {{ doc.usersCount }}</p>
               </div>
             </div>
           </div>
@@ -84,6 +84,8 @@ interface Document {
   id: number
   title: string
   date: string
+  signCount: number
+  usersCount: number
   signatures?: number
   volume?: number
 }
@@ -169,6 +171,8 @@ const getDocs = async (page = 1, limit = 5) => {
         id: doc.id,
         title: doc.title,
         date: doc.date,
+        signCount: doc.sigCount,
+        usersCount: doc.userCount,
       })
     })
 
