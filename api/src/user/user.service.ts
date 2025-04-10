@@ -32,10 +32,11 @@ export class UserService {
 	async getSubs(postId: number) {
 		try {
 			const users = await this.prisma.user.findMany({
+				where: {role: 'Guest'},
 				select: {
 					id: true,
 					name: true
-				}
+				},
 			})
 	
 			const signedUsers = await this.prisma.signature.findMany({
