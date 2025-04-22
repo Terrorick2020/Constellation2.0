@@ -189,11 +189,12 @@ onMounted(() => {
 
 
 .no-users-message{
-  text-align: center;
-  padding: 10px;
-  border-radius: 15px;
-  font-size: 23px;
-  margin-top: 140px;
+  width: 100%;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
 }
 
 
