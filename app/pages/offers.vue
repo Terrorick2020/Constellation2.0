@@ -39,16 +39,23 @@
       </div>
       <el-container class="w-full notify" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
         <el-main style="padding: 0; margin: 0; background: transparent;">
-          <div class="mt-[15px] flex flex-col gap-[15px]">
-            <el-card style="width: 100%; border-radius: 10px;" v-for="item in notiList">
-            <template #header>
-              <div class="card-header">
-                <span>{{ item.title }}</span>
-              </div>
-            </template>
-            <p style="white-space: pre-line;">{{item.description}}</p>
-            </el-card>
-          </div>
+          <template v-if="notiList.length > 0">
+            <div class="mt-[15px] flex flex-col gap-[15px]">
+              <el-card style="width: 100%; border-radius: 10px;" v-for="item in notiList">
+              <template #header>
+                <div class="card-header">
+                  <span>{{ item.title }}</span>
+                </div>
+              </template>
+              <p style="white-space: pre-line;">{{item.description}}</p>
+              </el-card>
+            </div>
+          </template>
+          <template v-else>
+            <div class="no-notify-message">
+              Уведомлений пока нет😔
+            </div>
+          </template>
         </el-main>
       </el-container>
       <!-- <div class="el-select__selected-item">
@@ -106,7 +113,6 @@ const getNot = async () => {
 
   });
 
-  // console.log("ГОВНО", getNotQuery)
   notiList.value = getNotQuery.data.data
   console.log("фывфывфв")
   load.value = false;
@@ -132,5 +138,12 @@ onMounted (() => {
 
 
 <style scoped lang="scss">
-
+.no-notify-message{
+  width: 100%;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
 </style>

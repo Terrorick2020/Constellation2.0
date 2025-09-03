@@ -24,35 +24,42 @@
       </div>
     </div>
 
-    <el-container class="w-full docs" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
+    <el-container class="w-full docs list-load" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
       <el-main style="padding: 0; margin: 0; background: transparent;">
-        <div class="space-y-[10px]">
-          <div
-            v-for="(doc, index) in displayedDocs"
-            :key="doc.id"
-            class="flex w-full flex-col gap-[10px]"
-          >
-            <Company :func="getTargetDoc" :item="doc" :setTable="setTable" index-page />
+        <div class="content-box space-y-[10px]" >
+          <template v-if="displayedDocs.length > 0">
+            <div
+              v-for="(doc, index) in displayedDocs"
+              :key="doc.id"
+              class="flex w-full flex-col gap-[10px]"
+            >
+              <Company :func="getTargetDoc" :item="doc" :setTable="setTable" index-page />
 
-            <div class="border border-black/15 p-4 flex flex-col gap-y-[20px] bg-white rounded-2xl">
-              <div class="flex flex-col gap-[10px]">
-                <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">Количество людей, подписавших документ</h2>
-                <div class="demo-progress">
-                  <el-progress
-                    :percentage="Math.floor((doc.signCount / doc.usersCount) * 100)"
-                    :stroke-width="15"
-                    status="success"
-                    striped
-                    striped-flow
-                    :duration="duration"
-                    :text-inside="true"
-                    color="#409EFF"
-                  />
+              <div class="border border-black/15 p-4 flex flex-col gap-y-[20px] bg-white rounded-2xl">
+                <div class="flex flex-col gap-[10px]">
+                  <h2 class="text-xs font-extrabold text-black/50 uppercase leading-[110%]">Количество людей, подписавших документ</h2>
+                  <div class="demo-progress">
+                    <el-progress
+                      :percentage="Math.floor((doc.signCount / doc.usersCount) * 100)"
+                      :stroke-width="15"
+                      status="success"
+                      striped
+                      striped-flow
+                      :duration="duration"
+                      :text-inside="true"
+                      color="#409EFF"
+                    />
+                  </div>
+                  <p class="text-sm text-gray-500">Подписали: {{ doc.signCount }} из {{ doc.usersCount }}</p>
                 </div>
-                <p class="text-sm text-gray-500">Подписали: {{ doc.signCount }} из {{ doc.usersCount }}</p>
               </div>
             </div>
-          </div>
+          </template>
+          <template v-else>
+            <div class="no-docs-message">
+              К сожалению, администратор пока не вывесил документы😔
+            </div>
+          </template>
         </div>
       </el-main>
     </el-container>
@@ -73,7 +80,7 @@ const authStore = useAuthStore()
 const targetDocId = ref<string>('')
 const percentage = ref<number>(50)
 const searchQuery = ref('')
-const load = ref(false)
+const load = ref(true)
 const sortOption = ref<string>('1')
 
 const allDataLoaded = ref(false)
@@ -89,6 +96,8 @@ interface Document {
   signatures?: number
   volume?: number
 }
+
+
 
 const listDocs: Document[] = []
 const visibleDocs = ref<Document[]>([])
@@ -239,5 +248,13 @@ onMounted(() => {
 }
 .btn-add {
   height: 100%;
+}
+.no-docs-message{
+  width: 100%;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
 }
 </style>

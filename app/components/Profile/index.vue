@@ -13,36 +13,44 @@
     </el-input>
 
     <!-- Контейнер для карточек -->
-    <el-container class="w-full profiles" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
+    <el-container class="w-full profiles list-load" style="padding: 0; margin: 0; background: transparent;" v-loading="load">
       <el-main style="padding: 0; margin: 0; background: transparent;">
         <div class="item-container">
-          <el-card
-            v-for="o in filteredUsers"
-            :key="o.username"
-            class="user-card"
-            shadow="always"
-          >
-            <div class="user-card-content">
-              <el-avatar :size="48" :src="Avatar" class="border border-black/15" />
-              <div class="user-info">
-                <h4 class="user-name">{{ o.username }}</h4>
-                <h5 class="user-fio">{{ o.name }}</h5>
+          <template v-if="filteredUsers.length > 0">
+            <el-card
+              v-for="o in filteredUsers"
+              :key="o.username"
+              class="user-card"
+              shadow="always"
+            >
+              <div class="user-card-content">
+                <el-avatar :size="48" :src="Avatar" class="border border-black/15" />
+                <div class="user-info">
+                  <h4 class="user-name">{{ o.username }}</h4>
+                  <h5 class="user-fio">{{ o.name }}</h5>
+                </div>
+                <NuxtLink :to="`/profiles/${o.id}`">
+                  <el-button class="profile-description">
+                    <span class="mr-2 text-[#ffffff]">Перейти к профилю</span>
+                    <el-icon>
+                      <Right class="text-[#ffffff]" />
+                    </el-icon>
+                  </el-button>
+                </NuxtLink>
               </div>
-              <NuxtLink :to="`/profiles/${o.id}`">
-                <el-button class="profile-description">
-                  <span class="mr-2 text-[#ffffff]">Перейти к профилю</span>
-                  <el-icon>
-                    <Right class="text-[#ffffff]" />
-                  </el-icon>
-                </el-button>
-              </NuxtLink>
+            </el-card>
+          </template>
+          <template v-else>
+            <div class="no-users-message">
+              К сожалению, пока никто не зарегистрировался😔
             </div>
-          </el-card>
+          </template>
         </div>
       </el-main>
     </el-container>
   </div>
 </template>
+
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
@@ -63,7 +71,7 @@ interface usersAll {
 const users = ref<usersAll[]>([]);
 const filteredUsers = ref<usersAll[]>([]);
 const searchQuery = ref('');
-const load = ref(false);
+const load = ref(true);
 
 const filterUsers = () => {
   const query = searchQuery.value.toLowerCase().trim();
@@ -105,7 +113,6 @@ const getUsers = async () => {
   }));
 
   filteredUsers.value = users.value;
-  
   setTimeout(() => {
     load.value = false;  
   }, 2000);
@@ -116,6 +123,7 @@ const getUsers = async () => {
 
 
 onMounted(() => {
+  
   getUsers();
   
 });
@@ -178,4 +186,16 @@ onMounted(() => {
 .is-loading {
   background: transparent !important;
 }
+
+
+.no-users-message{
+  width: 100%;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+
+
 </style>
