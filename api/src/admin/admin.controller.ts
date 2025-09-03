@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
-import { multerOptions } from 'src/config/multer.config'
+import { multerConfig } from 'src/config/multer.config'
 import { CreatePostDto } from 'src/post/dto/create-post.dto'
 import { UpdatePostDto } from 'src/post/dto/update-post.dto'
 import { PostService } from 'src/post/post.service'
@@ -30,7 +30,7 @@ export class AdminController {
 		private postService: PostService
 	) {}
 
-	@UseInterceptors(FileInterceptor('file', multerOptions))
+	@UseInterceptors(FileInterceptor('file', multerConfig))
 	@Post('post')
 	create(
 		@UploadedFile() file: Express.Multer.File,

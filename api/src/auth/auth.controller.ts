@@ -10,7 +10,14 @@ import {
 	UseInterceptors,
 	UploadedFile
 } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiParam } from '@nestjs/swagger'
+import {
+	ApiTags,
+	ApiOperation,
+	ApiResponse,
+	ApiBearerAuth,
+	ApiBody,
+	ApiParam
+} from '@nestjs/swagger'
 import { AuthService } from './auth.service'
 import { RegisterDto } from './dto/register.dto'
 import { LoginDto } from './dto/login.dto'
@@ -19,14 +26,17 @@ import { Response } from 'express'
 import { createReadStream } from 'fs'
 import { FileInterceptor } from '@nestjs/platform-express'
 
-@ApiTags('Auth') 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
 	@Post('register')
 	@ApiOperation({ summary: 'Регистрация пользователя' })
-	@ApiResponse({ status: 201, description: 'Пользователь успешно зарегистрирован' })
+	@ApiResponse({
+		status: 201,
+		description: 'Пользователь успешно зарегистрирован'
+	})
 	@ApiResponse({ status: 400, description: 'Ошибка регистрации' })
 	@ApiBody({ type: RegisterDto })
 	register(@Body() createAuthDto: RegisterDto) {
@@ -37,8 +47,15 @@ export class AuthController {
 	@ApiOperation({ summary: 'Получение публичного ключа пользователя' })
 	@ApiResponse({ status: 200, description: 'Файл публичного ключа' })
 	@ApiResponse({ status: 404, description: 'Ключ не найден' })
-	@ApiParam({ name: 'username', required: true, description: 'Имя пользователя' })
-	async getPublicKey(@Param('username') username: string, @Res() res: Response) {
+	@ApiParam({
+		name: 'username',
+		required: true,
+		description: 'Имя пользователя'
+	})
+	async getPublicKey(
+		@Param('username') username: string,
+		@Res() res: Response
+	) {
 		const file = createReadStream(`./keys/${username}/public.pem`)
 		res.set({
 			'Content-Type': 'application/octet-stream',
