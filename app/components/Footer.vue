@@ -12,15 +12,15 @@
       </div>
       <div class="flex flex-col gap-[10px] w-full lg:w-1/3">
         <div class="flex gap-2 items-center justify-center lg:justify-start text-[#3D5AD2]">
-          <nuxt-link to="/preview">О нас</nuxt-link>
+          <nuxt-link to="/">О нас</nuxt-link>
           <SvgoLink />
         </div>
         <div class="flex gap-2 items-center justify-center lg:justify-start text-[#3D5AD2]">
-          <nuxt-link to="/preview/privacy">Политика конфиденциальности</nuxt-link>
+          <nuxt-link to="/privacy">Политика конфиденциальности</nuxt-link>
           <SvgoLink />
         </div>
         <div class="flex gap-2 items-center justify-center lg:justify-start text-[#3D5AD2]">
-          <nuxt-link href="/preview/rules">Публичная оферта</nuxt-link>
+          <nuxt-link href="/rules">Публичная оферта</nuxt-link>
           <SvgoLink />
         </div>
       </div>
