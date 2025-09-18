@@ -1,16 +1,16 @@
 import {
-    Body,
-    Controller,
-    Get,
-    Param,
-    Post,
-    Put,
-    Query,
-    Request,
-    Res,
-    UploadedFile,
-    UseGuards,
-    UseInterceptors
+	Body,
+	Controller,
+	Get,
+	Param,
+	Post,
+	Put,
+	Query,
+	Request,
+	Res,
+	UploadedFile,
+	UseGuards,
+	UseInterceptors
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Response } from 'express'
@@ -36,7 +36,7 @@ export class ChatsController {
 		@Request() req: any
 	): Promise<ResCreateChat> {
 		const fromUserId = req.user.userId
-		const toUserId = parseInt(createDto.toUser)
+		const toUserId = createDto.toUser
 		return await this.chatsService.createChat(fromUserId, toUserId)
 	}
 
