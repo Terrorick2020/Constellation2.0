@@ -1,11 +1,11 @@
-import { Controller, Get, Param, Query, Post, Body, Put, Delete, UploadedFile, UseInterceptors, UseGuards, Request } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger'
-import { PostService } from './post.service'
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { CreatePostDto } from './dto/create-post.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
-import { FileInterceptor } from '@nestjs/platform-express'
-import { AuthGuard } from '@nestjs/passport'
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { PostService } from './post.service'
 
 @ApiTags('Post') // Группируем эндпоинты в Swagger
 @Controller('post')
@@ -52,7 +52,7 @@ export class PostController {
 		}
 	})
 	create(@Request() req, @Body() dto: CreatePostDto, @UploadedFile() file: Express.Multer.File) {
-		return this.postService.create(req.user.id, dto, file)
+		return this.postService.create(req.user.userId, dto, file)
 	}
 
 	@UseGuards(AuthGuard('jwt'))

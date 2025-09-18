@@ -1,18 +1,20 @@
 import {
-	Body,
-	Controller,
-	Get,
-	Param,
-	Post,
-	Put,
-	Query,
-	Request,
-	Res,
-	UploadedFile,
-	UseInterceptors
+    Body,
+    Controller,
+    Get,
+    Param,
+    Post,
+    Put,
+    Query,
+    Request,
+    Res,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Response } from 'express'
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { multerConfig } from '../config/multer.config'
 import { ChatsService } from './chats.service'
 import type { ChatPreview, ResCreateChat } from './chats.types'
@@ -23,6 +25,7 @@ import { ReadMessagesDto } from './dto/read-messages.dto'
 import { SendMessageWithFileDto } from './dto/send-message-with-file.dto'
 import { SendMessageDto } from './dto/send-messages.dto'
 
+@UseGuards(JwtAuthGuard)
 @Controller('chats')
 export class ChatsController {
 	constructor(private readonly chatsService: ChatsService) {}
@@ -32,14 +35,14 @@ export class ChatsController {
 		@Body() createDto: CreateDto,
 		@Request() req: any
 	): Promise<ResCreateChat> {
-		const fromUserId = req.user.id
+		const fromUserId = req.user.userId
 		const toUserId = parseInt(createDto.toUser)
 		return await this.chatsService.createChat(fromUserId, toUserId)
 	}
 
 	@Get()
 	async getUserChats(@Request() req: any): Promise<ChatPreview[]> {
-		const userId = req.user.id
+		const userId = req.user.userId
 		return await this.chatsService.getUserChats(userId)
 	}
 
@@ -49,7 +52,7 @@ export class ChatsController {
 		@Body() messageData: SendMessageDto,
 		@Request() req: any
 	): Promise<ChatMsg> {
-		const fromUserId = req.user.id
+		const fromUserId = req.user.userId
 		return await this.chatsService.sendMessage(chatId, fromUserId, messageData)
 	}
 
@@ -59,7 +62,7 @@ export class ChatsController {
 		@Query() query: GetMessagesDto,
 		@Request() req: any
 	): Promise<ChatMsg[]> {
-		const userId = req.user.id
+		const userId = req.user.userId
 		return await this.chatsService.getMessages(chatId, userId, query)
 	}
 
@@ -69,7 +72,7 @@ export class ChatsController {
 		@Body() readData: ReadMessagesDto,
 		@Request() req: any
 	): Promise<void> {
-		const userId = req.user.id
+		const userId = req.user.userId
 		await this.chatsService.markMessagesAsRead(chatId, userId, readData)
 	}
 
@@ -84,7 +87,7 @@ export class ChatsController {
 		@Body() messageData: SendMessageWithFileDto,
 		@Request() req: any
 	): Promise<ChatMsg> {
-		const fromUserId = req.user.id
+		const fromUserId = req.user.userId
 		return await this.chatsService.sendMessageWithFile(
 			chatId,
 			fromUserId,
@@ -103,7 +106,7 @@ export class ChatsController {
 		@Res() res: Response,
 		@Request() req: any
 	): Promise<void> {
-		const userId = req.user.id
+		const userId = req.user.userId
 
 		// Проверяем права доступа к файлу
 		const hasAccess = await this.chatsService.checkFileAccess(chatId, userId)
