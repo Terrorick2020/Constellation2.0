@@ -28,14 +28,16 @@ export class ChatsService {
 		toUserId: string
 	): Promise<ResCreateChat> {
 		try {
-			// Проверяем, существует ли уже чат между этими пользователями
-			const existingChat = await this.prismaService.chat.findFirst({
-				where: {
-					participants: {
-						hasEvery: [fromUserId, toUserId]
-					}
+			console.log('DEBUG: createChat - fromUserId:', fromUserId, 'type:', typeof fromUserId)
+			console.log('DEBUG: createChat - toUserId:', toUserId, 'type:', typeof toUserId)
+		// Проверяем, существует ли уже чат между этими пользователями
+		const existingChat = await this.prismaService.chat.findFirst({
+			where: {
+				participants: {
+					hasEvery: [fromUserId.toString(), toUserId.toString()]
 				}
-			})
+			}
+		})
 
 			if (existingChat) {
 				return {
@@ -44,13 +46,13 @@ export class ChatsService {
 				}
 			}
 
-			// Создаем новый чат
-			const chat = await this.prismaService.chat.create({
-				data: {
-					participants: [fromUserId, toUserId],
-					typing: []
-				}
-			})
+		// Создаем новый чат
+		const chat = await this.prismaService.chat.create({
+			data: {
+				participants: [fromUserId.toString(), toUserId.toString()],
+				typing: []
+			}
+		})
 
 			// Создаем записи UserChat для обоих пользователей
 			await this.prismaService.userChat.createMany({

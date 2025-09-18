@@ -37,6 +37,8 @@ export class ChatsController {
 	): Promise<ResCreateChat> {
 		const fromUserId = req.user.userId
 		const toUserId = createDto.toUser
+		console.log('DEBUG: Controller - fromUserId:', fromUserId, 'type:', typeof fromUserId)
+		console.log('DEBUG: Controller - toUserId:', toUserId, 'type:', typeof toUserId)
 		return await this.chatsService.createChat(fromUserId, toUserId)
 	}
 
