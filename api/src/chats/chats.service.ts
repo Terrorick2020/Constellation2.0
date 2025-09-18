@@ -114,7 +114,7 @@ export class ChatsService {
 			const message = await this.prismaService.message.create({
 				data: {
 					chatId,
-					fromUserId,
+					fromUserId: parseInt(fromUserId),
 					text: messageData.text || '',
 					mediaType: file.mimetype,
 					mediaUrl: savedFile.url,
@@ -273,15 +273,15 @@ export class ChatsService {
 				take: query.limit || 50
 			})
 
-			return messages.map(msg => ({
-				id: msg.id,
-				chatId: msg.chatId,
-				fromUser: msg.fromUserId,
-				text: msg.text,
-				created_at: msg.createdAt.getTime(),
-				updated_at: msg.updatedAt.getTime(),
-				is_read: msg.isRead,
-				media_type: msg.mediaType,
+		return messages.map(msg => ({
+			id: msg.id,
+			chatId: msg.chatId,
+			fromUser: msg.fromUserId.toString(),
+			text: msg.text,
+			created_at: msg.createdAt.getTime(),
+			updated_at: msg.updatedAt.getTime(),
+			is_read: msg.isRead,
+			media_type: msg.mediaType,
 				media_url: msg.mediaUrl
 			}))
 		} catch (error) {
@@ -308,14 +308,14 @@ export class ChatsService {
 				throw new Error('Чат не найден или пользователь не является участником')
 			}
 
-			// Обновляем UserChat с последним прочитанным сообщением
-			await this.prismaService.userChat.update({
-				where: {
-					chatId_userId: {
-						chatId,
-						userId
-					}
-				},
+		// Обновляем UserChat с последним прочитанным сообщением
+		await this.prismaService.userChat.update({
+			where: {
+				chatId_userId: {
+					chatId,
+					userId: parseInt(userId)
+				}
+			},
 				data: {
 					lastReadMessageId: data.messageId
 				}
@@ -328,15 +328,15 @@ export class ChatsService {
 					data: { isRead: true }
 				})
 			} else {
-				// Отмечаем все непрочитанные сообщения как прочитанные
-				await this.prismaService.message.updateMany({
-					where: {
-						chatId,
-						fromUserId: { not: userId },
-						isRead: false
-					},
-					data: { isRead: true }
-				})
+			// Отмечаем все непрочитанные сообщения как прочитанные
+			await this.prismaService.message.updateMany({
+				where: {
+					chatId,
+					fromUserId: { not: parseInt(userId) },
+					isRead: false
+				},
+				data: { isRead: true }
+			})
 			}
 		} catch (error) {
 			console.error('Ошибка при отметке сообщений как прочитанных:', error)
