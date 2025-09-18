@@ -7,7 +7,8 @@ COPY . .
 
 RUN npm i --legacy-peer-deps
 
+RUN chmod +x ./wait-for-db.sh
+
 EXPOSE 3000
 
-# Command to run the application
-CMD ["sh", "-c", "npx prisma migrate dev && npm run start"]
+CMD ["sh", "./wait-for-db.sh"]

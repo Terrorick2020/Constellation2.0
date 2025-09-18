@@ -93,32 +93,35 @@ watch(searchQuery, (newQuery) => {
     filterUsers();
   }, 500);
 });
+
+
 const getUsers = async () => {
   load.value = true;
 
-  const { accessToken, userId } = useAuthStore();
-  const response = await axios.get(`${BASE_URL}/user`, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
-    }
-  });
+  try {
+    const { accessToken, userId } = useAuthStore();
+    const response = await axios.get(`${BASE_URL}/user`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
 
-  users.value = response.data
-  .filter((usr: any) => usr.id !== userId)
-  .map((usr: any) => ({
-    id: usr.id,
-    username: usr.username,
-    name: usr.name,
-  }));
+    users.value = response.data
+      .filter((usr: any) => usr.id !== userId)
+      .map((usr: any) => ({
+        id: usr.id,
+        username: usr.username,
+        name: usr.name,
+      }));
 
-  filteredUsers.value = users.value;
-  setTimeout(() => {
-    load.value = false;  
-  }, 2000);
+    filteredUsers.value = users.value;
+  } catch (error) {
+    console.error('Ошибка загрузки пользователей:', error);
+  } finally {
+    load.value = false;
+  }
 };
-
-
 
 
 
@@ -146,7 +149,7 @@ onMounted(() => {
   padding: 5px;
   background-color: #f7f7f7;
   border-radius: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .user-card-content {

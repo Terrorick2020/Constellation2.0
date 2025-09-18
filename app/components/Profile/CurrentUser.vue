@@ -101,8 +101,8 @@ const props = defineProps<{
 }>()
 
 const persone = reactive({
-  name: 'user 1',
-  fio: 'Тараскин Илья Дмитриевич',
+  name: 'Загрузка...',
+  fio: 'Загрузка...',
 })
 
 const route = useRoute();
@@ -155,11 +155,6 @@ const onSelect = (option: (typeof LIST_OPTIONS)[0]) => {
 </script>
 
 
-<!-- три точки:
-     Пожаловаться
-     Заблокировать (ТОЛЛЬКО ДЛОЯ АДМИНА)
-     Заблокать
-      -->
 
 
 <style scoped>

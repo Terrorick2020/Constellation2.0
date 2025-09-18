@@ -20,7 +20,7 @@
     "crossws": "^0.3.4",
     "element-plus": "^2.9.3",
     "laravel-echo": "^2.0.2",
-    "nuxt": "^3.15.4",
+    "nuxt": "^3.19.0",
     "nuxt-socket-io": "^3.0.13",
     "nuxt-svgo": "^4.0.14",
     "nuxt-viewport": "^2.2.0",

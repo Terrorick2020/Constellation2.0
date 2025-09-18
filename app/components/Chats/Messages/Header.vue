@@ -5,7 +5,7 @@
     </button>
     <div class="flex flex-col items-center">
       <div class="sm font-semibold text-black">Britva</div>
-      <div class="text-sm text-gray-400">Барбершоп</div>
+      <div class="text-sm text-gray-400">ты</div>
     </div>
     <div class="flex items-center gap-x-[10px]">
       <UIPopoverMenu :list="LIST_OPTIONS" @select="onSelect">
