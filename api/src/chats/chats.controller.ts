@@ -1,16 +1,16 @@
 import {
-	Body,
-	Controller,
-	Get,
-	Param,
-	Post,
-	Put,
-	Query,
-	Request,
-	Res,
-	UploadedFile,
-	UseGuards,
-	UseInterceptors
+    Body,
+    Controller,
+    Get,
+    Param,
+    Post,
+    Put,
+    Query,
+    Request,
+    Res,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Response } from 'express'
@@ -39,6 +39,14 @@ export class ChatsController {
 		const toUserId = createDto.toUser
 		console.log('DEBUG: Controller - fromUserId:', fromUserId, 'type:', typeof fromUserId)
 		console.log('DEBUG: Controller - toUserId:', toUserId, 'type:', typeof toUserId)
+		console.log('DEBUG: Controller - createDto:', createDto)
+		console.log('DEBUG: Controller - req.body:', req.body)
+		
+		// Проверяем, что toUser передан
+		if (!toUserId) {
+			throw new Error('Поле toUser обязательно для заполнения');
+		}
+		
 		return await this.chatsService.createChat(fromUserId, toUserId)
 	}
 

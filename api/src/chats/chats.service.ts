@@ -31,6 +31,11 @@ export class ChatsService {
 			console.log('DEBUG: createChat - fromUserId:', fromUserId, 'type:', typeof fromUserId)
 			console.log('DEBUG: createChat - toUserId:', toUserId, 'type:', typeof toUserId)
 			
+			// Проверяем, что toUserId не пустой
+			if (!toUserId || toUserId === 'undefined' || toUserId === 'null') {
+				throw new Error('toUserId не может быть пустым');
+			}
+			
 			// Находим пользователя по username, если toUserId не является ID
 			let toUser;
 			// Проверяем, является ли toUserId уже ID пользователя (cuid формат)
