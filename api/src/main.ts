@@ -1,4 +1,3 @@
-import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import * as dotenv from 'dotenv'
@@ -9,12 +8,17 @@ dotenv.config()
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule)
 	
-	// Добавляем глобальный валидатор
-	app.useGlobalPipes(new ValidationPipe({
-		whitelist: true,
-		forbidNonWhitelisted: true,
-		transform: true
-	}))
+	// Добавляем глобальный валидатор (временно отключен для отладки)
+	// app.useGlobalPipes(new ValidationPipe({
+	// 	whitelist: true,
+	// 	forbidNonWhitelisted: false,
+	// 	transform: true,
+	// 	skipMissingProperties: false,
+	// 	validationError: {
+	// 		target: false,
+	// 		value: false
+	// 	}
+	// }))
 	
 	// app.setGlobalPrefix('api')
 	// Настройка CORS
