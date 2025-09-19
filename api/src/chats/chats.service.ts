@@ -30,47 +30,71 @@ export class ChatsService {
 		try {
 			console.log('DEBUG: createChat - fromUserId:', fromUserId, 'type:', typeof fromUserId)
 			console.log('DEBUG: createChat - toUserId:', toUserId, 'type:', typeof toUserId)
-		// Проверяем, существует ли уже чат между этими пользователями
-		const existingChat = await this.prismaService.chat.findFirst({
-			where: {
-				participants: {
-					hasEvery: [fromUserId.toString(), toUserId.toString()]
+			
+			// Находим пользователя по username, если toUserId не является ID
+			let toUser;
+			// Проверяем, является ли toUserId уже ID пользователя (cuid формат)
+			if (toUserId.length > 20) {
+				// toUserId - это ID пользователя
+				toUser = await this.prismaService.user.findUnique({
+					where: { id: toUserId }
+				});
+				
+				if (!toUser) {
+					throw new Error(`Пользователь с ID "${toUserId}" не найден`);
+				}
+			} else {
+				// toUserId - это username
+				toUser = await this.prismaService.user.findUnique({
+					where: { username: toUserId }
+				});
+				
+				if (!toUser) {
+					throw new Error(`Пользователь с username "${toUserId}" не найден`);
 				}
 			}
-		})
+
+			// Проверяем, существует ли уже чат между этими пользователями
+			const existingChat = await this.prismaService.chat.findFirst({
+				where: {
+					participants: {
+						hasEvery: [fromUserId, toUser.id]
+					}
+				}
+			})
 
 			if (existingChat) {
 				return {
 					chatId: existingChat.id,
-					toUser: toUserId
+					toUser: toUser.username
 				}
 			}
 
-		// Создаем новый чат
-		const chat = await this.prismaService.chat.create({
-			data: {
-				participants: [fromUserId.toString(), toUserId.toString()],
-				typing: []
-			}
-		})
+			// Создаем новый чат
+			const chat = await this.prismaService.chat.create({
+				data: {
+					participants: [fromUserId, toUser.id],
+					typing: []
+				}
+			})
 
 			// Создаем записи UserChat для обоих пользователей
 			await this.prismaService.userChat.createMany({
 				data: [
 					{
 						chatId: chat.id,
-						userId: parseInt(fromUserId)
+						userId: fromUserId
 					},
 					{
 						chatId: chat.id,
-						userId: parseInt(toUserId)
+						userId: toUser.id
 					}
 				]
 			})
 
 			return {
 				chatId: chat.id,
-				toUser: toUserId
+				toUser: toUser.username
 			}
 		} catch (error) {
 			console.error('Ошибка при создании чата:', error)
@@ -116,7 +140,7 @@ export class ChatsService {
 			const message = await this.prismaService.message.create({
 				data: {
 					chatId,
-					fromUserId: parseInt(fromUserId),
+					fromUserId: fromUserId,
 					text: messageData.text || '',
 					mediaType: file.mimetype,
 					mediaUrl: savedFile.url,
@@ -139,7 +163,7 @@ export class ChatsService {
 			const resultMessage: ChatMsg = {
 				id: message.id,
 				chatId: message.chatId,
-				fromUser: message.fromUserId.toString(),
+				fromUser: message.fromUserId,
 				text: message.text,
 				created_at: message.createdAt.getTime(),
 				updated_at: message.updatedAt.getTime(),
@@ -200,7 +224,7 @@ export class ChatsService {
 			const message = await this.prismaService.message.create({
 				data: {
 					chatId,
-					fromUserId: parseInt(fromUserId),
+					fromUserId: fromUserId,
 					text: messageData.text,
 					isRead: false
 				}
@@ -218,7 +242,7 @@ export class ChatsService {
 			const resultMessage: ChatMsg = {
 				id: message.id,
 				chatId: message.chatId,
-				fromUser: message.fromUserId.toString(),
+				fromUser: message.fromUserId,
 				text: message.text,
 				created_at: message.createdAt.getTime(),
 				updated_at: message.updatedAt.getTime(),
@@ -315,7 +339,7 @@ export class ChatsService {
 			where: {
 				chatId_userId: {
 					chatId,
-					userId: parseInt(userId)
+					userId: userId
 				}
 			},
 				data: {
@@ -334,7 +358,7 @@ export class ChatsService {
 			await this.prismaService.message.updateMany({
 				where: {
 					chatId,
-					fromUserId: { not: parseInt(userId) },
+					fromUserId: { not: userId },
 					isRead: false
 				},
 				data: { isRead: true }
@@ -392,7 +416,7 @@ export class ChatsService {
 	async getUserChats(userId: string): Promise<ChatPreview[]> {
 		try {
 		const userChats = await this.prismaService.userChat.findMany({
-			where: { userId: parseInt(userId) },
+			where: { userId: userId },
 				include: {
 					chat: {
 						include: {
@@ -423,7 +447,7 @@ export class ChatsService {
 				if (!otherParticipantId) continue
 
 				const otherUser = await this.prismaService.user.findUnique({
-					where: { id: parseInt(otherParticipantId) }
+					where: { id: otherParticipantId }
 				})
 
 				if (!otherUser) continue
@@ -432,7 +456,7 @@ export class ChatsService {
 				const unreadCount = await this.prismaService.message.count({
 					where: {
 						chatId: chat.id,
-						fromUserId: { not: parseInt(userId) },
+						fromUserId: { not: userId },
 						isRead: false
 					}
 				})
@@ -440,7 +464,7 @@ export class ChatsService {
 				chatPreviews.push({
 					chatId: chat.id,
 					toUser: {
-						id: otherUser.id.toString(),
+						id: otherUser.id,
 						name: otherUser.name,
 						username: otherUser.username,
 						division: otherUser.division,

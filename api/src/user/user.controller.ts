@@ -1,17 +1,17 @@
-import { Controller, Get, Param, Post, Body, Put, Delete, UseGuards } from '@nestjs/common'
-import { UserService } from './user.service'
-import { CreateUserDto } from './dto/create-user.dto'
-import { UpdateUserDto } from './dto/update-user.dto'
-import { RegisterDto } from 'src/auth/dto/register.dto'
-import {
-	ApiTags,
-	ApiOperation,
-	ApiResponse,
-	ApiBody,
-	ApiParam
-} from '@nestjs/swagger'
-import { ErrorResponseDto } from './dto/error-response.dto' // Подключаем DTO для ошибок
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
+import {
+    ApiBody,
+    ApiOperation,
+    ApiParam,
+    ApiResponse,
+    ApiTags
+} from '@nestjs/swagger'
+import { RegisterDto } from 'src/auth/dto/register.dto'
+import { CreateUserDto } from './dto/create-user.dto'
+import { ErrorResponseDto } from './dto/error-response.dto'; // Подключаем DTO для ошибок
+import { UpdateUserDto } from './dto/update-user.dto'
+import { UserService } from './user.service'
 
 @ApiTags('User') // Группируем эндпоинты в Swagger
 @Controller('user')
@@ -47,9 +47,9 @@ export class UserController {
 		description: 'Пользователь не найден',
 		type: ErrorResponseDto // Ошибка с типом ErrorResponseDto
 	})
-	@ApiParam({ name: 'id', type: 'number', description: 'ID пользователя' })
+	@ApiParam({ name: 'id', type: 'string', description: 'ID пользователя' })
 	findOne(@Param('id') id: string) {
-		return this.userService.findOne(+id)
+		return this.userService.findOne(id)
 	}
 
 	@Post()
@@ -81,9 +81,9 @@ export class UserController {
 		description: 'Пользователь не найден',
 		type: ErrorResponseDto 
 	})
-	@ApiParam({ name: 'id', type: 'number', description: 'ID пользователя' })
+	@ApiParam({ name: 'id', type: 'string', description: 'ID пользователя' })
 	update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-		return this.userService.update(+id, updateUserDto)
+		return this.userService.update(id, updateUserDto)
 	}
 
 	@Delete(':id')
@@ -97,8 +97,8 @@ export class UserController {
 		description: 'Пользователь не найден',
 		type: ErrorResponseDto 
 	})
-	@ApiParam({ name: 'id', type: 'number', description: 'ID пользователя' })
+	@ApiParam({ name: 'id', type: 'string', description: 'ID пользователя' })
 	remove(@Param('id') id: string) {
-		return this.userService.remove(+id)
+		return this.userService.remove(id)
 	}
 }

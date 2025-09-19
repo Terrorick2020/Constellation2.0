@@ -1,17 +1,17 @@
 import {
-	Body,
-	Controller,
-	Delete,
-	ForbiddenException,
-	Get,
-	Param,
-	Patch,
-	Post,
-	Put,
-	Request,
-	UploadedFile,
-	UseGuards,
-	UseInterceptors
+    Body,
+    Controller,
+    Delete,
+    ForbiddenException,
+    Get,
+    Param,
+    Patch,
+    Post,
+    Put,
+    Request,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
@@ -73,17 +73,17 @@ export class AdminController {
 
 	@Put('user/:id')
 	updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-		return this.userService.update(+id, updateUserDto)
+		return this.userService.update(id, updateUserDto)
 	}
 	@Patch('user/:id')
 	setAdmin(@Param('id') id: string, @Request() req) {
 		if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin')
-		return this.userService.setAdmin(+id)
+		return this.userService.setAdmin(id)
 	}
 
 	@Delete('user/:id')
 	removeUser(@Param('id') id: string, @Request() req) {
 		if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin')
-		return this.userService.remove(+id)
+		return this.userService.remove(id)
 	}
 }
