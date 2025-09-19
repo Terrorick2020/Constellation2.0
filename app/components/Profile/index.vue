@@ -26,6 +26,7 @@
               <div class="user-card-content">
                 <el-avatar :size="48" :src="Avatar" class="border border-black/15" />
                 <div class="user-info">
+                  <h4 class="user-name">{{ o.id }} ВРЕМЕННО</h4>
                   <h4 class="user-name">{{ o.username }}</h4>
                   <h5 class="user-fio">{{ o.name }}</h5>
                 </div>
@@ -106,6 +107,7 @@ const getUsers = async () => {
         'Authorization': `Bearer ${accessToken}`
       }
     });
+    console.log("ОТВЕТ ОТ СЕРВЕРА", response);
 
     users.value = response.data
       .filter((usr: any) => usr.id !== userId)

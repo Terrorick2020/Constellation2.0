@@ -8,6 +8,7 @@
   </div>
 </template>
 
-<script setup>
-import SVGMessageCircle from '@/assets/icons/message-circle.svg'
+<script setup lang="ts">
+  import SVGMessageCircle from '@/assets/icons/message-circle.svg'
+
 </script>

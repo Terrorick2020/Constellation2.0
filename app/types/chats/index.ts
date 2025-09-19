@@ -20,3 +20,9 @@ export interface IChatFilterTab {
 export interface IChatInjects {
   closeChat: () => void
 }
+
+
+
+
+
+
