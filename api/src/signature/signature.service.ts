@@ -34,7 +34,7 @@ export class SignatureService {
 				data: {
 					signatures: {
 						create: [
-							{ user: { connect: { id: Number(req.user.userId) } }, hash: hash }
+							{ user: { connect: { id: req.user.userId } }, hash: hash }
 						]
 					}
 				},

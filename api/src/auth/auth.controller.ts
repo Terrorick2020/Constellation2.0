@@ -1,30 +1,31 @@
 import {
-	Controller,
-	Get,
-	Post,
-	Body,
-	Param,
-	UseGuards,
-	Request,
-	Res,
-	UseInterceptors,
-	UploadedFile
+    BadRequestException,
+    Body,
+    Controller,
+    Get,
+    Param,
+    Post,
+    Request,
+    Res,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors
 } from '@nestjs/common'
-import {
-	ApiTags,
-	ApiOperation,
-	ApiResponse,
-	ApiBearerAuth,
-	ApiBody,
-	ApiParam
-} from '@nestjs/swagger'
-import { AuthService } from './auth.service'
-import { RegisterDto } from './dto/register.dto'
-import { LoginDto } from './dto/login.dto'
 import { AuthGuard } from '@nestjs/passport'
+import { FileInterceptor } from '@nestjs/platform-express'
+import {
+    ApiBearerAuth,
+    ApiBody,
+    ApiOperation,
+    ApiParam,
+    ApiResponse,
+    ApiTags
+} from '@nestjs/swagger'
 import { Response } from 'express'
 import { createReadStream } from 'fs'
-import { FileInterceptor } from '@nestjs/platform-express'
+import { AuthService } from './auth.service'
+import { LoginDto } from './dto/login.dto'
+import { RegisterDto } from './dto/register.dto'
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -40,6 +41,20 @@ export class AuthController {
 	@ApiResponse({ status: 400, description: 'Ошибка регистрации' })
 	@ApiBody({ type: RegisterDto })
 	register(@Body() createAuthDto: RegisterDto) {
+		// Валидация полей
+		if (!createAuthDto.name || !createAuthDto.username || !createAuthDto.password || 
+			!createAuthDto.repass || !createAuthDto.division || !createAuthDto.job) {
+			throw new BadRequestException('Все поля обязательны для заполнения')
+		}
+		
+		if (createAuthDto.password.length < 6) {
+			throw new BadRequestException('Пароль должен содержать минимум 6 символов')
+		}
+		
+		if (createAuthDto.password !== createAuthDto.repass) {
+			throw new BadRequestException('Пароли не совпадают')
+		}
+		
 		return this.authService.register(createAuthDto)
 	}
 
@@ -70,6 +85,11 @@ export class AuthController {
 	@ApiResponse({ status: 401, description: 'Неверные учетные данные' })
 	@ApiBody({ type: LoginDto })
 	create(@Body() createAuthDto: LoginDto) {
+		// Валидация полей
+		if (!createAuthDto.username || !createAuthDto.password) {
+			throw new BadRequestException('Имя пользователя и пароль обязательны')
+		}
+		
 		return this.authService.login(createAuthDto)
 	}
 

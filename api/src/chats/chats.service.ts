@@ -24,15 +24,46 @@ export class ChatsService {
 	 * Создание нового чата между двумя пользователями
 	 */
 	async createChat(
-		fromUserId: number,
-		toUserId: number
+		fromUserId: string,
+		toUserId: string
 	): Promise<ResCreateChat> {
 		try {
+			console.log('DEBUG: createChat - fromUserId:', fromUserId, 'type:', typeof fromUserId)
+			console.log('DEBUG: createChat - toUserId:', toUserId, 'type:', typeof toUserId)
+			
+			// Проверяем, что toUserId не пустой
+			if (!toUserId || toUserId === 'undefined' || toUserId === 'null') {
+				throw new Error('toUserId не может быть пустым');
+			}
+			
+			// Находим пользователя по username, если toUserId не является ID
+			let toUser;
+			// Проверяем, является ли toUserId уже ID пользователя (cuid формат)
+			if (toUserId.length > 20) {
+				// toUserId - это ID пользователя
+				toUser = await this.prismaService.user.findUnique({
+					where: { id: toUserId }
+				});
+				
+				if (!toUser) {
+					throw new Error(`Пользователь с ID "${toUserId}" не найден`);
+				}
+			} else {
+				// toUserId - это username
+				toUser = await this.prismaService.user.findUnique({
+					where: { username: toUserId }
+				});
+				
+				if (!toUser) {
+					throw new Error(`Пользователь с username "${toUserId}" не найден`);
+				}
+			}
+
 			// Проверяем, существует ли уже чат между этими пользователями
 			const existingChat = await this.prismaService.chat.findFirst({
 				where: {
 					participants: {
-						hasEvery: [fromUserId.toString(), toUserId.toString()]
+						hasEvery: [fromUserId, toUser.id]
 					}
 				}
 			})
@@ -40,14 +71,14 @@ export class ChatsService {
 			if (existingChat) {
 				return {
 					chatId: existingChat.id,
-					toUser: toUserId.toString()
+					toUser: toUser.username
 				}
 			}
 
 			// Создаем новый чат
 			const chat = await this.prismaService.chat.create({
 				data: {
-					participants: [fromUserId.toString(), toUserId.toString()],
+					participants: [fromUserId, toUser.id],
 					typing: []
 				}
 			})
@@ -61,14 +92,14 @@ export class ChatsService {
 					},
 					{
 						chatId: chat.id,
-						userId: toUserId
+						userId: toUser.id
 					}
 				]
 			})
 
 			return {
 				chatId: chat.id,
-				toUser: toUserId.toString()
+				toUser: toUser.username
 			}
 		} catch (error) {
 			console.error('Ошибка при создании чата:', error)
@@ -81,7 +112,7 @@ export class ChatsService {
 	 */
 	async sendMessageWithFile(
 		chatId: string,
-		fromUserId: number,
+		fromUserId: string,
 		file: Express.Multer.File,
 		messageData: SendMessageWithFileDto
 	): Promise<ChatMsg> {
@@ -96,7 +127,7 @@ export class ChatsService {
 			}
 
 			// Проверяем, является ли пользователь участником чата
-			if (!chat.participants.includes(fromUserId.toString())) {
+			if (!chat.participants.includes(fromUserId)) {
 				throw new Error('Пользователь не является участником чата')
 			}
 
@@ -114,7 +145,7 @@ export class ChatsService {
 			const message = await this.prismaService.message.create({
 				data: {
 					chatId,
-					fromUserId,
+					fromUserId: fromUserId,
 					text: messageData.text || '',
 					mediaType: file.mimetype,
 					mediaUrl: savedFile.url,
@@ -137,7 +168,7 @@ export class ChatsService {
 			const resultMessage: ChatMsg = {
 				id: message.id,
 				chatId: message.chatId,
-				fromUser: message.fromUserId.toString(),
+				fromUser: message.fromUserId,
 				text: message.text,
 				created_at: message.createdAt.getTime(),
 				updated_at: message.updatedAt.getTime(),
@@ -176,7 +207,7 @@ export class ChatsService {
 	 */
 	async sendMessage(
 		chatId: string,
-		fromUserId: number,
+		fromUserId: string,
 		messageData: SendMessageDto
 	): Promise<ChatMsg> {
 		try {
@@ -190,7 +221,7 @@ export class ChatsService {
 			}
 
 			// Проверяем, является ли пользователь участником чата
-			if (!chat.participants.includes(fromUserId.toString())) {
+			if (!chat.participants.includes(fromUserId)) {
 				throw new Error('Пользователь не является участником чата')
 			}
 
@@ -198,7 +229,7 @@ export class ChatsService {
 			const message = await this.prismaService.message.create({
 				data: {
 					chatId,
-					fromUserId,
+					fromUserId: fromUserId,
 					text: messageData.text,
 					isRead: false
 				}
@@ -216,7 +247,7 @@ export class ChatsService {
 			const resultMessage: ChatMsg = {
 				id: message.id,
 				chatId: message.chatId,
-				fromUser: message.fromUserId.toString(),
+				fromUser: message.fromUserId,
 				text: message.text,
 				created_at: message.createdAt.getTime(),
 				updated_at: message.updatedAt.getTime(),
@@ -243,7 +274,7 @@ export class ChatsService {
 	 */
 	async getMessages(
 		chatId: string,
-		userId: number,
+		userId: string,
 		query: GetMessagesDto
 	): Promise<ChatMsg[]> {
 		try {
@@ -252,7 +283,7 @@ export class ChatsService {
 				where: { id: chatId }
 			})
 
-			if (!chat || !chat.participants.includes(userId.toString())) {
+			if (!chat || !chat.participants.includes(userId)) {
 				throw new Error('Чат не найден или пользователь не является участником')
 			}
 
@@ -273,15 +304,15 @@ export class ChatsService {
 				take: query.limit || 50
 			})
 
-			return messages.map(msg => ({
-				id: msg.id,
-				chatId: msg.chatId,
-				fromUser: msg.fromUserId.toString(),
-				text: msg.text,
-				created_at: msg.createdAt.getTime(),
-				updated_at: msg.updatedAt.getTime(),
-				is_read: msg.isRead,
-				media_type: msg.mediaType,
+		return messages.map(msg => ({
+			id: msg.id,
+			chatId: msg.chatId,
+			fromUser: msg.fromUserId.toString(),
+			text: msg.text,
+			created_at: msg.createdAt.getTime(),
+			updated_at: msg.updatedAt.getTime(),
+			is_read: msg.isRead,
+			media_type: msg.mediaType,
 				media_url: msg.mediaUrl
 			}))
 		} catch (error) {
@@ -295,7 +326,7 @@ export class ChatsService {
 	 */
 	async markMessagesAsRead(
 		chatId: string,
-		userId: number,
+		userId: string,
 		data: ReadMessagesDto
 	): Promise<void> {
 		try {
@@ -304,18 +335,18 @@ export class ChatsService {
 				where: { id: chatId }
 			})
 
-			if (!chat || !chat.participants.includes(userId.toString())) {
+			if (!chat || !chat.participants.includes(userId)) {
 				throw new Error('Чат не найден или пользователь не является участником')
 			}
 
-			// Обновляем UserChat с последним прочитанным сообщением
-			await this.prismaService.userChat.update({
-				where: {
-					chatId_userId: {
-						chatId,
-						userId
-					}
-				},
+		// Обновляем UserChat с последним прочитанным сообщением
+		await this.prismaService.userChat.update({
+			where: {
+				chatId_userId: {
+					chatId,
+					userId: userId
+				}
+			},
 				data: {
 					lastReadMessageId: data.messageId
 				}
@@ -328,15 +359,15 @@ export class ChatsService {
 					data: { isRead: true }
 				})
 			} else {
-				// Отмечаем все непрочитанные сообщения как прочитанные
-				await this.prismaService.message.updateMany({
-					where: {
-						chatId,
-						fromUserId: { not: userId },
-						isRead: false
-					},
-					data: { isRead: true }
-				})
+			// Отмечаем все непрочитанные сообщения как прочитанные
+			await this.prismaService.message.updateMany({
+				where: {
+					chatId,
+					fromUserId: { not: userId },
+					isRead: false
+				},
+				data: { isRead: true }
+			})
 			}
 		} catch (error) {
 			console.error('Ошибка при отметке сообщений как прочитанных:', error)
@@ -349,7 +380,7 @@ export class ChatsService {
 	 */
 	async updateTypingStatus(
 		chatId: string,
-		userId: number,
+		userId: string,
 		data: TypingStatusDto
 	): Promise<void> {
 		try {
@@ -358,11 +389,11 @@ export class ChatsService {
 				where: { id: chatId }
 			})
 
-			if (!chat || !chat.participants.includes(userId.toString())) {
+			if (!chat || !chat.participants.includes(userId)) {
 				throw new Error('Чат не найден или пользователь не является участником')
 			}
 
-			const userIdStr = userId.toString()
+			const userIdStr = userId
 			let typingUsers = [...chat.typing]
 
 			if (data.isTyping) {
@@ -387,10 +418,10 @@ export class ChatsService {
 	/**
 	 * Получение списка чатов пользователя
 	 */
-	async getUserChats(userId: number): Promise<ChatPreview[]> {
+	async getUserChats(userId: string): Promise<ChatPreview[]> {
 		try {
-			const userChats = await this.prismaService.userChat.findMany({
-				where: { userId },
+		const userChats = await this.prismaService.userChat.findMany({
+			where: { userId: userId },
 				include: {
 					chat: {
 						include: {
@@ -416,12 +447,12 @@ export class ChatsService {
 
 				// Получаем информацию о другом участнике чата
 				const otherParticipantId = chat.participants.find(
-					id => id !== userId.toString()
+					id => id !== userId
 				)
 				if (!otherParticipantId) continue
 
 				const otherUser = await this.prismaService.user.findUnique({
-					where: { id: parseInt(otherParticipantId) }
+					where: { id: otherParticipantId }
 				})
 
 				if (!otherUser) continue
@@ -438,7 +469,7 @@ export class ChatsService {
 				chatPreviews.push({
 					chatId: chat.id,
 					toUser: {
-						id: otherUser.id.toString(),
+						id: otherUser.id,
 						name: otherUser.name,
 						username: otherUser.username,
 						division: otherUser.division,
@@ -461,7 +492,7 @@ export class ChatsService {
 	/**
 	 * Проверка прав доступа к файлу
 	 */
-	async checkFileAccess(chatId: string, userId: number): Promise<boolean> {
+	async checkFileAccess(chatId: string, userId: string): Promise<boolean> {
 		try {
 			const chat = await this.prismaService.chat.findUnique({
 				where: { id: chatId }
@@ -469,7 +500,7 @@ export class ChatsService {
 
 			if (!chat) return false
 
-			return chat.participants.includes(userId.toString())
+			return chat.participants.includes(userId)
 		} catch (error) {
 			console.error('Ошибка при проверке прав доступа к файлу:', error)
 			return false

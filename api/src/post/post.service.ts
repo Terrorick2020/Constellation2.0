@@ -2,10 +2,9 @@ import { Injectable } from '@nestjs/common'
 import { readFileSync } from 'fs'
 import { PrismaService } from 'prisma/prisma.service'
 import { EncryptionService } from 'src/encryption/encryption.service'
+import { NotificationService } from 'src/notification/notification.service'
 import { CreatePostDto } from './dto/create-post.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
-import { NotificationService } from 'src/notification/notification.service'
-import { title } from 'process'
 
 @Injectable()
 export class PostService {
@@ -15,7 +14,7 @@ export class PostService {
 		private notificationService: NotificationService
 	) {}
 
-	async create(id: number, dto: CreatePostDto, file: Express.Multer.File) {
+	async create(id: string, dto: CreatePostDto, file: Express.Multer.File) {
 		try {
 			const buffer = Buffer.from(readFileSync(file.path))
 

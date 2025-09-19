@@ -49,7 +49,7 @@ export class UserService {
 				}
 			})
 	
-			const signedMap = new Map<number, Date>()
+			const signedMap = new Map<string, Date>()
 			for (const sig of signedUsers) {
 				signedMap.set(sig.userId, sig.assignedAt)
 			}
@@ -80,7 +80,7 @@ export class UserService {
 	
 	
 
-	findOne(id: number) {
+	findOne(id: string) {
 		return this.prisma.user.findFirst({
 			where: { id },
 			omit: { password: true }
@@ -89,14 +89,14 @@ export class UserService {
 	findByUsername(username: string) {
 		return this.prisma.user.findFirst({ where: { username } })
 	}
-	update(id: number, updateUserDto: UpdateUserDto) {
+	update(id: string, updateUserDto: UpdateUserDto) {
 		return this.prisma.user.update({
 			data: updateUserDto,
 			where: { id },
 			omit: { password: true }
 		})
 	}
-	setAdmin(id: number) {
+	setAdmin(id: string) {
 		return this.prisma.user.update({
 			data: { role: 'Admin' },
 			where: { id },
@@ -104,7 +104,7 @@ export class UserService {
 		})
 	}
 
-	remove(id: number) {
+	remove(id: string) {
 		return this.prisma.user.delete({ where: { id }, omit: { password: true } })
 	}
 }
