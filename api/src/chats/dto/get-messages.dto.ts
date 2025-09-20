@@ -1,8 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { IsNumber, IsOptional, IsString, Min } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator'
 
 export class GetMessagesDto {
+	@ApiProperty({ description: 'ID чата' })
+	@IsString()
+	@IsNotEmpty()
+	chatId!: string
+
+	@ApiProperty({ description: 'ID пользователя, запрашивающего сообщения' })
+	@IsString()
+	@IsNotEmpty()
+	userId!: string
+
 	@ApiProperty({ description: 'ID сообщения, до которого нужно получить сообщения', required: false })
 	@IsString()
 	@IsOptional()

@@ -1,7 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator'
 
 export class SendMessageWithFileDto {
+	@ApiProperty({ description: 'ID чата' })
+	@IsString()
+	@IsNotEmpty()
+	chatId!: string
+
+	@ApiProperty({ description: 'ID пользователя, отправляющего сообщение' })
+	@IsString()
+	@IsNotEmpty()
+	fromUser!: string
+
 	@ApiProperty({ description: 'Текст сообщения', required: false })
 	@IsString()
 	@IsOptional()
