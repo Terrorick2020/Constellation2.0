@@ -1,8 +1,6 @@
-<template>
-  <!-- left side -->
+<!-- <template>
   <ChatsList :chats="CHATS" @select-chat="selectChat" />
 
-  <!-- messages -->
   <section class="h-full w-full overflow-x-hidden">
     <ChatsMessages
       v-show="selectedChat"
@@ -21,10 +19,7 @@ import { ChatKey } from '~/types/chats/symbols'
 import type { IChat } from '~/types/chats'
 
 const mountedGetChats = () => {
-  // window.Echo.channel('public')
-  //     .listen('ExampleEvent', (e: any) => {
-  //         console.log(e)
-  // })
+
 }
 
 onMounted(() => {
@@ -67,8 +62,151 @@ const CHATS: IChat[] = [
     muted: false,
     me: false,
     type: 'document'
+  },
+  {
+    id: 4,
+    avatar: AvatarImage,
+    label: 'Samsung TechnoFun',
+    lastMessage: 'Хорошо, созвонимся в 12?',
+    unread: 0,
+    pinned: false,
+    verified: false,
+    muted: true,
+    me: true,
+    type: 'message'
+  },
+  {
+    id: 5,
+    avatar: AvatarImage,
+    label: 'Britva',
+    lastMessage: 'Добрый день, на связи Britva.',
+    unread: 0,
+    pinned: false,
+    verified: false,
+    muted: false,
+    me: false,
+    type: 'message'
+  },
+  {
+    id: 6,
+    avatar: AvatarImage,
+    label: 'Britva',
+    lastMessage: 'Добрый день, на связи Britva.',
+    unread: 0,
+    pinned: false,
+    verified: false,
+    muted: false,
+    me: false,
+    type: 'message'
+  },
+  {
+    id: 7,
+    avatar: AvatarImage,
+    label: 'Britva',
+    lastMessage: 'Добрый день, на связи Britva.',
+    unread: 0,
+    pinned: false,
+    verified: false,
+    muted: false,
+    me: false,
+    type: 'message'
+  },
+  {
+    id: 8,
+    avatar: AvatarImage,
+    label: 'Britva',
+    lastMessage: 'Добрый день, на связи Britva.',
+    unread: 0,
+    pinned: false,
+    verified: false,
+    muted: false,
+    me: false,
+    type: 'message'
+  },
+  {
+    id: 9,
+    avatar: AvatarImage,
+    label: 'Britva',
+    lastMessage: 'Добрый день, на связи Britva.',
+    unread: 0,
+    pinned: false,
+    verified: false,
+    muted: false,
+    me: false,
+    type: 'message'
+  },
+  {
+    id: 10,
+    avatar: AvatarImage,
+    label: 'Britva',
+    lastMessage: 'Добрый день, на связи Britva.',
+    unread: 0,
+    pinned: false,
+    verified: false,
+    muted: false,
+    me: false,
+    type: 'message'
+  },
+  {
+    id: 11,
+    avatar: AvatarImage,
+    label: 'Britva',
+    lastMessage: 'Добрый день, на связи Britva.',
+    unread: 0,
+    pinned: false,
+    verified: false,
+    muted: false,
+    me: false,
+    type: 'message'
+  },
+  {
+    id: 12,
+    avatar: AvatarImage,
+    label: 'Britva',
+    lastMessage: 'Добрый день, на связи Britva.',
+    unread: 0,
+    pinned: false,
+    verified: false,
+    muted: false,
+    me: false,
+    type: 'message'
+  },
+  {
+    id: 13,
+    avatar: AvatarImage,
+    label: 'Britva',
+    lastMessage: 'Добрый день, на связи Britva.',
+    unread: 0,
+    pinned: false,
+    verified: false,
+    muted: false,
+    me: false,
+    type: 'message'
+  },
+  {
+    id: 14,
+    avatar: AvatarImage,
+    label: 'Britva',
+    lastMessage: 'Добрый день, на связи Britva.',
+    unread: 0,
+    pinned: false,
+    verified: false,
+    muted: false,
+    me: false,
+    type: 'message'
+  },
+  {
+    id: 15,
+    avatar: AvatarImage,
+    label: 'Britva',
+    lastMessage: 'Last message',
+    unread: 0,
+    pinned: false,
+    verified: false,
+    muted: false,
+    me: false,
+    type: 'message'
   }
-  
 ]
 
 const selectedChat = ref<IChat | null>(null)
@@ -85,4 +223,58 @@ const closeChat = () => {
 provide(ChatKey, {
   closeChat
 })
+</script> -->
+  
+
+
+<!-- components/Chats/Index.vue -->
+<template>
+  <!-- Список чатов -->
+  <ChatsList
+    :chats="chats"
+    @select-chat="selectChat"
+    :loading="loading"
+  />
+
+  <!-- Область сообщений -->
+  <section class="h-full w-full overflow-x-hidden">
+    <ChatsMessages
+      v-show="selectedChat"
+      :selected-chat="selectedChat" 
+
+      :class="[
+        'fixed lg:relative lg:translate-x-0',
+        selectedChat ? '-translate-x-full' : 'translate-x-full'
+      ]"
+    />
+    <ChatsNotSelectedChat v-show="!selectedChat" />
+  </section>
+</template>
+
+<script setup lang="ts">
+import { ChatKey } from '~/types/chats/symbols'
+import type { IChat } from '~/types/chats'
+import { onMounted, ref, provide } from 'vue'
+import { useChats } from '~/stores/getChats'
+
+const { chats, loading, fetchChats } = useChats()
+const selectedChat = ref<IChat | null>(null)
+
+onMounted(() => {
+  fetchChats()
+})
+
+const selectChat = (chat: IChat) => {
+  selectedChat.value = chat
+}
+
+const closeChat = () => {
+  selectedChat.value = null
+}
+
+provide(ChatKey, {
+  closeChat
+})
 </script>
+
+ 
