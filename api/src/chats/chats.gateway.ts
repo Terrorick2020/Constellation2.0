@@ -1,11 +1,11 @@
 import {
-    ConnectedSocket,
-    MessageBody,
-    OnGatewayConnection,
-    OnGatewayDisconnect,
-    SubscribeMessage,
-    WebSocketGateway,
-    WebSocketServer
+	ConnectedSocket,
+	MessageBody,
+	OnGatewayConnection,
+	OnGatewayDisconnect,
+	SubscribeMessage,
+	WebSocketGateway,
+	WebSocketServer
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io'
 import { ChatsService } from './chats.service'
@@ -69,11 +69,11 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		if (!userId) return
 
 		try {
-		const message = await this.chatsService.sendMessage(
-			data.chatId,
-			userId,
-			data.message
-		)
+			const message = await this.chatsService.sendMessage(
+				data.chatId,
+				userId,
+				data.message
+			)
 
 			// Отправляем сообщение всем участникам чата
 			this.server.to(`chat:${data.chatId}`).emit('new-message', message)
@@ -115,12 +115,16 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 				stream: null
 			}
 
-		const message = await this.chatsService.sendMessageWithFile(
-			data.chatId,
-			userId,
-			file,
-			{ text: data.message.text }
-		)
+			const message = await this.chatsService.sendMessageWithFile(
+				data.chatId,
+				userId,
+				file,
+				{
+					chatId: data.chatId,
+					fromUser: userId,
+					text: data.message.text
+				}
+			)
 
 			// Отправляем сообщение с файлом всем участникам чата
 			this.server.to(`chat:${data.chatId}`).emit('new-message', message)
@@ -138,13 +142,11 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		if (!userId) return
 
 		try {
-		await this.chatsService.updateTypingStatus(
-			data.chatId,
-			userId,
-			{
+			await this.chatsService.updateTypingStatus(data.chatId, userId, {
+				chatId: data.chatId,
+				userId: userId,
 				isTyping: data.isTyping
-			}
-		)
+			})
 
 			// Уведомляем других участников о статусе печати
 			client.to(`chat:${data.chatId}`).emit('user-typing', {
