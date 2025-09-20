@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
+import { RedisPubSubService } from '../redis/redis-pub-sub.service'
 import { RedisService } from '../redis/redis.service'
 import { StorageService } from '../storage/storage.service'
 import type { ChatPreview, ResCreateChat } from './chats.types'
@@ -17,6 +18,7 @@ export class ChatsService {
 	constructor(
 		private readonly prismaService: PrismaService,
 		private readonly redisService: RedisService,
+		private readonly redisPubSubService: RedisPubSubService,
 		private readonly storageService: StorageService
 	) {}
 
@@ -96,6 +98,26 @@ export class ChatsService {
 					}
 				]
 			})
+
+			// Уведомляем обоих пользователей о создании нового чата
+			for (const participantId of [fromUserId, toUser.id]) {
+				const otherParticipantId = participantId === fromUserId ? toUser.id : fromUserId
+				const otherUser = participantId === fromUserId ? toUser : await this.prismaService.user.findUnique({
+					where: { id: fromUserId }
+				})
+
+				await this.redisPubSubService.publishNewChat({
+					userId: participantId,
+					chatId: chat.id,
+					withUser: {
+						id: otherParticipantId,
+						name: otherUser?.name || 'Unknown',
+						avatar: '' // TODO: добавить аватар пользователя
+					},
+					created_at: chat.createdAt.getTime(),
+					timestamp: Date.now()
+				})
+			}
 
 			return {
 				chatId: chat.id,
@@ -177,11 +199,20 @@ export class ChatsService {
 				media_url: message.mediaUrl
 			}
 
-			// Уведомляем других участников о новом сообщении
-			await this.redisService.publish(
-				`chat:${chatId}:messages`,
-				JSON.stringify(resultMessage)
-			)
+			// Уведомляем других участников о новом сообщении через Redis Pub/Sub
+			const recipientId = chat.participants.find(id => id !== fromUserId)
+			if (recipientId) {
+				await this.redisPubSubService.publishNewMessage({
+					chatId,
+					messageId: message.id,
+					senderId: fromUserId,
+					recipientId,
+					text: messageData.text || '',
+					timestamp: message.createdAt.getTime(),
+					media_type: message.mediaType,
+					media_url: message.mediaUrl
+				})
+			}
 
 			return resultMessage
 		} catch (error) {
@@ -256,11 +287,20 @@ export class ChatsService {
 				media_url: message.mediaUrl
 			}
 
-			// Уведомляем других участников о новом сообщении
-			await this.redisService.publish(
-				`chat:${chatId}:messages`,
-				JSON.stringify(resultMessage)
-			)
+			// Уведомляем других участников о новом сообщении через Redis Pub/Sub
+			const recipientId = chat.participants.find(id => id !== fromUserId)
+			if (recipientId) {
+				await this.redisPubSubService.publishNewMessage({
+					chatId,
+					messageId: message.id,
+					senderId: fromUserId,
+					recipientId,
+					text: messageData.text,
+					timestamp: message.createdAt.getTime(),
+					media_type: message.mediaType,
+					media_url: message.mediaUrl
+				})
+			}
 
 			return resultMessage
 		} catch (error) {
@@ -358,16 +398,51 @@ export class ChatsService {
 					where: { id: data.messageId },
 					data: { isRead: true }
 				})
+
+				// Уведомляем отправителя о прочтении сообщения
+				const message = await this.prismaService.message.findUnique({
+					where: { id: data.messageId }
+				})
+				if (message && message.fromUserId !== userId) {
+					await this.redisPubSubService.publishMessageRead({
+						chatId,
+						userId: message.fromUserId,
+						messageIds: [data.messageId],
+						timestamp: Date.now()
+					})
+				}
 			} else {
-			// Отмечаем все непрочитанные сообщения как прочитанные
-			await this.prismaService.message.updateMany({
-				where: {
-					chatId,
-					fromUserId: { not: userId },
-					isRead: false
-				},
-				data: { isRead: true }
-			})
+				// Отмечаем все непрочитанные сообщения как прочитанные
+				const unreadMessages = await this.prismaService.message.findMany({
+					where: {
+						chatId,
+						fromUserId: { not: userId },
+						isRead: false
+					},
+					select: { id: true, fromUserId: true }
+				})
+
+				await this.prismaService.message.updateMany({
+					where: {
+						chatId,
+						fromUserId: { not: userId },
+						isRead: false
+					},
+					data: { isRead: true }
+				})
+
+				// Уведомляем отправителей о прочтении сообщений
+				const messageIds = unreadMessages.map(msg => msg.id)
+				const senderIds = [...new Set(unreadMessages.map(msg => msg.fromUserId))]
+				
+				for (const senderId of senderIds) {
+					await this.redisPubSubService.publishMessageRead({
+						chatId,
+						userId: senderId,
+						messageIds,
+						timestamp: Date.now()
+					})
+				}
 			}
 		} catch (error) {
 			console.error('Ошибка при отметке сообщений как прочитанных:', error)
@@ -408,6 +483,14 @@ export class ChatsService {
 			await this.prismaService.chat.update({
 				where: { id: chatId },
 				data: { typing: typingUsers }
+			})
+
+			// Уведомляем других участников о статусе печати
+			await this.redisPubSubService.publishTypingStatus({
+				chatId,
+				userId: userIdStr,
+				isTyping: data.isTyping,
+				participants: chat.participants
 			})
 		} catch (error) {
 			console.error('Ошибка при обновлении статуса печати:', error)
@@ -512,5 +595,206 @@ export class ChatsService {
 	 */
 	getFilePath(chatId: string, filename: string): string {
 		return this.storageService.getFilePath(chatId, filename)
+	}
+
+	/**
+	 * Получение чата по ID
+	 */
+	async getChatById(chatId: string): Promise<any> {
+		try {
+			const chat = await this.prismaService.chat.findUnique({
+				where: { id: chatId },
+				include: {
+					messages: {
+						orderBy: { createdAt: 'desc' },
+						take: 1
+					}
+				}
+			})
+
+			if (!chat) {
+				throw new Error('Чат не найден')
+			}
+
+			return {
+				id: chat.id,
+				participants: chat.participants,
+				created_at: chat.createdAt.getTime(),
+				last_message_id: chat.lastMessageId,
+				last_message_at: chat.lastMessageAt?.getTime() || chat.createdAt.getTime(),
+				typing: chat.typing
+			}
+		} catch (error) {
+			console.error('Ошибка при получении чата по ID:', error)
+			throw error
+		}
+	}
+
+	/**
+	 * Удаление чата
+	 */
+	async deleteChat(chatId: string, userId: string): Promise<{ success: boolean; message: string }> {
+		try {
+			// Проверяем существование чата и участие пользователя
+			const chat = await this.prismaService.chat.findUnique({
+				where: { id: chatId }
+			})
+
+			if (!chat) {
+				return { success: false, message: 'Чат не найден' }
+			}
+
+			if (!chat.participants.includes(userId)) {
+				return { success: false, message: 'Вы не являетесь участником этого чата' }
+			}
+
+			// Удаляем чат и все связанные данные
+			await this.prismaService.$transaction([
+				this.prismaService.userChat.deleteMany({
+					where: { chatId }
+				}),
+				this.prismaService.message.deleteMany({
+					where: { chatId }
+				}),
+				this.prismaService.chat.delete({
+					where: { id: chatId }
+				})
+			])
+
+			return { success: true, message: 'Чат удален' }
+		} catch (error) {
+			console.error('Ошибка при удалении чата:', error)
+			return { success: false, message: 'Ошибка при удалении чата' }
+		}
+	}
+
+	/**
+	 * Удаление чата пользователем
+	 */
+	async deleteChatByUser(chatId: string, userId: string): Promise<{ success: boolean; message: string }> {
+		try {
+			// Проверяем существование чата и участие пользователя
+			const chat = await this.prismaService.chat.findUnique({
+				where: { id: chatId }
+			})
+
+			if (!chat) {
+				return { success: false, message: 'Чат не найден' }
+			}
+
+			if (!chat.participants.includes(userId)) {
+				return { success: false, message: 'Вы не являетесь участником этого чата' }
+			}
+
+			// Удаляем только связь пользователя с чатом
+			await this.prismaService.userChat.delete({
+				where: {
+					chatId_userId: {
+						chatId,
+						userId
+					}
+				}
+			})
+
+			// Если это был последний участник, удаляем весь чат
+			const remainingUserChats = await this.prismaService.userChat.count({
+				where: { chatId }
+			})
+
+			if (remainingUserChats === 0) {
+				await this.prismaService.$transaction([
+					this.prismaService.message.deleteMany({
+						where: { chatId }
+					}),
+					this.prismaService.chat.delete({
+						where: { id: chatId }
+					})
+				])
+			}
+
+			// Уведомляем других участников об удалении чата
+			await this.redisPubSubService.publishChatDeleted({
+				chatId,
+				deletedByUserId: userId,
+				participants: chat.participants,
+				timestamp: Date.now()
+			})
+
+			return { success: true, message: 'Чат удален' }
+		} catch (error) {
+			console.error('Ошибка при удалении чата пользователем:', error)
+			return { success: false, message: 'Ошибка при удалении чата' }
+		}
+	}
+
+	/**
+	 * Получение чатов с непрочитанными сообщениями
+	 */
+	async getChatsWithUnread(userId: string): Promise<string[]> {
+		try {
+			const userChats = await this.prismaService.userChat.findMany({
+				where: { userId },
+				include: {
+					chat: {
+						include: {
+							messages: {
+								where: {
+									fromUserId: { not: userId },
+									isRead: false
+								}
+							}
+						}
+					}
+				}
+			})
+
+			const unreadChats = userChats
+				.filter(userChat => userChat.chat.messages.length > 0)
+				.map(userChat => userChat.chatId)
+
+			return unreadChats
+		} catch (error) {
+			console.error('Ошибка при получении чатов с непрочитанными сообщениями:', error)
+			return []
+		}
+	}
+
+	/**
+	 * Получение всех пользователей с непрочитанными сообщениями
+	 */
+	async getUsersWithUnreadMessages(): Promise<{ userId: string; unreadCount: number }[]> {
+		try {
+			const users = await this.prismaService.user.findMany({
+				select: { id: true }
+			})
+
+			const usersWithUnread: { userId: string; unreadCount: number }[] = []
+
+			for (const user of users) {
+				const unreadCount = await this.prismaService.message.count({
+					where: {
+						chat: {
+							userChats: {
+								some: { userId: user.id }
+							}
+						},
+						fromUserId: { not: user.id },
+						isRead: false
+					}
+				})
+
+				if (unreadCount > 0) {
+					usersWithUnread.push({
+						userId: user.id,
+						unreadCount
+					})
+				}
+			}
+
+			return usersWithUnread
+		} catch (error) {
+			console.error('Ошибка при получении пользователей с непрочитанными сообщениями:', error)
+			return []
+		}
 	}
 }

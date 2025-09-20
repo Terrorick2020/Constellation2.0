@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Param,
     Post,
@@ -13,18 +14,22 @@ import {
     UseInterceptors
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Response } from 'express'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { multerConfig } from '../config/multer.config'
 import { ChatsService } from './chats.service'
-import type { ChatPreview, ResCreateChat } from './chats.types'
+import type { Chat, ChatPreview, ResCreateChat } from './chats.types'
 import { type ChatMsg } from './chats.types'
 import { CreateDto } from './dto/create.dto'
+import { DeleteChatDto } from './dto/delete-chat.dto'
 import { GetMessagesDto } from './dto/get-messages.dto'
 import { ReadMessagesDto } from './dto/read-messages.dto'
 import { SendMessageWithFileDto } from './dto/send-message-with-file.dto'
 import { SendMessageDto } from './dto/send-messages.dto'
+import { TypingStatusDto } from './dto/typing-status.dto'
 
+@ApiTags('chats')
 @UseGuards(JwtAuthGuard)
 @Controller('chats')
 export class ChatsController {
@@ -130,5 +135,69 @@ export class ChatsController {
 
 		// Отправляем файл
 		res.sendFile(filePath, { root: '.' })
+	}
+
+	@ApiOperation({ summary: 'Получить метаданные чата' })
+	@ApiResponse({ status: 200, description: 'Метаданные чата получены' })
+	@Get(':chatId/metadata')
+	async getChatMetadata(
+		@Param('chatId') chatId: string,
+		@Request() req: any
+	): Promise<Chat> {
+		const userId = req.user.userId
+		return await this.chatsService.getChatById(chatId)
+	}
+
+	@ApiOperation({ summary: 'Удалить чат' })
+	@ApiResponse({ status: 200, description: 'Чат удален' })
+	@Delete(':chatId')
+	async deleteChat(
+		@Param('chatId') chatId: string,
+		@Request() req: any
+	): Promise<{ success: boolean; message: string }> {
+		const userId = req.user.userId
+		return await this.chatsService.deleteChat(chatId, userId)
+	}
+
+	@ApiOperation({ summary: 'Удалить чат конкретным пользователем' })
+	@ApiResponse({ status: 200, description: 'Чат удален пользователем' })
+	@Delete(':chatId/by-user')
+	async deleteChatByUser(
+		@Param('chatId') chatId: string,
+		@Body() deleteChatDto: DeleteChatDto,
+		@Request() req: any
+	): Promise<{ success: boolean; message: string }> {
+		const userId = req.user.userId
+		return await this.chatsService.deleteChatByUser(chatId, userId)
+	}
+
+	@ApiOperation({ summary: 'Получить количество непрочитанных чатов' })
+	@ApiResponse({ status: 200, description: 'Количество получено' })
+	@Get('unread-chats-count')
+	async getUnreadChatsCount(@Request() req: any): Promise<string[]> {
+		const userId = req.user.userId
+		return await this.chatsService.getChatsWithUnread(userId)
+	}
+
+	@ApiOperation({ summary: 'Получить всех пользователей с непрочитанными сообщениями' })
+	@ApiResponse({ status: 200, description: 'Список пользователей получен' })
+	@Get('users-with-unread')
+	async getUsersWithUnreadMessages(): Promise<{ userId: string; unreadCount: number }[]> {
+		return await this.chatsService.getUsersWithUnreadMessages()
+	}
+
+	@ApiOperation({ summary: 'Обновить статус набора текста' })
+	@ApiResponse({ status: 200, description: 'Статус набора текста обновлен' })
+	@Post('typing')
+	async updateTypingStatus(
+		@Body() typingStatusDto: TypingStatusDto,
+		@Request() req: any
+	): Promise<void> {
+		const userId = req.user.userId
+		await this.chatsService.updateTypingStatus(
+			typingStatusDto.chatId,
+			userId,
+			typingStatusDto
+		)
 	}
 }

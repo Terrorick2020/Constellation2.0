@@ -24,6 +24,9 @@ export interface ChatMsg {
 	is_read: boolean
 	media_type?: string
 	media_url?: string
+	fileName?: string
+	fileSize?: number
+	filePath?: string
 }
 
 // Типы ответов API
@@ -64,4 +67,17 @@ export enum SendChatsTcpPatterns {
 	UpdatedChat = 'UpdatedChat',
 	AddChat = 'AddChat',
 	DeleteChat = 'DeleteChat',
+}
+
+// Дополнительные типы для микросервисных операций
+export interface ConnectionDto {
+	userId: string
+	roomName: string
+}
+
+export interface MicroServiceResponse<T = any> {
+	success: boolean
+	data?: T
+	message?: string
+	error?: any
 }
