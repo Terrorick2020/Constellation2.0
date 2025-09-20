@@ -1,0 +1,54 @@
+# Зависимости
+node_modules
+npm-debug.log*
+
+# Сборка
+dist
+build
+
+# Логи
+logs
+*.log
+
+# Временные файлы
+.tmp
+.temp
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Environment
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Coverage
+coverage
+.nyc_output
+
+# Test
+test
+*.spec.ts
+*.test.ts
+
+# Documentation
+README.md
+docs
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
