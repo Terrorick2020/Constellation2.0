@@ -37,7 +37,11 @@ export class ChatsMicroController {
 			}
 
 			// Получаем последнее сообщение
-			const messages = await this.chatsService.getMessages(data.chatId, '', { limit: 1 })
+			const messages = await this.chatsService.getMessages(data.chatId, '', { 
+				chatId: data.chatId,
+				userId: '',
+				limit: 1 
+			})
 			const lastMessage = messages.length > 0 ? messages[0] : null
 
 			return {
@@ -68,6 +72,8 @@ export class ChatsMicroController {
 				data.chatId,
 				'', // userId не нужен для микросервисного вызова
 				{
+					chatId: data.chatId,
+					userId: '',
 					limit: data.limit || 50,
 					offset: data.offset || 0
 				}

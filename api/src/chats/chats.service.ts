@@ -388,26 +388,26 @@ export class ChatsService {
 				}
 			},
 				data: {
-					lastReadMessageId: data.messageId
+					lastReadMessageId: data.lastReadMessageId
 				}
 			})
 
 			// Если указано конкретное сообщение, отмечаем его как прочитанное
-			if (data.messageId) {
+			if (data.lastReadMessageId) {
 				await this.prismaService.message.update({
-					where: { id: data.messageId },
+					where: { id: data.lastReadMessageId },
 					data: { isRead: true }
 				})
 
 				// Уведомляем отправителя о прочтении сообщения
 				const message = await this.prismaService.message.findUnique({
-					where: { id: data.messageId }
+					where: { id: data.lastReadMessageId }
 				})
 				if (message && message.fromUserId !== userId) {
 					await this.redisPubSubService.publishMessageRead({
 						chatId,
 						userId: message.fromUserId,
-						messageIds: [data.messageId],
+						messageIds: [data.lastReadMessageId],
 						timestamp: Date.now()
 					})
 				}

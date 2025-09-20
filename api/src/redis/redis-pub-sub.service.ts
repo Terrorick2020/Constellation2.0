@@ -1,27 +1,27 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import Redis from 'ioredis'
+import { createClient } from 'redis'
 
 @Injectable()
 export class RedisPubSubService implements OnModuleInit, OnModuleDestroy {
-	private readonly publisher: Redis
+	private readonly publisher: ReturnType<typeof createClient>
 	private readonly CONTEXT = 'RedisPubSubService'
 
 	constructor(private readonly configService: ConfigService) {
-		this.publisher = new Redis({
-			host: this.configService.get('REDIS_HOST', 'localhost'),
-			port: parseInt(this.configService.get('REDIS_PORT', '6379')),
+		this.publisher = createClient({
+			url: `redis://${this.configService.get('REDIS_HOST', 'localhost')}:${this.configService.get('REDIS_PORT', '6379')}`,
 			password: this.configService.get('REDIS_PASSWORD', ''),
-			db: parseInt(this.configService.get('REDIS_DB', '0')),
+			database: parseInt(this.configService.get('REDIS_DB', '0')),
 		})
 	}
 
 	async onModuleInit() {
+		await this.publisher.connect()
 		console.log('Redis Pub/Sub сервис инициализирован')
 	}
 
 	async onModuleDestroy() {
-		await this.publisher.quit()
+		await this.publisher.disconnect()
 		console.log('Redis Pub/Sub соединение закрыто')
 	}
 
