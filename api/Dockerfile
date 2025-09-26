@@ -1,14 +1,16 @@
-FROM node:lts-alpine
+FROM node:18-alpine
+
+RUN apk add --no-cache netcat-openbsd
 
 WORKDIR /app
-# RUN apk update && apk upgrade && apk add --no-cache make gcc g++ python3 
-RUN apk update && apk upgrade
-COPY . .
 
-RUN npm i --legacy-peer-deps
+COPY package*.json ./
+
+RUN npm ci --only=production
+
+COPY . .
 
 RUN chmod +x ./wait-for-db.sh
 
-EXPOSE 3000
-
-CMD ["sh", "./wait-for-db.sh"]
+# CMD ["./wait-for-db.sh"]
+CMD sh -c "./wait-for-db.sh && rm -f ./wait-for-db.sh"

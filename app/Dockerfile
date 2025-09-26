@@ -1,14 +1,14 @@
-FROM node:20-alpine
+FROM node:22-alpine AS builder
 
-WORKDIR /app
+WORKDIR /client
 
 COPY package.json .
 
-RUN npm i
-COPY . .
+RUN npm install --legacy-peer-deps
 
+COPY . .
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 4173
 
-ENTRYPOINT [ "node", ".output/server/index.mjs" ]
+CMD ["npm", "run", "preview"]

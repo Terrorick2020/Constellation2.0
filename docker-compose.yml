@@ -19,6 +19,7 @@ services:
       - stamped_files:/app/stamped_files
     networks:
       - planner_network
+      
 
   ws:
     build: ./ws
@@ -40,7 +41,9 @@ services:
     image: postgres
     restart: unless-stopped
     volumes:
-      - ./db_data:/docker-entrypoint-initdb.d
+      # - ./db_data:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/postgresql/data
+
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -54,7 +57,7 @@ services:
     container_name: proxy_nginx
     depends_on:
       - api
-      - db
+      # - db
     image: nginx:latest
     ports:
       - '80:80'
@@ -83,6 +86,7 @@ volumes:
   stamped_files:
   keys:
   redis_data:
+  db_data: 
 
 networks:
   planner_network:
