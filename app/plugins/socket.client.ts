@@ -1,35 +1,38 @@
 import { io, Socket } from 'socket.io-client'
+import { useAuthStore } from '~/stores/auth'
 
-export default defineNuxtPlugin(() => {
-  const socket: Socket = io('http://localhost:4200', {
+export default defineNuxtPlugin((nuxtApp) => {
+  const authStore = useAuthStore()
+  const token = authStore.accessToken
+
+  const socket: Socket = io('http://78.24.221.66', {
     path: '/socket.io',
-    // path: '/',
     transports: ['websocket'],
     withCredentials: true,
+    auth: {
+      token: token || '' 
+    }
   })
 
-  console.log("Подключение к socket.io")
+  socket.on('connect', () => {
+    console.log('✅ WebSocket подключен. ID:', socket.id)
+  })
+
+  socket.on('disconnect', () => {
+    console.log('❌ WebSocket отключен')
+  })
+
+  socket.on('connect_error', (err) => {
+    console.error('🔌 Ошибка подключения WebSocket:', err)
+  })
 
   return {
     provide: {
-      socket,
-    },
+      socket
+    }
   }
 })
 
-// export default defineNuxtPlugin(() => {
-//   const socket: Socket = io('http://78.24.221.66/api', {
-//     path: '/socket.io',
-//     // path: '/',
-//     transports: ['websocket'],
-//     withCredentials: true,
-//   })
 
-//   console.log("Подключение к socket.io")
 
-//   return {
-//     provide: {
-//       socket,
-//     },
-//   }
-// })
+

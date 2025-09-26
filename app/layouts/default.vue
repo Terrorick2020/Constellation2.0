@@ -13,6 +13,10 @@ import { ElNotification } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { ApiResType, type ApiRes } from '~/types/auth'
 import type { Badges } from '~/types/props'
+import { onMounted, reactive, watch } from 'vue'
+import { useNuxtApp } from '#app'
+import { useChats } from '~/stores/chats/getChats'
+
 
 const { $socket } = useNuxtApp()
 

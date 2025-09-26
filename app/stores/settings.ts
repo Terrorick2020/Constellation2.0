@@ -12,7 +12,6 @@ type Scope = {
 
 export const useSettingsStore = defineStore('settings', () => {
     const { $api } = useNuxtApp()
-    // TODO:Удалить линки
     const mediaList = ref<UploadUserFile[]>([
        
     ])

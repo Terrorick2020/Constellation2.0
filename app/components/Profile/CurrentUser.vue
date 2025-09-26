@@ -228,7 +228,7 @@ import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { BASE_URL } from '~/env/requests.env'
 import { useAuthStore } from '~/stores/auth'
-import { useChatStore } from '~/stores/createChat' 
+import { useChatStore } from '~/stores/chats/createChat' 
 
 const { profileInfo } = useProfileStore()
 const chatStore = useChatStore() 

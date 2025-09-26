@@ -10,5 +10,5 @@
 </template>
 
 <script setup lang="ts">
-import SVGSearch from '@/assets/icons/search.svg'
+  import SVGSearch from '@/assets/icons/search.svg'
 </script>

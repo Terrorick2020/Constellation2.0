@@ -17,6 +17,14 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
 const isShowArchive = ref(false)
-const toggleShow = () => (isShowArchive.value = !isShowArchive.value)
+const toggleShow = () => {
+  isShowArchive.value = !isShowArchive.value
+}
+
+defineExpose({
+  isShowArchive
+})
 </script>
