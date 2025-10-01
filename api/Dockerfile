@@ -1,7 +1,7 @@
 # Сборка
 FROM node:22-alpine AS builder
  
-WORKDIR /api
+WORKDIR /app
 
 COPY package.json ./
 RUN npm install --legacy-peer-deps
@@ -13,18 +13,18 @@ RUN npm run build
 # Продуктивный образ
 FROM node:22-alpine
 
-WORKDIR /api
+WORKDIR /app
 
 COPY package.json ./
 RUN npm install --omit=dev --legacy-peer-deps
 
-COPY --from=builder /api/node_modules ./node_modules
-COPY --from=builder /api/dist ./dist
-COPY --from=builder /api/prisma ./prisma
-COPY --from=builder /api/wait-for-db.sh ./wait-for-db.sh
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/wait-for-db.sh ./wait-for-db.sh
 
 RUN chmod +x ./wait-for-db.sh
 
-EXPOSE 3000
+EXPOSE 4200
 
 CMD ["sh", "./wait-for-db.sh"]

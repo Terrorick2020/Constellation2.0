@@ -9,7 +9,6 @@ RUN npm install --legacy-peer-deps
 
 COPY . . 
 RUN npm run build
-RUN npm run minify
 
 # # Этап продакшена — через nginx
 # FROM nginx:stable-alpine
