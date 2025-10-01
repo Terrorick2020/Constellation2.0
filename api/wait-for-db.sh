@@ -11,4 +11,4 @@ echo "🚀 Running Prisma DB push..."
 npx prisma db push --accept-data-loss
 
 echo "▶️ Starting application..."
-exec npm run start
+exec npm run start:prod
