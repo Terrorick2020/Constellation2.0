@@ -1,6 +1,19 @@
 services:
+  client:
+    image: ${DOCKER_USER}/app_constellation:latest
+    restart: unless-stopped
+    depends_on:
+      - api
+    networks:
+      - planner_network
+    ports:
+      - '4173:80'
+    env_file:
+      - app/.env
+
   api:
-    build: ./api
+    image: ${DOCKER_USER}/api_constellation:latest
+    restart: unless-stopped
     ports:
       - 4200:4200
     dns:
@@ -10,7 +23,6 @@ services:
     depends_on:
       - db
       - redis
-    restart: always
     env_file:
       - ./api/.env
     volumes:
@@ -21,7 +33,7 @@ services:
       - planner_network
 
   ws:
-    build: ./ws
+    image: ${DOCKER_USER}/ws_constellation:latest
     ports:
       - 7000:7000
     dns:
@@ -30,7 +42,7 @@ services:
       - 1.1.1.1
     depends_on:
       - redis
-    restart: always
+    restart: unless-stopped
     env_file:
       - ./ws/.env
     networks:

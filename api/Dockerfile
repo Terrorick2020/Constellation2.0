@@ -1,11 +1,27 @@
-FROM node:lts-alpine
+# Сборка
+FROM node:22-alpine AS builder
+ 
+WORKDIR /api
 
-WORKDIR /app
-# RUN apk update && apk upgrade && apk add --no-cache make gcc g++ python3 
-RUN apk update && apk upgrade
+COPY package.json ./
+RUN npm install --legacy-peer-deps
+
 COPY . .
+RUN npx prisma generate
+RUN npm run build
 
-RUN npm i --legacy-peer-deps
+# Продуктивный образ
+FROM node:22-alpine
+
+WORKDIR /api
+
+COPY package.json ./
+RUN npm install --omit=dev --legacy-peer-deps
+
+COPY --from=builder /api/node_modules ./node_modules
+COPY --from=builder /api/dist ./dist
+COPY --from=builder /api/prisma ./prisma
+COPY --from=builder /api/wait-for-db.sh ./wait-for-db.sh
 
 RUN chmod +x ./wait-for-db.sh
 

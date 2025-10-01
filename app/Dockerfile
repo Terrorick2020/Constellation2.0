@@ -1,14 +1,24 @@
-FROM node:20-alpine
+# Сборочный этап
+FROM node:22-alpine AS builder
 
-WORKDIR /app
+WORKDIR /client
 
 COPY package.json .
 
-RUN npm i
-COPY . .
+RUN npm install --legacy-peer-deps
 
+COPY . . 
 RUN npm run build
+RUN npm run minify
 
-EXPOSE 3000
+# # Этап продакшена — через nginx
+# FROM nginx:stable-alpine
+# COPY --from=builder /client/node_modules ./node_modules
+# COPY --from=builder /client/dist /usr/share/nginx/html
+# EXPOSE 4173
+# CMD ["nginx", "-g", "daemon off;"]
 
-ENTRYPOINT [ "node", ".output/server/index.mjs" ]
+# Пробная версия
+EXPOSE 4173
+
+CMD ["npm", "run", "preview"]
