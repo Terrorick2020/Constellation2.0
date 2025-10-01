@@ -1,14 +1,14 @@
-#!/bin/bash
+#!/bin/sh
 
-# Ждем, пока база данных будет доступна на порту 5432
-until nc -z -v -w30 db 5432; do
-  echo "Waiting for database connection..."
+echo "⏳ Waiting for PostgreSQL (db:5432)..."
+
+while ! nc -z db 5432; do
   sleep 1
 done
 
-# Когда база данных доступна, выполняем миграции и запускаем приложение
-echo "Database is up, running prisma db push"
-npx prisma db push
+echo "✅ Database is ready!"
+echo "🚀 Running Prisma DB push..."
+npx prisma db push --accept-data-loss
 
-# Запускаем приложение
-npm run start
+echo "▶️ Starting application..."
+exec npm run start

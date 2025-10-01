@@ -34,8 +34,8 @@ const TABS: IChatFilterTab[] = [
   { label: 'Все', key: 'all' },
   { label: 'Закрепленные', key: 'pinned' },
   { label: 'Новое', key: 'unread' },
-  { label: 'Обсуждение', key: 'discussion' },
+  // { label: 'Обсуждение', key: 'discussion' },
   // @ts-ignore
-  { label: 'Тестовый лейбл', key: 'test' }
+  // { label: 'Тестовый лейбл', key: 'test' }
 ]
 </script>

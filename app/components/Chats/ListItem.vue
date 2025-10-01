@@ -6,28 +6,26 @@
   >
     <el-avatar :size="52" :src="props.chat.avatar"> photo </el-avatar>
     <div class="flex grow flex-col gap-y-[5px]">
-      <!-- chat header -->
       <div class="flex justify-between">
         <div class="flex items-center gap-x-1">
-          <span class="text-sm font-bold text-black">{{ props.chat.label }}</span>
+          <span class="text-sm font-bold text-black">{{ props.chat.label || 'Загрузка...' }}</span>
           <SVGPin2 v-show="props.chat.pinned" class="size-2 text-gray-800" />
           <SVGCheckmarkCircle v-show="props.chat.verified" class="size-2 text-gray-800" />
           <SVGVolumeOff v-show="props.chat.muted" class="size-2 text-gray-800" />
         </div>
         <div class="flex items-center gap-x-1">
-          <span class="text-sm text-gray-400">16:15</span>
-          <ChatsAsideOptions class="hidden rounded group-hover:block" />
+          <span class="text-sm text-gray-400">{{ formattedTime || 'Загрузка...' }}</span>
+          <ChatsAsideOptions :chat="props.chat" class="hidden rounded group-hover:block" />
         </div>
       </div>
 
-      <!-- list chats -->
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-1">
           <span v-show="props.chat.me" class="text-sm font-bold text-black"> Вы: </span>
           <SVGPaperClip v-show="props.chat.type === 'document'" class="stroke-[#E44820]" />
 
           <span :class="textClasses">
-            {{ props.chat.lastMessage }}
+            {{ props.chat.lastMessage || 'Загрузка...' }}
           </span>
         </div>
         <div
@@ -47,6 +45,15 @@ import SVGPaperClip from '@/assets/icons/paper-clip.svg'
 import SVGVolumeOff from '@/assets/icons/volume-off.svg'
 import SVGCheckmarkCircle from '@/assets/icons/checkmark-circle.svg'
 import type { IChat } from '~/types/chats'
+import { getMetadata } from '~/stores/chats/getMetadata'
+
+
+import { computed } from 'vue'
+
+
+
+
+
 
 interface Props {
   chat: IChat
@@ -58,6 +65,17 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+console.log('props', props)
+
+const formattedTime = computed(() => {
+  if (!props.chat.lastTime) return ''
+  const date = new Date(props.chat.lastTime)
+  return date.toLocaleTimeString('ru-RU', {
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+})
 
 const textClasses = computed(() => {
   return ['text-sm', props.chat.type === 'document' ? 'text-[#E44820]' : 'text-black/50']

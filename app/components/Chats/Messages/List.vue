@@ -1,61 +1,69 @@
 <template>
-  <el-scrollbar ref="scrollbarRef" wrap-class="!scroll-smooth">
-    <!-- list -->
-    <div ref="listRef" class="relative flex flex-col justify-end p-5">
-      <ChatsMessagesListItem :sender="false" :text="'Сообщение'" class="mb-[10px]" />
-      <ChatsMessagesListItem :sender="false" :text="'Сообщение'" />
-
-      <!-- time step -->
+  <el-scrollbar ref="scrollbarRef" wrap-class="!scroll-smooth" class="flex-1">
+    <div ref="listRef" class="relative flex flex-col p-5">
       <ChatsMessagesListItemTimeStep />
 
       <ChatsMessagesListItem
-        v-for="(mess, idx) in MESSAGES"
-        :key="mess.text"
+        v-for="(mess, idx) in displayedMessages"
+        :key="mess.id"
         :sender="mess.sender"
         :text="mess.text"
-        :file="mess?.file"
+        :timestamp="mess.timestamp"
+        :file="mess.file"
+        @reply="$emit('reply', $event)"
         :class="getMessageClass(mess, idx)"
       />
 
-      <!-- system message -->
       <ChatsMessagesListItemSystem />
     </div>
   </el-scrollbar>
 </template>
 
 <script setup lang="ts">
+import { ref, computed, nextTick, watch } from 'vue'
 import type { ElScrollbar } from 'element-plus'
+import { useChatMessagesStore } from '~/stores/chats/messages'
+
+const props = defineProps<{
+  searchQuery?: string
+}>()
+
+const chatMessagesStore = useChatMessagesStore()
+const sortedMessages = computed(() => chatMessagesStore.sortedMessages)
+
+const displayedMessages = computed(() => {
+  if (!props.searchQuery?.trim()) return sortedMessages.value
+
+  const q = props.searchQuery.toLowerCase()
+  return sortedMessages.value.filter(msg =>
+    msg.text.toLowerCase().includes(q)
+  )
+})
 
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 const listRef = ref<HTMLElement | null>(null)
 
-const MESSAGES = [
-  { sender: true, text: 'Текстовое сообщение 1' },
-  { sender: true, text: 'Текстовое сообщение 2 ' },
-  { sender: false, text: 'Текстовое сообщение 3' },
-  { sender: false, text: 'Текстовое сообщение 4' },
-  { sender: false, text: 'Текстовое сообщение 5' },
-  { sender: false, text: 'Текстовое сообщение 6 ' },
-  { sender: true, text: 'Текстовое сообщение 7' },
-  { sender: true, text: 'Текстовое сообщение 8' },
-  { sender: true, text: 'Текстовое сообщение 9' },
-  { sender: false, text: 'Текстовое сообщение 10' },
-  { sender: false, text: 'Текстовое сообщение 11' },
-  { sender: false, file: true, text: '' }
-]
-
-const scrollToLastMessage = () => {
-  if (!listRef.value || !scrollbarRef.value) return
-
-  scrollbarRef.value.setScrollTop(listRef.value.scrollHeight)
-}
-
-type TMessage = (typeof MESSAGES)[0]
-const getMessageClass = (message: TMessage, index: number) => {
-  const isLastInGroup = !MESSAGES[index + 1] || MESSAGES[index + 1].sender !== message.sender
+const getMessageClass = (message: any, index: number) => {
+  const isLastInGroup = !displayedMessages.value[index + 1] || displayedMessages.value[index + 1].sender !== message.sender
   return isLastInGroup ? 'mb-4' : 'mb-[10px]'
 }
 
-// onMounted(scrollToLastMessage)
-nextTick(scrollToLastMessage)
+const scrollToLastMessage = () => {
+  if (!listRef.value || !scrollbarRef.value) return
+  nextTick(() => {
+    setTimeout(() => {
+      if (listRef.value && scrollbarRef.value) {
+        scrollbarRef.value.setScrollTop(listRef.value.scrollHeight)
+      }
+    }, 100)
+  })
+}
+
+watch(
+  () => displayedMessages.value.length,
+  () => {
+    scrollToLastMessage()
+  },
+  { immediate: true }
+)
 </script>

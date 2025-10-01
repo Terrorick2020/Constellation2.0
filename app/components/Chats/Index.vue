@@ -1,247 +1,14 @@
-<!-- <template>
-  <ChatsList :chats="CHATS" @select-chat="selectChat" />
-
-  <section class="h-full w-full overflow-x-hidden">
-    <ChatsMessages
-      v-show="selectedChat"
-      :class="[
-        'fixed lg:relative lg:translate-x-0',
-        selectedChat ? '-translate-x-full' : 'translate-x-full'
-      ]"
-    />
-    <ChatsNotSelectedChat v-show="!selectedChat" />
-  </section>
-</template>
-
-<script setup lang="ts">
-import AvatarImage from '@/assets/image/avatar.jpg'
-import { ChatKey } from '~/types/chats/symbols'
-import type { IChat } from '~/types/chats'
-
-const mountedGetChats = () => {
-
-}
-
-onMounted(() => {
-  mountedGetChats()
-})
-
-const CHATS: IChat[] = [
-  {
-    id: 1,
-    avatar: AvatarImage,
-    label: 'Britva',
-    lastMessage: 'Добрый день, на связи Britva.',
-    unread: 2,
-    pinned: true,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  },
-  {
-    id: 2,
-    avatar: AvatarImage,
-    label: 'Nintendo Россия',
-    lastMessage: 'Добрый день, на связи Britva.',
-    unread: 2,
-    pinned: false,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  },
-  {
-    id: 3,
-    avatar: AvatarImage,
-    label: 'Сбербанк',
-    lastMessage: 'шаблон_договора.pdf',
-    unread: 0,
-    pinned: false,
-    verified: true,
-    muted: false,
-    me: false,
-    type: 'document'
-  },
-  {
-    id: 4,
-    avatar: AvatarImage,
-    label: 'Samsung TechnoFun',
-    lastMessage: 'Хорошо, созвонимся в 12?',
-    unread: 0,
-    pinned: false,
-    verified: false,
-    muted: true,
-    me: true,
-    type: 'message'
-  },
-  {
-    id: 5,
-    avatar: AvatarImage,
-    label: 'Britva',
-    lastMessage: 'Добрый день, на связи Britva.',
-    unread: 0,
-    pinned: false,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  },
-  {
-    id: 6,
-    avatar: AvatarImage,
-    label: 'Britva',
-    lastMessage: 'Добрый день, на связи Britva.',
-    unread: 0,
-    pinned: false,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  },
-  {
-    id: 7,
-    avatar: AvatarImage,
-    label: 'Britva',
-    lastMessage: 'Добрый день, на связи Britva.',
-    unread: 0,
-    pinned: false,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  },
-  {
-    id: 8,
-    avatar: AvatarImage,
-    label: 'Britva',
-    lastMessage: 'Добрый день, на связи Britva.',
-    unread: 0,
-    pinned: false,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  },
-  {
-    id: 9,
-    avatar: AvatarImage,
-    label: 'Britva',
-    lastMessage: 'Добрый день, на связи Britva.',
-    unread: 0,
-    pinned: false,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  },
-  {
-    id: 10,
-    avatar: AvatarImage,
-    label: 'Britva',
-    lastMessage: 'Добрый день, на связи Britva.',
-    unread: 0,
-    pinned: false,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  },
-  {
-    id: 11,
-    avatar: AvatarImage,
-    label: 'Britva',
-    lastMessage: 'Добрый день, на связи Britva.',
-    unread: 0,
-    pinned: false,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  },
-  {
-    id: 12,
-    avatar: AvatarImage,
-    label: 'Britva',
-    lastMessage: 'Добрый день, на связи Britva.',
-    unread: 0,
-    pinned: false,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  },
-  {
-    id: 13,
-    avatar: AvatarImage,
-    label: 'Britva',
-    lastMessage: 'Добрый день, на связи Britva.',
-    unread: 0,
-    pinned: false,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  },
-  {
-    id: 14,
-    avatar: AvatarImage,
-    label: 'Britva',
-    lastMessage: 'Добрый день, на связи Britva.',
-    unread: 0,
-    pinned: false,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  },
-  {
-    id: 15,
-    avatar: AvatarImage,
-    label: 'Britva',
-    lastMessage: 'Last message',
-    unread: 0,
-    pinned: false,
-    verified: false,
-    muted: false,
-    me: false,
-    type: 'message'
-  }
-]
-
-const selectedChat = ref<IChat | null>(null)
-
-const selectChat = (chat: IChat) => {
-  console.log(chat)
-  selectedChat.value = chat
-}
-
-const closeChat = () => {
-  selectedChat.value = null
-}
-
-provide(ChatKey, {
-  closeChat
-})
-</script> -->
-  
-
-
-<!-- components/Chats/Index.vue -->
 <template>
-  <!-- Список чатов -->
   <ChatsList
     :chats="chats"
     @select-chat="selectChat"
     :loading="loading"
   />
 
-  <!-- Область сообщений -->
   <section class="h-full w-full overflow-x-hidden">
     <ChatsMessages
       v-show="selectedChat"
-      :selected-chat="selectedChat" 
-
+      :selected-chat="selectedChat"
       :class="[
         'fixed lg:relative lg:translate-x-0',
         selectedChat ? '-translate-x-full' : 'translate-x-full'
@@ -255,17 +22,101 @@ provide(ChatKey, {
 import { ChatKey } from '~/types/chats/symbols'
 import type { IChat } from '~/types/chats'
 import { onMounted, ref, provide } from 'vue'
-import { useChats } from '~/stores/getChats'
+import { useChats } from '~/stores/chats/getChats'
+import { getMetadata } from '~/stores/chats/getMetadata'
+import { getMessages } from '~/stores/chats/getMessage'
+import { useChatMessagesStore } from '~/stores/chats/messages'
+import {readMessages} from '~/stores/chats/readMessage'
+import { useAuthStore } from '~/stores/auth'
+import { joinChatRoom } from '~/utils/sockets'
+import { subscribeToNewMessage } from '~/utils/sockets'
+
 
 const { chats, loading, fetchChats } = useChats()
 const selectedChat = ref<IChat | null>(null)
+const authStore = useAuthStore()
+const chatMessagesStore = useChatMessagesStore()
+const unsubscribe = ref<(() => void) | null>(null)
+
+
+const joinChat = async (chatId: string) => {
+  if (!chatId) return
+  if (!authStore.userId) {
+    console.warn('Нет userId для подключения к чату')
+    return
+  }
+
+  try {
+    await joinChatRoom(chatId)
+    console.log('✅ Присоединились к чату:', chatId)
+  } catch (error) {
+    console.error('❌ Ошибка подключения к чату:', error)
+  }
+}
 
 onMounted(() => {
+  if (unsubscribe.value) {
+    console.log('🧹 Отписываемся от WebSocket при уходе со страницы')
+
+    unsubscribe.value()
+  }
   fetchChats()
 })
 
-const selectChat = (chat: IChat) => {
+
+const selectChat = async (chat: IChat) => {
+   if (unsubscribe.value) {
+    unsubscribe.value()
+    console.log('📤 Отписываемся от предыдущего чата')
+
+    unsubscribe.value = null
+  }
+  chatMessagesStore.clear()
+
   selectedChat.value = chat
+  console.log('📂 Выбран чат:', chat.id)
+
+  try {
+    const chatId = chat.id.toString()
+
+    
+    const metadata = await getMetadata(chatId)
+    console.log('Ответ от сервера на получение метаданных:', metadata)
+    
+    const getChats = await fetchChats()
+    console.log('Ответ от сервера на получение чатов:', getChats)
+  
+    const readResult = await readMessages(chatId)
+    console.log('Ответ от сервера на чтение чата:', readResult) 
+    const result = await getMessages(chatId)
+    console.log('Ответ от сервера на получение сообщении:', result)
+    if (result.success) {
+      const mappedMessages = result.data.map((msg: any) => ({
+        id: msg.id,
+        text: msg.text,
+        sender: msg.fromUser === authStore.userId?.toString(),
+        timestamp: msg.created_at
+      }))
+      chatMessagesStore.setMessages(mappedMessages)
+    }
+    await joinChat(chatId)
+    console.log('👂 Подписываемся на событие "new-message"')
+    
+    unsubscribe.value = subscribeToNewMessage((message) => {
+  console.log('📨 Получено новое сообщение через WebSocket:', message)
+  
+  if (message.chatId === chatId) {
+    const isOwn = String(message.fromUser) === String(authStore.userId)
+    chatMessagesStore.addMessage(
+      message.text,
+      isOwn, 
+      message.created_at || Date.now()
+    )
+  }
+})
+  } catch (error) {
+    console.error('Ошибка загрузки сообщений:', error)
+  }
 }
 
 const closeChat = () => {
@@ -277,4 +128,6 @@ provide(ChatKey, {
 })
 </script>
 
- 
+
+
+

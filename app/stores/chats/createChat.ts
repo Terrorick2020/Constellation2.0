@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import { useAuthStore } from './auth'
+import { useAuthStore } from '~/stores/auth'
 import { BASE_URL } from '~/env/requests.env'
 
 export const useChatStore = defineStore('chat', {

@@ -101,4 +101,24 @@ export default defineNuxtConfig({
     inject: true,
     display: 'swap'
   },
+
+  // vite: {
+  //   css: {
+  //     preprocessorOptions: {
+  //       scss: {
+  //         // Добавляем путь к папке со SCSS-частями
+  //         additionalData: `@use "sass:math";`, // если используется math, иначе удали
+  //         importer: undefined, // сбрасываем, если был
+  //         // Главное — includePaths как массив строк:
+  //         includePaths: ['assets/scss']
+  //       }
+  //     }
+  //   }
+  // }
+
+
+
+
 })
+
+

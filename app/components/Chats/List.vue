@@ -1,23 +1,25 @@
 <template>
   <section class="h-full min-w-full lg:min-w-[350px] lg:border-r">
-    <!-- search + backet -->
-    <ChatsHeader v-model="inputSearch" />
+    <ChatsHeader ref="headerRef" />
 
-    <!-- tabs + chats -->
     <div ref="chatsContainer" class="flex h-[calc(100%-4rem)] flex-col">
-      <!-- tab list -->
       <ChatsTabs :filter-key="filterKey" @select="changeKey" />
 
-      <!-- chat list -->
       <el-scrollbar view-class="flex flex-col">
-        <ChatsListItem v-for="chat in chatsFiltred" :key="chat.id" :chat @select="selectChat" />
+        <ChatsListItem
+          v-for="chat in filteredAndSortedChats"
+          :key="chat.id"
+          :chat="chat"
+          @select="selectChat"
+        />
       </el-scrollbar>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import type { IChat, IChatFilterTab, TChatFilterTabKeys } from '~/types/chats'
+import type { IChat, TChatFilterTabKeys } from '~/types/chats'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 interface Props {
   chats: IChat[]
@@ -25,23 +27,61 @@ interface Props {
 
 const props = defineProps<Props>()
 const emit = defineEmits(['selectChat'])
-const inputSearch = defineModel({ type: String })
+const headerRef = ref()
+
+const searchQuery = ref('')
+
+const isShowArchive = computed(() => {
+  return headerRef.value?.isShowArchive || false
+})
+
+let searchInput: HTMLInputElement | null = null
+
+const handleInput = () => {
+  if (searchInput) {
+    searchQuery.value = searchInput.value
+  }
+}
+
+onMounted(() => {
+  searchInput = document.querySelector('input[placeholder="Поиск по названию и др..."]')
+  if (searchInput) {
+    searchInput.addEventListener('input', handleInput)
+  }
+})
+
+onUnmounted(() => {
+  if (searchInput) {
+    searchInput.removeEventListener('input', handleInput)
+  }
+})
+
+const filteredAndSortedChats = computed(() => {
+  let chats = [...props.chats]
+
+  if (searchQuery.value.trim()) {
+    const q = searchQuery.value.toLowerCase()
+    chats = chats.filter(chat => chat.label.toLowerCase().includes(q))
+  }
+
+  if (isShowArchive.value) {
+    chats = chats.filter(chat => chat.archived)
+  } else {
+    chats = chats.filter(chat => !chat.archived)
+  }
+
+  if (filterKey.value === 'unread') chats = chats.filter(c => c.unread !== 0)
+  if (filterKey.value === 'pinned') chats = chats.filter(c => c.pinned)
+  if (filterKey.value === 'discussion') chats = chats
+
+  return chats.sort((a, b) => {
+    if (a.pinned !== b.pinned) return a.pinned ? -1 : 1
+    return b.lastTime - a.lastTime
+  })
+})
 
 const filterKey = ref<TChatFilterTabKeys>('all')
 const changeKey = (key: TChatFilterTabKeys) => (filterKey.value = key)
-const chatsFiltred = computed(() => {
-  return props.chats.filter((i) => {
-    if (filterKey.value === 'all') {
-      return props.chats
-    } else if (filterKey.value === 'unread') {
-      return i.unread !== 0
-    } else if (filterKey.value === 'pinned') {
-      return i.pinned
-    } else if (filterKey.value === 'discussion') {
-      return true
-    }
-  })
-})
 
 const selectChat = (chat: IChat) => {
   emit('selectChat', chat)

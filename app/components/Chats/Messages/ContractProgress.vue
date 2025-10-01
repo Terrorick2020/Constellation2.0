@@ -9,7 +9,6 @@
             ></div>
           </template>
         </el-step>
-        <!-- current -->
         <el-step class="current">
           <template #icon>
             <div
