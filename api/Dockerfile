@@ -22,6 +22,8 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/wait-for-db.sh ./wait-for-db.sh
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
+COPY --from=builder /app/nest-cli.json ./nest-cli.json
 
 RUN chmod +x ./wait-for-db.sh
 
