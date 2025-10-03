@@ -18,6 +18,8 @@ RUN npm run build
 # CMD ["nginx", "-g", "daemon off;"]
 
 # Пробная версия
-EXPOSE 4173
+EXPOSE 80
 
+ENV PORT=80
+ENV HOST=0.0.0.0
 CMD ["npm", "run", "preview"]

@@ -39,6 +39,11 @@ export default defineNuxtConfig({
     payloadExtraction: false
   },
 
+  devServer: {
+    port: 80,
+    host: '0.0.0.0'
+  },
+
   postcss: {
     plugins: {
       tailwindcss: {},
