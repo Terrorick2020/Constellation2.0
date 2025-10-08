@@ -1,9 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-03-15',
-  
+
   devtools: { enabled: true },
-  
+
   typescript: {
     typeCheck: false
   },
@@ -14,14 +14,10 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
-    'nuxt-viewport',
+    'nuxt-viewport'
   ],
 
-
-  plugins: [
-    { src: '~/plugins/socket.client.ts', mode: 'client' },
-  ],
-  
+  plugins: [{ src: '~/plugins/socket.client.ts', mode: 'client' }],
 
   svgo: {
     autoImportPath: './assets/icons/'
@@ -39,10 +35,13 @@ export default defineNuxtConfig({
     payloadExtraction: false
   },
 
-  devServer: {
-    port: 80,
-    host: '0.0.0.0'
-  },
+  devServer:
+    process.env.NODE_ENV === 'development'
+      ? {
+          port: 80,
+          host: '0.0.0.0'
+        }
+      : undefined,
 
   postcss: {
     plugins: {
@@ -105,7 +104,7 @@ export default defineNuxtConfig({
     download: true,
     inject: true,
     display: 'swap'
-  },
+  }
 
   // vite: {
   //   css: {
@@ -120,10 +119,4 @@ export default defineNuxtConfig({
   //     }
   //   }
   // }
-
-
-
-
 })
-
-
