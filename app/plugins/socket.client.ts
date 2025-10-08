@@ -13,6 +13,15 @@ export default defineNuxtPlugin((nuxtApp) => {
       token: token || '' 
     }
   })
+  
+  // const socket: Socket = io('http://localhost:7000', {
+  //   path: '/socket.io',
+  //   transports: ['websocket'],
+  //   withCredentials: true,
+  //   auth: {
+  //     token: token || '' 
+  //   }
+  // })
 
   socket.on('connect', () => {
     console.log('✅ WebSocket подключен. ID:', socket.id)

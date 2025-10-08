@@ -26,7 +26,7 @@
       </div>
       <div class="lg:w-1/3 flex flex-col lg:justify-end justify-center items-center lg:items-end h-full w-full gap-2">
         <div class="w-full">
-          <nuxt-link v-if="isAuth" href="/docs"><el-button round class="btn-main w-full">На главную</el-button></nuxt-link>
+          <nuxt-link v-if="isAuth" href="/"><el-button round class="btn-main w-full">На главную</el-button></nuxt-link>
           <nuxt-link v-else href="/auth/sign-in"><el-button round class="btn-main w-full">Вход/Регистрация</el-button></nuxt-link>
         </div>
         <div class="w-full">

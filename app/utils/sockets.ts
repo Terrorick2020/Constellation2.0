@@ -2,6 +2,7 @@ import { io, Socket } from 'socket.io-client'
 import { useAuthStore } from '~/stores/auth'
 
 const WS_URL = 'http://78.24.221.66'
+// const WS_URL = 'http://localhost:7000'
 
 let socket: Socket | null = null
 
