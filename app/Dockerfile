@@ -60,5 +60,6 @@ ENV PORT=80
 EXPOSE 80
 
 USER node
-
-CMD ["node", ".output/server/index.mjs"]
+ENV NODE_OPTIONS="--max-old-space-size=1024"
+# CMD ["node", ".output/server/index.mjs"]
+CMD ["npm", "run", "preview"]
