@@ -55,6 +55,7 @@ COPY --from=builder /client/package*.json ./
 RUN npm ci --omit=dev --legacy-peer-deps --production
 
 # Запуск SSR-сервера
+ENV HOST=0.0.0.0
 ENV PORT=80
 EXPOSE 80
 
