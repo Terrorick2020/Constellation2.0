@@ -36,18 +36,9 @@ export const useSettingsStore = defineStore('settings', () => {
             id: 'language',
             name: 'Язык',
             scopes: [
-                {
-                    id: 'English',
-                    name: 'Английский'
-                },
-                {
-                    id: 'Russian',
-                    name: 'Русский'
-                },
-                {
-                    id: 'Chinese',
-                    name: 'Китайский'
-                },
+                    { id: 'en', name: 'Английский' },
+                    { id: 'ru', name: 'Русский' },
+                    { id: 'be', name: 'Белорусский' },
             ]
         },
         // {

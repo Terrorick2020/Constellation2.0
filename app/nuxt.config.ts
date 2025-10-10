@@ -1,9 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { fileURLToPath } from 'node:url'
+import { dirname, join } from 'node:path'
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-03-15',
-
+  
   devtools: { enabled: true },
-
+  
   typescript: {
     typeCheck: false
   },
@@ -14,10 +17,27 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
-    'nuxt-viewport'
+    'nuxt-viewport',
+    '@nuxtjs/i18n',
   ],
 
-  plugins: [{ src: '~/plugins/socket.client.ts', mode: 'client' }],
+  i18n: {
+    lazy: true,
+    locales: [
+      { code: 'ru', name: 'Русский', file: 'ru.json' },
+      { code: 'en', name: 'English', file: 'en.json' },
+      { code: 'be', name: 'Белорусский', file: 'be.json' }
+    ],
+    defaultLocale: 'ru',
+    langDir: 'locales',
+    // vueI18n: './i18n.config.ts',
+    vueI18n: join(__dirname, 'i18n.config.ts'),
+  },
+
+  plugins: [
+    { src: '~/plugins/socket.client.ts', mode: 'client' },
+  ],
+  
 
   svgo: {
     autoImportPath: './assets/icons/'
@@ -34,14 +54,6 @@ export default defineNuxtConfig({
   experimental: {
     payloadExtraction: false
   },
-
-  devServer:
-    process.env.NODE_ENV === 'development'
-      ? {
-          port: 80,
-          host: '0.0.0.0'
-        }
-      : undefined,
 
   postcss: {
     plugins: {
@@ -104,7 +116,7 @@ export default defineNuxtConfig({
     download: true,
     inject: true,
     display: 'swap'
-  }
+  },
 
   // vite: {
   //   css: {
@@ -119,4 +131,10 @@ export default defineNuxtConfig({
   //     }
   //   }
   // }
+
+
+
+
 })
+
+

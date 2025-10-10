@@ -1,0 +1,10 @@
+{
+  "settings": {
+    "title": "Select the categories you would like to change",
+    "currentLanguage": "Current language:",
+    "theme": {
+      "label": "Theme"
+    },
+    "save": "Save"
+  }
+}
