@@ -52,7 +52,7 @@ const profileSettings = [
   // { id: 4, title: 'Рекламный инвентарь', path: '/settings/inventory', iconName: 'list', color: '#FF6C46' },
 ]
 
-const serviceSettings = []
+
 
 const navigationLinks = [
   {id: 1, title: 'Настройки профиля', children: profileSettings},

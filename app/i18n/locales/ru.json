@@ -1,8 +1,44 @@
 {
   "settings": {
-    "title": "Выберите категории, которые хотели бы изменить",
-    "currentLanguage": "Текущий язык:",
+    "title": "Выберите категории, которые хотите изменить",
     "theme": { "label": "Тема" },
     "save": "Сохранить"
+  },
+  "scopes": {
+    "language": "Язык",
+    "en": "Английский",
+    "ru": "Русский",
+    "be": "Белорусский"
+  },
+  "profile": {
+    "title": "Изменить данные профиля",
+    "fullName": "ФИО*",
+    "division": "Подразделение*",
+    "position": "Должность*",
+    "photoTitle": "Фото профиля",
+    "photoHint": "Рекомендуемый размер: 512x512px.",
+    "photoFormats": "Доступные форматы: png, jpeg.",
+    "backgroundTitle": "Фоновое фото",
+    "backgroundHint": "Рекомендуемый размер: 812x812px.",
+    "backgroundFormats": "Доступные форматы: png, jpeg.",
+    "upload": "Загрузить",
+    "academyName": "ВКА им. А.Ф. Можайского"
+  },
+  "sidebar": {
+    "profileTitle": "Ваш профиль",
+    "group": {
+      "profileSettings": "Настройки профиля"
+    },
+    "links": {
+      "profile": "Профиль",
+      "scope": "Настройка сервиса"
+    }
+  },
+  "notifications": {
+    "profileNotVerified": {
+      "title": "Профиль не подтверждён",
+      "description": "Подтвердите документы, чтобы получить доступ к переписке с другими пользователями.",
+      "action": "Подтвердить"
+    }
   }
 }

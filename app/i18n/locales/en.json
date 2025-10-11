@@ -1,10 +1,44 @@
 {
   "settings": {
-    "title": "Select the categories you would like to change",
-    "currentLanguage": "Current language:",
-    "theme": {
-      "label": "Theme"
-    },
+    "title": "Select the categories you want to change",
+    "theme": { "label": "Theme" },
     "save": "Save"
+  },
+  "scopes": {
+    "language": "Language",
+    "en": "English",
+    "ru": "Russian",
+    "be": "Belarusian"
+  },
+  "profile": {
+    "title": "Edit profile data",
+    "fullName": "Full name*",
+    "division": "Division*",
+    "position": "Position*",
+    "photoTitle": "Profile photo",
+    "photoHint": "Recommended size: 512x512px.",
+    "photoFormats": "Available formats: png, jpeg.",
+    "backgroundTitle": "Background photo",
+    "backgroundHint": "Recommended size: 812x812px.",
+    "backgroundFormats": "Available formats: png, jpeg.",
+    "upload": "Upload",
+    "academyName": "Mozhaysky Military Space Academy"
+  },
+  "sidebar": {
+    "profileTitle": "Your profile",
+    "group": {
+      "profileSettings": "Profile settings"
+    },
+    "links": {
+      "profile": "Profile",
+      "scope": "Service settings"
+    }
+  },
+  "notifications": {
+    "profileNotVerified": {
+      "title": "Profile not verified",
+      "description": "Verify your documents to access messaging with other users.",
+      "action": "Verify"
+    }
   }
 }

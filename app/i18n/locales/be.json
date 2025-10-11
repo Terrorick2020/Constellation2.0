@@ -1,10 +1,44 @@
 {
   "settings": {
-    "title": "Выберыце катэгорыі, якія вы хочаце змяніць",
-    "currentLanguage": "Бягучая мова:",
-    "theme": {
-      "label": "Тэма"
-    },
+    "title": "Абярыце катэгорыі, якія хочаце змяніць",
+    "theme": { "label": "Тэма" },
     "save": "Захаваць"
+  },
+  "scopes": {
+    "language": "Мова",
+    "en": "Англійская",
+    "ru": "Руская",
+    "be": "Беларуская"
+  },
+  "profile": {
+    "title": "Змяніць дадзеныя профілю",
+    "fullName": "ПІБ*",
+    "division": "Падраздзяленне*",
+    "position": "Пасада*",
+    "photoTitle": "Фота профілю",
+    "photoHint": "Рэкамендаваны памер: 512x512px.",
+    "photoFormats": "Даступныя фарматы: png, jpeg.",
+    "backgroundTitle": "Фонавае фота",
+    "backgroundHint": "Рэкамендаваны памер: 812x812px.",
+    "backgroundFormats": "Даступныя фарматы: png, jpeg.",
+    "upload": "Загрузіць",
+    "academyName": "ВВА імя А.Ф. Мажайскага"
+  },
+  "sidebar": {
+    "profileTitle": "Ваш профіль",
+    "group": {
+      "profileSettings": "Налады профілю"
+    },
+    "links": {
+      "profile": "Профіль",
+      "scope": "Налада сэрвісу"
+    }
+  },
+  "notifications": {
+    "profileNotVerified": {
+      "title": "Профіль не пацверджаны",
+      "description": "Пацвердзіце дакументы, каб атрымаць доступ да перапіскі з іншымі карыстальнікамі.",
+      "action": "Пацвердзіць"
+    }
   }
 }

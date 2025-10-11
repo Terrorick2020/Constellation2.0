@@ -117,6 +117,11 @@ export default defineNuxtConfig({
     inject: true,
     display: 'swap'
   },
+  vite: {
+    build: {
+      sourcemap: false,  
+    }
+  }
 
   // vite: {
   //   css: {

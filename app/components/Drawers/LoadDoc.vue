@@ -56,40 +56,43 @@ const loadDocs = async () => {
 
   if (!fileList.value.length) return;
 
-  for (let file: UploadFile of fileList.value) {
-      const formData = new FormData()
-      formData.append('title', file.raw.name)
-      formData.append('file', file.raw)
+  for (const file of fileList.value) {
+  const uploadFile = file as UploadFile
 
-      console.log( file.raw.name )
-      console.log( file.raw )
+  const formData = new FormData()
+  formData.append('title', uploadFile.raw.name)
+  formData.append('file', uploadFile.raw)
 
-      console.info(formData)
+  console.log(uploadFile.raw.name)
+  console.log(uploadFile.raw)
 
-      const { accessToken } = useAuthStore()
+  console.info(formData)
 
-      const response = await axios.post(`${BASE_URL}/admin/post`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', 
-          'Authorization': `Bearer ${accessToken}`
-        },
-      })
-      const authStore = useAuthStore()
+  const { accessToken } = useAuthStore()
+
+  const response = await axios.post(`${BASE_URL}/admin/post`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': `Bearer ${accessToken}`
+    },
+  })
+
+  const authStore = useAuthStore()
 
   switch (response.data.result) {
-    case 'success': 
-    authStore.apiRes.value = true
-    authStore.apiRes.type = ApiResType.success
-    authStore.apiRes.title = 'Ура!'
-    authStore.apiRes.msg = `Успешное добавление документа ${response.data.data.title}`
-    break
+    case 'success':
+      authStore.apiRes.value = true
+      authStore.apiRes.type = ApiResType.success
+      authStore.apiRes.title = 'Ура!'
+      authStore.apiRes.msg = `Успешное добавление документа ${response.data.data.title}`
+      break
     case 'failed':
-    authStore.apiRes.value = true
-    authStore.apiRes.type = ApiResType.error
-    authStore.apiRes.title = 'Ошибка!'
-    authStore.apiRes.msg = `Не удалось добавить документ ${response.data.data.title}`
+      authStore.apiRes.value = true
+      authStore.apiRes.type = ApiResType.error
+      authStore.apiRes.title = 'Ошибка!'
+      authStore.apiRes.msg = `Не удалось добавить документ ${response.data.data.title}`
   }
-  }
+}
 
   props.setDrawer( false )
 
@@ -102,6 +105,7 @@ const handleClose = () => {
     props.setDrawer( false )
 }
 </script>
+
 
 <style scoped lang="scss">
 .el-icon--upload {

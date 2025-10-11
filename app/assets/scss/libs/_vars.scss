@@ -1,0 +1,19 @@
+:root {
+ 
+  --bounce-1: 1.1s;
+  --bounce-2: 1.25s;
+  --bounce-3: 1.15s;
+}
+
+.light {
+  --main-color: white;
+  --background-color: #12121f;
+  --message-color: #f0f0f0;
+}
+
+.dark {
+
+  --main-color: #12121f;
+  --background-color: white;
+  --message-color: #333;;
+}
