@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center block-wrapper settings-userInfo gap-[10px]">
-    <el-avatar :size="48" :src="$images['avatar']" />
+    <el-avatar :size="48" :src="$images['avatar1']" />
     <div class="flex flex-col gap-[4px]">
       <span class="font-bold">{{ username }}</span>
       <span class="text-xs opacity-40">{{ t('profile.academyName') }}</span>

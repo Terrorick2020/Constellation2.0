@@ -46,7 +46,7 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button class="s_btn" @click="dialogVisible = false">Отклонить</el-button>
-        <el-button class="f_btn" type="primary" @click="dialogVisible = false">
+        <el-button class="f_btn" type="primary" @click="handleSubmitReport">
           Подтвердить
         </el-button>
       </div>
@@ -56,6 +56,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { ElMessage } from 'element-plus' 
+
 
 const dialogVisible = ref(false)
 
@@ -64,6 +66,15 @@ const handleClose = (done: () => void) => {
 }
 
 const isAuth = ref<boolean>( true )
+const handleSubmitReport = () => {
+  dialogVisible.value = false 
+  ElMessage.success({
+    message: 'Сообщение об ошибке отправлено',
+    duration: 2000,
+    showClose: true
+  })
+  
+}
 
 </script>
 

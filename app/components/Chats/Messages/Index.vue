@@ -66,7 +66,8 @@
 </template>
 
 <script setup lang="ts">
-import Avatar from '@/assets/image/avatar.jpg'
+// import Avatar from '@/assets/image/avatar.jpg'
+import Avatar from '@/assets/image/avatar1.png'
 import { ref, computed, nextTick } from 'vue'
 import { sendMessage } from '~/stores/chats/sendMessage'
 import { sendFileMessage } from '~/stores/chats/sendFile'
@@ -74,6 +75,7 @@ import { useAuthStore } from '~/stores/auth'
 import { useChatMessagesStore } from '~/stores/chats/messages'
 import { useRouter } from 'vue-router'
 import { sendMessage as sendViaSocket } from '~/utils/sockets'
+import { ElMessage } from 'element-plus' 
 
 
 const props = defineProps<{
@@ -100,33 +102,35 @@ const handleSendMessage = async (payload: { text: string; file?: File }) => {
     const chatId = props.selectedChat.id.toString()
 
     if (payload.file) {
-      const result = await sendFileMessage(chatId, payload.file, payload.text)
+      const result = await sendFileMessage(chatId, payload.file, payload.text);
+      console.log(result)
       if (result.success) {
-        chatMessagesStore.addMessage(
-          payload.text || '[Файл]',
-          true,
-          Date.now(),
-          {
-            media_url: result.data.media_url,
-            media_type: result.data.media_type,
-            fileName: payload.file.name
-          }
-        )
-        status.value = '✅ Файл отправлен'
+        // chatMessagesStore.addMessage(
+        //   payload.text || '[Файл]',
+        //   true,
+        //   Date.now(),
+        //   {
+        //     media_url: result.data.media_url,
+        //     media_type: result.data.media_type,
+        //     fileName: payload.file.name
+        //   }
+        // )
+        // status.value = 'Файл отправлен'
       } else {
-        status.value = '❌ Ошибка отправки файла'
-        console.error(result.error)
+        // status.value = 'Ошибка отправки файла'
+        // console.error(result.error)
       }
     } else {
       const result = await sendViaSocket(chatId, payload.text)
       console.log('Ответ от сервера на отправку сообщения:', result)
       // chatMessagesStore.addMessage(payload.text, true, Date.now())
 
-      status.value = '✅ Сообщение отправлено'
+      status.value = 'Сообщение отправлено'
+      console.log("Сообщение отправлено", result)
 
     }
   } catch (error) {
-    status.value = '❌ Ошибка'
+    status.value = 'Ошибка'
     console.error(error)
   } finally {
     sending.value = false
@@ -146,6 +150,18 @@ const onHeaderSelect = (option: any) => {
     router.push(`/profiles/${props.selectedChat.userId}`)
   } else if (option.key === 'search') {
     startSearch()
+  } else if (option.key === 'report') {
+    ElMessage.success({
+      message: 'Жалоба отправлена',
+      duration: 2000,
+      showClose: true
+    })
+  } else if (option.key === 'block') {
+    ElMessage.warning({
+      message: 'Запрос на блокировку отправлен администратору',
+      duration: 3000,
+      showClose: true
+    })
   }
 }
 

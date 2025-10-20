@@ -1,78 +1,75 @@
 <template>
-    <div class="demo-collapse">
-      <el-collapse v-model="activeName" accordion>
-        <el-collapse-item title="Безопасность" name="1">
-          <div>
-            Consistent with real life: in line with the process and logic of real
-            life, and comply with languages and habits that the users are used to;
-          </div>
-          <div>
-            Consistent within interface: all elements should be consistent, such
-            as: design style, icons and texts, position of elements, etc.
-          </div>
-        </el-collapse-item>
-        <el-collapse-item title="Конфиденциальность" name="2">
-          <div>
-            Operation feedback: enable the users to clearly perceive their
-            operations by style updates and interactive effects;
-          </div>
-          <div>
-            Visual feedback: reflect current state by updating or rearranging
-            elements of the page.
-          </div>
-        </el-collapse-item>
-        <el-collapse-item title="Утеря секретного ключа" name="3">
-          <div>
-            Simplify the process: keep operating process simple and intuitive;
-          </div>
-          <div>
-            Definite and clear: enunciate your intentions clearly so that the
-            users can quickly understand and make decisions;
-          </div>
-          <div>
-            Easy to identify: the interface should be straightforward, which helps
-            the users to identify and frees them from memorizing and recalling.
-          </div>
-        </el-collapse-item>
-        <el-collapse-item title="Жалобы" name="4">
-          <div>
-            Decision making: giving advices about operations is acceptable, but do
-            not make decisions for the users;
-          </div>
-          <div>
-            Controlled consequences: users should be granted the freedom to
-            operate, including canceling, aborting or terminating current
-            operation.
-          </div>
-        </el-collapse-item>
-      </el-collapse>
-    </div>
-  </template>
-  
-  <script lang="ts" setup>
-  import { ref } from 'vue'
-  
-  const activeName = ref('1')
-  </script>
+  <div class="demo-collapse">
+    <el-collapse v-model="activeName" accordion>
+      <el-collapse-item title="🔒Безопасность" name="1">
+        <div>
+          Все документы обрабатываются и хранятся в защищённой информационной среде, соответствующей требованиям нормативных актов Министерства обороны РФ. Доступ к материалам возможен только после многофакторной аутентификации и строгой верификации полномочий пользователя.
+        </div>
+      </el-collapse-item>
+
+      <el-collapse-item title="🛡️Конфиденциальность" name="2">
+        <div>
+          Информация, передаваемая через платформу, не подлежит разглашению. Обработка данных осуществляется в рамках установленного режима секретности, а журналы операций подлежат шифрованию и аудиту в соответствии с внутренними регламентами ВС РФ.
+        </div>
+      </el-collapse-item>
+
+      <el-collapse-item title="⚠️Утеря секретного ключа" name="3">
+        <div>
+          Секретный ключ является единственным средством доступа к зашифрованным материалам. В случае его утраты восстановление данных технически невозможно. Рекомендуется хранить резервную копию ключа в защищённом хранилище в соответствии с инструкцией по обеспечению информационной безопасности.
+        </div>
+      </el-collapse-item>
+
+      <el-collapse-item title="📬Жалобы" name="4">
+        <div>
+          В случае выявления нарушений в обработке документов, технических сбоев или несоответствия регламенту вы можете подать обращение через защищённый канал связи. Все жалобы рассматриваются в приоритетном порядке уполномоченным подразделением в срок, установленный внутренними нормативами.
+        </div>
+      </el-collapse-item>
+    </el-collapse>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const activeName = ref('1')
+</script>
 
 <style scoped lang="scss">
 .demo-collapse {
-    width: 100%;
+  width: 100%;
 
-    .el-collapse {
-        border-top: none;
+  .el-collapse {
+    border-top: none;
 
-        .el-collapse-item {
-            background: #ffffff;
-            padding: 0 15px;
-            margin-top: 10px;
-            border-radius: 20px;
+    .el-collapse-item {
+      background: #ffffff;
+      padding: 0 15px;
+      margin-top: 10px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 
-            .el-collapse-item__header {
-                font-weight: 500;
-                font-size: 25px !important;
-            }
-        }
+      .el-collapse-item__header {
+        font-weight: 600;
+        font-size: 22px !important;
+        color: #1a3a6c;
+        padding: 16px 0;
+        border-bottom: 1px solid #f0f2f5;
+      }
+
+      .el-collapse-item__wrap {
+        padding: 16px 0 24px;
+      }
+
+      .el-collapse-item__content {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #4a5568;
+      }
     }
+
+    .el-collapse-item:last-child {
+      margin-bottom: 10px;
+    }
+  }
 }
 </style>

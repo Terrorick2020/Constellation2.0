@@ -59,11 +59,14 @@ export const subscribeToNewMessage = (
 }
 
 export const sendMessage = async (
+  
   chatId: string,
   text: string
 ): Promise<void> => {
   const s = await getOrCreateSocket()
   s.emit('send-message', { chatId, message: { text } })
+ 
+
 }
 
 

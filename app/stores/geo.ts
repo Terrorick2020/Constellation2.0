@@ -56,7 +56,7 @@ export const useGeoStore = defineStore('geo', () => {
     { value: 'Калуга', label: 'Калуга' }
   ]
 
-  const filter_geo_input = ref([])
+  // const filter_geo_input = ref([])
   const filter_loading_geo = ref(false)
   const geo_options = ref<any[]>([])
 

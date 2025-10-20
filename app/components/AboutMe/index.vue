@@ -14,8 +14,8 @@
 
         <div class="carousel w-full">
             <el-carousel :interval="4000" type="card" height="500px">
-                <el-carousel-item v-for="item in 6" :key="item">
-                    <h3 text="2xl" justify="center">{{ item }}</h3>
+                <el-carousel-item v-for="(item, index) in bannerMas" :key="index">
+                     <el-image :src="item" fit="contain" class="carousel-banner" />
                 </el-carousel-item>
             </el-carousel>
         </div>
@@ -29,6 +29,16 @@
 
 <script setup lang="ts">
 import BGif from '~/assets/image/blockchein.gif'
+import banner from '~/assets/icons/security-banner.svg?url' 
+const bannerMas = [
+    banner,
+    banner,
+    banner,
+    banner,
+    banner,
+    
+]
+
 </script>
 
 <style scoped lang="scss">

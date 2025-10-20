@@ -1,5 +1,6 @@
 <template>
   <el-form class="flex min-h-[600px] w-full flex-col">
+    <p style="color: red; font-weight: 800; margin-bottom: 20px; text-align: center">Находиться в разработке...</p>
     <span class="settings-title mb-[10px]">{{ t('settings.title') }}</span>
     
 

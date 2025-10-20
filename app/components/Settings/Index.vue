@@ -40,5 +40,5 @@ const viewport = useViewport();
 const isTabOpen = ref(!!path);
 const isDesktop = !viewport.isLessThan('desktop');
 
-// coll-614: Сделать анимацию
+
 </script>

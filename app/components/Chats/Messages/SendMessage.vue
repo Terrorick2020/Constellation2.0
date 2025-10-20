@@ -74,6 +74,7 @@ const clearFile = () => {
 }
 
 const onInput = (value: string) => {
+
   modelValue.value = value
 }
 
@@ -90,3 +91,6 @@ const handleSend = () => {
   }
 }
 </script>
+
+
+

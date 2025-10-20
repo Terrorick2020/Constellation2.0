@@ -26,7 +26,7 @@
               <div class="user-card-content">
                 <el-avatar :size="48" :src="Avatar" class="border border-black/15" />
                 <div class="user-info">
-                  <h4 class="user-name">{{ o.id }} ВРЕМЕННО</h4>
+                  
                   <h4 class="user-name">{{ o.username }}</h4>
                   <h5 class="user-fio">{{ o.name }}</h5>
                 </div>
@@ -55,7 +55,8 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
-import Avatar from '~/assets/image/avatar.png'
+// import Avatar from '~/assets/image/avatar.png'
+import Avatar from '~/assets/image/avatar1.png'
 import { Right } from '@element-plus/icons-vue'
 import { BASE_URL } from '~/env/requests.env'
 import axios from 'axios';

@@ -1,18 +1,21 @@
 <template>
   <el-scrollbar ref="scrollbarRef" wrap-class="!scroll-smooth" class="flex-1">
     <div ref="listRef" class="relative flex flex-col p-5">
-      <ChatsMessagesListItemTimeStep />
+      <template v-for="(mess, idx) in displayedMessages" :key="mess.id">
+        <ChatsMessagesListItemTimeStep
+          v-if="shouldShowDateHeader(idx)"
+          :label="getDayLabel(mess.timestamp)"
+        />
 
-      <ChatsMessagesListItem
-        v-for="(mess, idx) in displayedMessages"
-        :key="mess.id"
-        :sender="mess.sender"
-        :text="mess.text"
-        :timestamp="mess.timestamp"
-        :file="mess.file"
-        @reply="$emit('reply', $event)"
-        :class="getMessageClass(mess, idx)"
-      />
+        <ChatsMessagesListItem
+          :sender="mess.sender"
+          :text="mess.text"
+          :timestamp="mess.timestamp"
+          :file="mess.file"
+          @reply="$emit('reply', $event)"
+          :class="getMessageClass(mess, idx)"
+        />
+      </template>
 
       <ChatsMessagesListItemSystem />
     </div>
@@ -23,6 +26,7 @@
 import { ref, computed, nextTick, watch } from 'vue'
 import type { ElScrollbar } from 'element-plus'
 import { useChatMessagesStore } from '~/stores/chats/messages'
+import { getDayLabel, isSameDay } from '~/utils/date'
 
 const props = defineProps<{
   searchQuery?: string
@@ -36,12 +40,25 @@ const displayedMessages = computed(() => {
 
   const q = props.searchQuery.toLowerCase()
   return sortedMessages.value.filter(msg =>
-    msg.text.toLowerCase().includes(q)
+    msg.text?.toLowerCase().includes(q)
   )
 })
 
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 const listRef = ref<HTMLElement | null>(null)
+
+
+const shouldShowDateHeader = (index: number): boolean => {
+  const messages = displayedMessages.value
+  if (index === 0) return true 
+
+  const current = messages[index]
+  const prev = messages[index - 1]
+
+  if (!current.timestamp || !prev.timestamp) return true
+
+  return !isSameDay(current.timestamp, prev.timestamp)
+}
 
 const getMessageClass = (message: any, index: number) => {
   const isLastInGroup = !displayedMessages.value[index + 1] || displayedMessages.value[index + 1].sender !== message.sender

@@ -27,7 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import Avatar from '@/assets/image/avatar.jpg'
+// import Avatar from '@/assets/image/avatar.jpg'
+import Avatar from '@/assets/image/avatar1.png'
 import { ChatKey } from '~/types/chats/symbols'
 import type { IChat } from '~/types/chats'
 import { inject } from 'vue'

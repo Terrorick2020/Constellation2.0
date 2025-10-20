@@ -84,7 +84,6 @@ const rules = reactive<FormRules<RuleForm>>({
 
 
 const sendNoty = async () => {
-  console.log("dadadadadadada")
   const data = {
     title: ruleForm.name,
     description: ruleForm.desc

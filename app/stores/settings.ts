@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { UploadUserFile } from 'element-plus'
-import logo from '~/assets/image/avatar.jpg'
+// import logo from '~/assets/image/avatar.jpg'
+import logo from '~/assets/image/avatar1.png'
 import { fa } from 'element-plus/es/locales.mjs'
 
 type Scope = {
@@ -25,10 +26,12 @@ export const useSettingsStore = defineStore('settings', () => {
         wholeRussia: false,
         hideAddress: false,
         logo,
+        // avatar: '',
         media: mediaList,
         site: '',
         password: [],
-        rank:[]
+        rank:[],
+        
     });
 
     const scopes: Scope[] = [

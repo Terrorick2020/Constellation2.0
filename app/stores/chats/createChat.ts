@@ -20,7 +20,7 @@ export const useChatStore = defineStore('chat', {
         if (!authStore.accessToken) {
           throw new Error('Пользователь не авторизован')
         }
-        console.log('👀 Создание чата для:', userId)
+        console.log('Создание чата для:', userId)
         const response = await axios.post(`${BASE_URL}/chats`, {
           toUser: userId 
         }, {
@@ -30,7 +30,7 @@ export const useChatStore = defineStore('chat', {
           }
         })
 
-        console.log('✅ Чат создан:', response.data)
+        console.log('Чат создан:', response.data)
 
         ElMessage.success('Чат создан!')
 
@@ -38,7 +38,7 @@ export const useChatStore = defineStore('chat', {
         return response.data?.chatId || response.data?.data?.chatId
 
       } catch (error: any) {
-        console.error('❌ Ошибка создания чата:', error)
+        console.error('Ошибка создания чата:', error)
         ElMessage.error('Не удалось создать чат')
         throw error
       } finally {

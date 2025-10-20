@@ -11,26 +11,41 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { usePinnedChatsStore } from '~/stores/chats/pinned'
-import { useArchivedChatsStore } from '~/stores/chats/archive'
+import { useArchivedChatsStore } from '~/stores/chats/archive' 
+
 
 const props = defineProps<{
-  chat: any
+  chat: { id: string | number }
 }>()
 
 const pinnedStore = usePinnedChatsStore()
 const archiveStore = useArchivedChatsStore()
 const optionsVisible = ref(false)
 
+const isPinned = computed(() => pinnedStore.isPinned(props.chat.id))
+const isArchived = computed(() => archiveStore.isArchived(props.chat.id))
+
 const computedList = computed(() => [
-  { key: 'pin', label: props.chat.pinned ? 'Открепить' : 'Закрепить', icon: 'pinOutline' },
-  { key: 'archive', label: props.chat.archived ? 'Восстановить' : 'Архивировать', icon: 'archive' }
+  {
+    key: 'pin',
+    label: isPinned.value ? 'Открепить' : 'Закрепить',
+    icon: 'pinOutline'
+  },
+  {
+    key: 'archive',
+    label: isArchived.value ? 'Восстановить' : 'Архивировать',
+    icon: 'archive'
+  }
 ])
 
 const onSelect = (option: any) => {
   if (option.key === 'pin') {
-    pinnedStore.togglePin(props.chat)
+    pinnedStore.togglePin(props.chat.id)
   } else if (option.key === 'archive') {
-    archiveStore.toggleArchive(props.chat)
+    archiveStore.toggleArchive(props.chat.id) 
   }
 }
+
 </script>
+
+

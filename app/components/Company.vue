@@ -129,5 +129,5 @@ onMounted(() => {
 
 
 <style scoped>
-/* Ваши стили */
+
 </style>

@@ -3,7 +3,8 @@ import axios from 'axios'
 import type { IChat } from '~/types/chats'
 import { BASE_URL } from '~/env/requests.env'
 import { useAuthStore } from '~/stores/auth' 
-import DefaultAvatar from '~/assets/image/avatar.jpg'
+// import DefaultAvatar from '~/assets/image/avatar.jpg'
+import DefaultAvatar from '~/assets/image/avatar1.png'
 
 
 interface ChatItemRes {
@@ -47,7 +48,7 @@ export const useChats = () => {
         }
       })
 
-      console.log('📥 Получение списка чатов:', response.data)
+      console.log('Получение списка чатов:', response.data)
       
 
       const sortedData = response.data

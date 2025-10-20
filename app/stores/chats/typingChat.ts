@@ -3,7 +3,7 @@ import { BASE_URL } from "~/env/requests.env";
 import { useAuthStore } from "~/stores/auth";
 
 
-//для установления статуса печатает...
+//для установления статуса печатает
 const typingChats = async () => {
     const authStore = useAuthStore()
     try{

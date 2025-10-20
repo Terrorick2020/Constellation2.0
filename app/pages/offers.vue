@@ -104,7 +104,6 @@ const page = ref(1)
 const load = ref(true)
 const getNot = async () => {
   load.value = true
-  console.log("фывфывфв")
   const { accessToken } = useAuthStore();
   const getNotQuery = await axios.get(`${BASE_URL}/notify?page=${page.value}&limit=${limit.value}`, {
     headers: {
@@ -114,11 +113,7 @@ const getNot = async () => {
   });
 
   notiList.value = getNotQuery.data.data
-  console.log("фывфывфв")
   load.value = false;
-  // setTimeout(() => {
-  //   load.value = false;  // Скрываем лоадер после задержки
-  // }, 2000);
 
 }
 

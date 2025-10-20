@@ -24,15 +24,15 @@ export default defineNuxtPlugin((nuxtApp) => {
   // })
 
   socket.on('connect', () => {
-    console.log('✅ WebSocket подключен. ID:', socket.id)
+    console.log('WebSocket подключен. ID:', socket.id)
   })
 
   socket.on('disconnect', () => {
-    console.log('❌ WebSocket отключен')
+    console.log('WebSocket отключен')
   })
 
   socket.on('connect_error', (err) => {
-    console.error('🔌 Ошибка подключения WebSocket:', err)
+    console.error('Ошибка подключения WebSocket:', err)
   })
 
   return {

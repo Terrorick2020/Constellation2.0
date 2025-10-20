@@ -16,7 +16,7 @@ export const sendMessage = async (chatId: string, text: string) => {
         }
       }
     )
-
+    console.log("Отправка сообщения", response.data)
     return { success: true, data: response.data }
   } catch (error) {
     return { success: false, error: error }

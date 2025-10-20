@@ -16,7 +16,7 @@
     </div>
     
   
-    <!-- Центрируем PDF -->
+    <!-- PDF -->
     <div class="pdf-container">
         <embed
         :src="pdfFile"
@@ -95,7 +95,6 @@ const getDoc = async () => {
 
 
 //функция для подписи документов
-// какой id использовать userid или просто id
 
 const SubscribeDoc = async () => {
   console.log("ФУНКЦИЯИ ")

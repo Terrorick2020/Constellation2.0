@@ -46,7 +46,7 @@ import {useAuthStore} from "~/stores/auth"
 
 
 const optionsVisible = ref(false)
-const router = useRouter()  // Используем useRouter для доступа к маршрутизатору
+const router = useRouter()  
 
 interface Props {
   list: TPopoverItemProps[]
@@ -107,7 +107,6 @@ const handleClickOption = (listItem: TPopoverItemProps) => {
   closePopover()
   
   if (listItem.key === 'viewdoc') {
-    // Переход с использованием Vue Router
     console.log('Переход на /docs/' + props.id)
     router.push(`/docs/${props.id}`)
   }

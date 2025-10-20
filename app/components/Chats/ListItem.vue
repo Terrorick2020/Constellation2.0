@@ -9,7 +9,7 @@
       <div class="flex justify-between">
         <div class="flex items-center gap-x-1">
           <span class="text-sm font-bold text-black">{{ props.chat.label || 'Загрузка...' }}</span>
-          <SVGPin2 v-show="props.chat.pinned" class="size-2 text-gray-800" />
+          <SVGPin2 v-show="isPinned" class="size-2 text-gray-800" />
           <SVGCheckmarkCircle v-show="props.chat.verified" class="size-2 text-gray-800" />
           <SVGVolumeOff v-show="props.chat.muted" class="size-2 text-gray-800" />
         </div>
@@ -25,7 +25,7 @@
           <SVGPaperClip v-show="props.chat.type === 'document'" class="stroke-[#E44820]" />
 
           <span :class="textClasses">
-            {{ props.chat.lastMessage || 'Загрузка...' }}
+                {{ truncatedLastMessage }}
           </span>
         </div>
         <div
@@ -45,15 +45,8 @@ import SVGPaperClip from '@/assets/icons/paper-clip.svg'
 import SVGVolumeOff from '@/assets/icons/volume-off.svg'
 import SVGCheckmarkCircle from '@/assets/icons/checkmark-circle.svg'
 import type { IChat } from '~/types/chats'
-import { getMetadata } from '~/stores/chats/getMetadata'
-
-
 import { computed } from 'vue'
-
-
-
-
-
+import { usePinnedChatsStore } from '~/stores/chats/pinned' 
 
 interface Props {
   chat: IChat
@@ -66,7 +59,10 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-console.log('props', props)
+const pinnedStore = usePinnedChatsStore()
+const isPinned = computed(() => {
+  return pinnedStore.isPinned(props.chat.id)
+})
 
 const formattedTime = computed(() => {
   if (!props.chat.lastTime) return ''
@@ -75,6 +71,12 @@ const formattedTime = computed(() => {
     hour: '2-digit',
     minute: '2-digit'
   })
+})
+
+const truncatedLastMessage = computed(() => {
+  const message = props.chat.lastMessage || 'Загрузка...'
+  if (message.length <= 15) return message
+  return message.slice(0, 15) + '...'
 })
 
 const textClasses = computed(() => {

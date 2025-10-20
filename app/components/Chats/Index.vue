@@ -48,15 +48,15 @@ const joinChat = async (chatId: string) => {
 
   try {
     await joinChatRoom(chatId)
-    console.log('✅ Присоединились к чату:', chatId)
+    console.log('Присоединились к чату:', chatId)
   } catch (error) {
-    console.error('❌ Ошибка подключения к чату:', error)
+    console.error('Ошибка подключения к чату:', error)
   }
 }
 
 onMounted(() => {
   if (unsubscribe.value) {
-    console.log('🧹 Отписываемся от WebSocket при уходе со страницы')
+    console.log('Отписываемся от WebSocket при уходе со страницы')
 
     unsubscribe.value()
   }
@@ -67,14 +67,14 @@ onMounted(() => {
 const selectChat = async (chat: IChat) => {
    if (unsubscribe.value) {
     unsubscribe.value()
-    console.log('📤 Отписываемся от предыдущего чата')
+    console.log('Отписываемся от предыдущего чата')
 
     unsubscribe.value = null
   }
-  chatMessagesStore.clear()
+  // chatMessagesStore.clear()
 
   selectedChat.value = chat
-  console.log('📂 Выбран чат:', chat.id)
+  console.log('Выбран чат:', chat.id)
 
   try {
     const chatId = chat.id.toString()
@@ -100,10 +100,10 @@ const selectChat = async (chat: IChat) => {
       chatMessagesStore.setMessages(mappedMessages)
     }
     await joinChat(chatId)
-    console.log('👂 Подписываемся на событие "new-message"')
+    console.log('Подписываемся на событие "new-message"')
     
     unsubscribe.value = subscribeToNewMessage((message) => {
-  console.log('📨 Получено новое сообщение через WebSocket:', message)
+  console.log('Получено новое сообщение через WebSocket:', message)
   
   if (message.chatId === chatId) {
     const isOwn = String(message.fromUser) === String(authStore.userId)
